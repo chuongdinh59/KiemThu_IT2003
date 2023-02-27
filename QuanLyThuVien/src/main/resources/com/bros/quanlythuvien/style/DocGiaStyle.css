@@ -1,0 +1,23 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Feb 24, 2023, 11:04:18 AM
+    Author     : ADMIN
+*/
+
+Text.txtTitle{
+    -fx-font-size:15;
+    -fx-font-weight:bold;
+}
+Label.lbTheDG{
+    -fx-font-size:15;
+}
+TextField.txtFTheDG{
+    -fx-font-size:14;
+}
+Button.btnTheDG{
+    -fx-font-size:12;
+    -fx-font-weight:bold;
+}
