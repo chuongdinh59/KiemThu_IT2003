@@ -1,0 +1,36 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Feb 24, 2023, 9:53:50 PM
+    Author     : ADMIN
+*/
+GridPane.GPHeader{
+    -fx-background-color: orange;
+    -fx-padding:10;
+}
+Text.txtNameLibH{
+    -fx-fill: white;
+    -fx-font-size:15;
+    -fx-font-weight:bold;
+}
+Button.btnAddNew{
+    -fx-text-fill:white;
+    -fx-background-color: green;
+    -fx-font-weight:bold;
+    -fx-font-size:14;
+
+}
+
+Text.txtNameLib{
+    -fx-font-size:17;
+}
+GridPane.GPAdmin{
+    -fx-border-color: black;
+    -fx-padding:10;
+}
+.txtBold{
+    -fx-font-weight:bold;
+    -fx-font-size:14;
+}

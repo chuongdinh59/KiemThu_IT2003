@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="501.0" prefWidth="552.0" stylesheets="@DocGiaStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.quanlythuvien.DocGiaController">
+    <children>
+        <Text layoutX="26.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtTitle" text="Mã độc giả :" />
+        <Text layoutX="26.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtTitle" text="Đối tượng :" />
+        <Text layoutX="26.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtTitle" text="Giới tính :" />
+        <Text layoutX="26.0" layoutY="379.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtTitle" text="Địa chỉ :" />
+        <Text layoutX="26.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtTitle" text="Ngày sinh :" />
+        <Text layoutX="26.0" layoutY="289.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtTitle" text="Hạn thẻ :" />
+        <Text layoutX="26.0" layoutY="426.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtTitle" text="Điện thoại :" />
+        <Text layoutX="26.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtTitle" text="Họ và tên :" />
+        <Text layoutX="26.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtTitle" text="Bộ phận :" />
+        <Text layoutX="26.0" layoutY="330.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtTitle" text="Email :" />
+        <Label fx:id="lbMaDG" layoutX="123.0" layoutY="15.0" styleClass="lbTheDG" />
+        <Label fx:id="lbDoiTuong" layoutX="120.0" layoutY="190.0" styleClass="lbTheDG" />
+        <Label fx:id="lbNgaySinh" layoutX="120.0" layoutY="144.0" styleClass="lbTheDG" />
+        <Label fx:id="lbGioiTinh" layoutX="120.0" layoutY="103.0" styleClass="lbTheDG" />
+        <Label fx:id="lbBoPhan" layoutX="120.0" layoutY="233.0" styleClass="lbTheDG" />
+        <Label fx:id="lbHanThe" layoutX="120.0" layoutY="276.0" styleClass="lbTheDG" />
+        <Label fx:id="lbHoTen" layoutX="120.0" layoutY="60.0" styleClass="lbTheDG" />
+        <TextField fx:id="txtFDiaChi" layoutX="109.0" layoutY="362.0" prefHeight="25.0" prefWidth="392.0" />
+        <TextField fx:id="txtFEmail" layoutX="109.0" layoutY="313.0" prefHeight="30.0" prefWidth="392.0" styleClass="txtFTheDG" />
+        <TextField fx:id="txtFDienThoai" layoutX="109.0" layoutY="409.0" prefHeight="25.0" prefWidth="392.0" />
+        <Button layoutX="109.0" layoutY="467.0" mnemonicParsing="false" styleClass="btnTheDG" text="Lưu thông tin" />
+        <Button fx:id="DocGiaButton" layoutX="263.0" layoutY="467.0" onAction="#switchToAdmin" text="Switch to Admin View" />
+    </children>
+</Pane>
