@@ -1,15 +1,15 @@
-package com.mycompany.thedocgia;
+package com.mycompany.quanlythuvien;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class PrimaryController {
+public class DocGiaController {
 
     @FXML
-    private void switchToSecondary() throws IOException {
-        App.setRoot("secondary");
+    private void switchToAdmin() throws IOException {
+        App.setRoot("AdminUI");
     }
     @FXML
     private Label lbMaDG;
