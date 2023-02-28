@@ -6,4 +6,5 @@ module com.bros.quanlythuvien {
 
     opens com.bros.quanlythuvien to javafx.fxml;
     exports com.bros.quanlythuvien;
+
 }

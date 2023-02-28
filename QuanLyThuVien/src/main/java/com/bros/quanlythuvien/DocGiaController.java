@@ -1,5 +1,7 @@
 package com.bros.quanlythuvien;
 
+
+
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,7 +14,9 @@ public class DocGiaController {
      private void switchToQuanTri() throws IOException {
         App.setRoot("QuanTriUI");
     }
-     @FXML
+
+
+    @FXML
     private Label lbMaDG;
     @FXML
     private Label lbDoiTuong;
@@ -34,4 +38,5 @@ public class DocGiaController {
     private TextField txtFDienThoai;
     @FXML
     private Button DocGiaButton;
+
 }

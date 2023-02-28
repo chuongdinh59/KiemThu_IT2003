@@ -26,9 +26,10 @@
         <Label fx:id="lbHanThe" layoutX="120.0" layoutY="276.0" styleClass="lbTheDG" />
         <Label fx:id="lbHoTen" layoutX="120.0" layoutY="60.0" styleClass="lbTheDG" />
         <TextField fx:id="txtFDiaChi" layoutX="109.0" layoutY="362.0" prefHeight="25.0" prefWidth="392.0" />
-        <TextField fx:id="txtFEmail" layoutX="109.0" layoutY="313.0" prefHeight="30.0" prefWidth="392.0" styleClass="txtFTheDG" />
+
+        <TextField fx:id="txtFEmail" layoutX="109.0" layoutY="313.0" prefHeight="30.0" prefWidth="392.0" styleClass="txtFTheDG" stylesheets="@style/DocGiaStyle.css" />
         <TextField fx:id="txtFDienThoai" layoutX="109.0" layoutY="409.0" prefHeight="25.0" prefWidth="392.0" />
         <Button layoutX="109.0" layoutY="467.0" mnemonicParsing="false" styleClass="btnTheDG" text="Lưu thông tin" />
-        <Button fx:id="DocGiaButton" layoutX="263.0" layoutY="467.0" onAction="#switchToQuanTri" text="Switch to Admin View" />
+        <Button fx:id="DocGiaButton" layoutX="250.0" layoutY="454.0" onAction="#switchToQuanTri" text="Switch to QuanTri View" />
     </children>
 </Pane>

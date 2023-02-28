@@ -21,6 +21,8 @@ Button.btnAddNew{
     -fx-font-weight:bold;
     -fx-font-size:14;
 }
+
+
 Text.txtNameLib{
     -fx-font-size:17;
 }
