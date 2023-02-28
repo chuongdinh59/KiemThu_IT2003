@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\BookService.java
 D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\annotation\Entity.java
 D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\constant\QueryConstant.java
@@ -13,3 +14,9 @@ D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\PrimaryCont
 D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\QueryBuilderUtils.java
 D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\SecondaryController.java
 D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\BookRepository.java
+=======
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\DocGiaController.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\App.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\module-info.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\QuanTriController.java
+>>>>>>> 2852c9f6706a212a58d328c46abcaf41f0fb4c0f

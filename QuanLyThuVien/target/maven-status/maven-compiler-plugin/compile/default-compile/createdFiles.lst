@@ -1,3 +1,4 @@
 com\bros\quanlythuvien\App.class
+com\bros\quanlythuvien\QuanTriController.class
 module-info.class
-com\bros\quanlythuvien\PrimaryController.class
+com\bros\quanlythuvien\DocGiaController.class
