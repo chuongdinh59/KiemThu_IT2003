@@ -20,12 +20,19 @@ Button.btnAddNew{
     -fx-background-color: green;
     -fx-font-weight:bold;
     -fx-font-size:14;
+}
 
-}
-Button.btnHeader{
-    -fx-font-weight:bold;
-    -fx-font-size:14;
-}
+
 Text.txtNameLib{
     -fx-font-size:17;
 }
+GridPane.GPAdmin{
+    -fx-border-color: black;
+    -fx-padding:5;
+   
+}
+.txtBold{
+    -fx-font-weight:bold;
+    -fx-font-size:14;
+}
+

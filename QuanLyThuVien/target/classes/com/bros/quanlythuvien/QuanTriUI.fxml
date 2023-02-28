@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -8,38 +10,111 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="632.0" prefWidth="928.0" stylesheets="@style/QuanTriStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.admin.PrimaryController">
-   <children>
-      <GridPane layoutX="-3.0" prefHeight="62.0" prefWidth="934.0" styleClass="GPHeader">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="229.20001220703125" minWidth="10.0" prefWidth="193.00001220703126" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.39996337890625" minWidth="10.0" prefWidth="144.60000000000002" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="428.20001220703125" minWidth="10.0" prefWidth="158.399951171875" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="417.60004882812495" minWidth="10.0" prefWidth="417.60004882812495" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtNameLibH" text="CHUONGLibrary" />
-            <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="134.0" styleClass="btnAddNew" text="Add New" GridPane.columnIndex="1" />
-            <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="150.0" styleClass="btnHeader" text="Print Preview" GridPane.columnIndex="2" />
-            <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="150.0" styleClass="btnHeader" text="Print Preview" GridPane.columnIndex="3" />
-         </children>
-      </GridPane>
-      <TextField layoutX="593.0" layoutY="75.0" prefHeight="30.0" prefWidth="251.0" />
-      <Button layoutX="850.0" layoutY="75.0" mnemonicParsing="false" styleClass="btnHeader" text="Search" />
-      <Text layoutX="14.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtNameLib" text="CHUONGLibrary" wrappingWidth="150.39999999999998" />
-      <GridPane layoutX="139.0" layoutY="202.0" styleClass="GPHeader">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-      </GridPane>
-   </children>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="478.0" prefWidth="928.0" stylesheets="@style/QuanTriStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bros.quanlythuvien.QuanTriController">
+    <!--=======
+    <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="928.0" styleClass="GPAdmin" stylesheets="@style/QuanTriStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bros.quanlythuvien.QuanTriController">
+    >>>>>>> c0523e5550a61471127e5fe30b73a4eaf5116e0e-->
+    <children>
+        <GridPane layoutX="-3.0" prefHeight="62.0" prefWidth="934.0" styleClass="GPHeader">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="229.20001220703125" minWidth="10.0" prefWidth="193.00001220703126" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.39996337890625" minWidth="10.0" prefWidth="144.60000000000002" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="428.20001220703125" minWidth="10.0" prefWidth="158.399951171875" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="417.60004882812495" minWidth="10.0" prefWidth="417.60004882812495" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtNameLibH" text="CHUONGLibrary" />
+                <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="134.0" styleClass="btnAddNew" text="Add New" GridPane.columnIndex="1" />
+                <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="150.0" styleClass="txtBold" text="Print Preview" GridPane.columnIndex="2" />
+                <!--<<<<<<< HEAD
+                                <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="150.0" styleClass="txtBold" text="Print Preview" GridPane.columnIndex="3" />
+                            </children>
+                        </GridPane>
+                        <TextField layoutX="593.0" layoutY="75.0" prefHeight="30.0" prefWidth="251.0" />
+                        <Button layoutX="850.0" layoutY="75.0" mnemonicParsing="false" styleClass="txtBold" text="Search" />
+                        <Text layoutX="14.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtNameLib" text="CHUONGLibrary" wrappingWidth="150.39999999999998" />
+                        <GridPane layoutX="7.0" layoutY="260.0" prefHeight="82.0" prefWidth="897.0" styleClass="GPHeader">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                =======-->
+                <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="150.0" styleClass="txtBold" text="Show All" GridPane.columnIndex="3" />
+            </children>
+        </GridPane>
+        <TextField fx:id="TxtFSearch" layoutX="593.0" layoutY="75.0" prefHeight="30.0" prefWidth="251.0" />
+        <Button layoutX="850.0" layoutY="75.0" mnemonicParsing="false" styleClass="txtBold" text="Search" />
+        <Text layoutX="14.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtNameLib" text="CHUONGLibrary" wrappingWidth="150.39999999999998" />
+        <GridPane gridLinesVisible="true" layoutX="14.0" layoutY="189.0" prefHeight="112.0" prefWidth="903.0" styleClass="GPAdmin">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtBold" text="Name">
+                    <GridPane.margin>
+                        <Insets left="10.0" />
+                    </GridPane.margin>
+                </Text>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtBold " text="Day of Receipt" GridPane.columnIndex="1">
+                    <GridPane.margin>
+                        <Insets left="10.0" />
+                    </GridPane.margin>
+                </Text>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtBold" text="Date Published" GridPane.columnIndex="2">
+                    <GridPane.margin>
+                        <Insets left="10.0" />
+                    </GridPane.margin> 
+                </Text>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtBold" text="Price" GridPane.columnIndex="3">
+                    <GridPane.margin>
+                        <Insets left="10.0" />
+                    </GridPane.margin> 
+                </Text>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtBold" text="Type" GridPane.columnIndex="4">
+                    <GridPane.margin>
+                        <Insets left="10.0" />
+                    </GridPane.margin> 
+                </Text>
+                <Label fx:id="lbName" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin></Label>
+                <Label fx:id="lbDayofReceipt" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin></Label>
+                <Label fx:id="lbPublished" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin></Label>
+                <Label fx:id="lbPrice" GridPane.columnIndex="3" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin></Label>
+                <Label fx:id="lbType" GridPane.columnIndex="4" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin></Label>
+            </children>
+        </GridPane>
+        <Button fx:id="QuanTriButton" layoutX="377.0" layoutY="405.0" onAction="#switchToDocGia" text="Switch to DocGia View" />
+        <Button layoutX="14.0" layoutY="336.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="96.0" styleClass="txtBold" text="&lt; Previous" />
+        <Button layoutX="809.0" layoutY="336.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="96.0" styleClass="txtBold" text="Next &gt;" />
+
+    </children>
 </Pane>
