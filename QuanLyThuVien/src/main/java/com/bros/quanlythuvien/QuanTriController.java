@@ -29,4 +29,5 @@ public class QuanTriController {
     private Label lbPrice;
     @FXML
     private Button QuanTriButton;
+ 
 }

@@ -28,9 +28,11 @@ Text.txtNameLib{
 }
 GridPane.GPAdmin{
     -fx-border-color: black;
-    -fx-padding:10;
+    -fx-padding:5;
+   
 }
 .txtBold{
     -fx-font-weight:bold;
     -fx-font-size:14;
 }
+
