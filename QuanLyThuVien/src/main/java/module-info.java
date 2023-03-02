@@ -1,4 +1,7 @@
 module com.bros.quanlythuvien {
+    requires java.sql;
+    requires lombok;
+    requires modelmapper;
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.base;
