@@ -1,11 +1,19 @@
 package com.bros.quanlythuvien;
 
+import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 
 public class QuanTriController {
 
@@ -14,6 +22,46 @@ public class QuanTriController {
         App.setRoot("DocGiaUI");
     }
 
+    @FXML
+    private void initialize(URL url, ResourceBundle rb) {
+        paneslide.setTranslateX(-160);
+        bar1.setVisible(true);
+        bar2.setVisible(false);
+    }
+
+    @FXML
+    private void run1(MouseEvent event) {
+        TranslateTransition slide = new TranslateTransition();
+        slide.setDuration(Duration.seconds(0.4));
+        slide.setNode(paneslide);
+
+        slide.setToX(0);
+        slide.play();
+
+        paneslide.setTranslateX(-160);
+
+        slide.setOnFinished((ActionEvent e) -> {
+            bar1.setVisible(false);
+            bar2.setVisible(true);
+        });
+    }
+
+    @FXML
+    private void run2(MouseEvent event) {
+        TranslateTransition slide = new TranslateTransition();
+        slide.setDuration(Duration.seconds(0.4));
+        slide.setNode(paneslide);
+
+        slide.setToX(-160);
+        slide.play();
+
+        paneslide.setTranslateX(0);
+
+        slide.setOnFinished((ActionEvent e) -> {
+            bar1.setVisible(true);
+            bar2.setVisible(false);
+        });
+    }
 
     @FXML
     private TextField TxtFSearch;
@@ -29,5 +77,11 @@ public class QuanTriController {
     private Label lbPrice;
     @FXML
     private Button QuanTriButton;
- 
+    @FXML
+    private JFXButton bar2;
+    @FXML
+    private JFXButton bar1;
+    @FXML
+    private AnchorPane paneslide;
+
 }

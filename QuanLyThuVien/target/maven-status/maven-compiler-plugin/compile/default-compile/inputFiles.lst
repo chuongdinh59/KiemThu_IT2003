@@ -1,22 +1,15 @@
-<<<<<<< HEAD
-D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\BookService.java
-D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\annotation\Entity.java
-D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\constant\QueryConstant.java
-D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\ConnectionUtils.java
-D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\ValidateUtils.java
-D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\App.java
-D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\constant\DatabaseConstant.java
-D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\CommonRepository.java
-D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\annotation\Column.java
-D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\module-info.java
-D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\annotation\Table.java
-D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\PrimaryController.java
-D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\QueryBuilderUtils.java
-D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\SecondaryController.java
-D:\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\BookRepository.java
-=======
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\DocGiaController.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\App.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\annotation\Column.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\CommonRepository.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\constant\QueryConstant.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\constant\DatabaseConstant.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\DocGiaController.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\QueryBuilderUtils.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\module-info.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\annotation\Table.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\ConnectionUtils.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\ValidateUtils.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\annotation\Entity.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\BookRepository.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\QuanTriController.java
->>>>>>> 2852c9f6706a212a58d328c46abcaf41f0fb4c0f
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\BaiTapLon\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\BookService.java
