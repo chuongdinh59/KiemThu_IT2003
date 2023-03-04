@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="478.0" prefWidth="928.0" stylesheets="@style/QuanTriStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bros.quanlythuvien.QuanTriController">
@@ -84,18 +85,17 @@
                </GridPane.margin></Label>
             </children>
         </GridPane>
-        <Button fx:id="QuanTriButton" layoutX="377.0" layoutY="405.0" onAction="#switchToDocGia" text="Switch to DocGia View" />
         <Button layoutX="14.0" layoutY="336.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="96.0" styleClass="txtBold" text="&lt; Previous" />
         <Button layoutX="809.0" layoutY="336.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="96.0" styleClass="txtBold" text="Next &gt;" />
       <AnchorPane layoutY="-1.0" prefHeight="11.0" prefWidth="928.0" styleClass="GPHeader">
          <children>
                 <Text layoutX="89.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtNameLibH" text="CHUONGLibrary" wrappingWidth="162.39999999999998" />
-            <JFXButton fx:id="bar2" alignment="CENTER" contentDisplay="CENTER" layoutX="29.0" layoutY="26.0" onMouseClicked="#run2" prefHeight="28.0" prefWidth="39.0">
+            <JFXButton fx:id="bar2" alignment="CENTER" contentDisplay="CENTER" layoutX="39.0" layoutY="26.0" onMouseClicked="#run2" prefHeight="28.0" prefWidth="39.0">
                <graphic>
                   <FontAwesomeIconView glyphName="CHEVRON_LEFT" size="20" />
                </graphic>
             </JFXButton>
-            <JFXButton fx:id="bar1" alignment="CENTER" contentDisplay="CENTER" layoutX="29.0" layoutY="26.0" onMouseClicked="#run1" prefHeight="28.0" prefWidth="39.0">
+            <JFXButton fx:id="bar1" alignment="CENTER" contentDisplay="CENTER" layoutX="39.0" layoutY="26.0" onMouseClicked="#run1" prefHeight="28.0" prefWidth="39.0">
                <graphic>
                   <FontAwesomeIconView glyphName="BARS" size="20.0" text="" textAlignment="CENTER" wrappingWidth="31.9921875" />
                </graphic>
@@ -108,7 +108,7 @@
          </graphic>
          <styleClass>
             <String fx:value="btnAddNew" />
-            <String fx:value="redHover" />
+            <String fx:value="redUnder" />
          </styleClass>
       </JFXButton>
       <JFXButton layoutX="438.0" layoutY="14.0" prefHeight="42.0" prefWidth="150.0" text="Print Preview">
@@ -117,7 +117,7 @@
          </graphic>
          <styleClass>
             <String fx:value="txtBold" />
-            <String fx:value="purpleHover" />
+            <String fx:value="purpleUnder" />
          </styleClass>
       </JFXButton>
       <JFXButton layoutX="602.0" layoutY="14.0" prefHeight="42.0" prefWidth="150.0" text="Show All">
@@ -126,10 +126,52 @@
          </graphic>
          <styleClass>
             <String fx:value="txtBold" />
-            <String fx:value="yellowHover" />
+            <String fx:value="yellowUnder" />
          </styleClass>
       </JFXButton>
-      <AnchorPane fx:id="paneslide" layoutY="72.0" prefHeight="410.0" prefWidth="160.0" style="-fx-background-color: black;" />
+      <AnchorPane fx:id="paneslide" layoutX="-1.0" layoutY="72.0" prefHeight="410.0" prefWidth="160.0" style="-fx-background-color: #474747;">
+         <children>
+            <JFXButton alignment="CENTER" layoutX="25.0" layoutY="28.0" styleClass="btnNavbar" text=" DashBoard">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="CALENDAR" size="16" />
+               </graphic>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </JFXButton>
+            <JFXButton alignment="CENTER" layoutX="25.0" layoutY="80.0" styleClass="btnNavbar" text=" Members">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="USER" size="16" />
+               </graphic>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </JFXButton>
+            <JFXButton alignment="CENTER" layoutX="25.0" layoutY="247.0" styleClass="btnNavbar" text="Customers">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="USER" size="16" />
+               </graphic>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </JFXButton>
+            <JFXButton alignment="CENTER" layoutX="25.0" layoutY="190.0" onAction="#switchToDocGia" styleClass="btnNavbar" text="Promissory Note">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="PENCIL" size="16" />
+               </graphic>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </JFXButton>
+            <JFXButton alignment="CENTER" layoutX="25.0" layoutY="138.0" styleClass="btnNavbar" text=" Books">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="BOOK" size="16" />
+               </graphic>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </JFXButton>
+         </children></AnchorPane>
 
     </children>
 </Pane>

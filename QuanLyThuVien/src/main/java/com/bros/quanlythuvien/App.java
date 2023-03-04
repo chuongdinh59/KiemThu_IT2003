@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import static javafx.application.Application.launch;
-import javafx.stage.StageStyle;
+
 
 
 /**
@@ -21,7 +21,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("DocGiaUI"));
+        scene = new Scene(loadFXML("QuanTriUI"));
 
         stage.setScene(scene);
         stage.show();

@@ -1,12 +1,14 @@
 package com.bros.quanlythuvien;
 
 import com.jfoenix.controls.JFXButton;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,15 +17,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
-public class QuanTriController {
+public class QuanTriController implements Initializable  {
 
     @FXML
     private void switchToDocGia() throws IOException {
         App.setRoot("DocGiaUI");
     }
 
-    @FXML
-    private void initialize(URL url, ResourceBundle rb) {
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
         paneslide.setTranslateX(-160);
         bar1.setVisible(true);
         bar2.setVisible(false);
@@ -81,6 +83,10 @@ public class QuanTriController {
     private JFXButton bar2;
     @FXML
     private JFXButton bar1;
+    @FXML
+    private FontAwesomeIcon font1;
+    @FXML
+    private FontAwesomeIcon font2;
     @FXML
     private AnchorPane paneslide;
 

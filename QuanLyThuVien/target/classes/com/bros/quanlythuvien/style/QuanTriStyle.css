@@ -29,22 +29,29 @@ Text.txtNameLib{
 GridPane.GPAdmin{
     -fx-border-color: black;
     -fx-padding:5;
-   
+
 }
 .txtBold{
     -fx-font-weight:bold;
     -fx-font-size:14;
 }
-.purpleHover:hover{
+.purpleUnder:hover{
     -fx-border-color:purple;
     -fx-border-width:0px 0px 3px 0px;
 }
-.redHover:hover{
+.redUnder:hover{
     -fx-border-color:red;
     -fx-border-width:0px 0px 3px 0px;
 }
-.yellowHover:hover{
+.yellowUnder:hover{
     -fx-border-color:yellow;
     -fx-border-width:0px 0px 3px 0px;
+}
+.btnNavbar{
+    -fx-text-fill:white;
+}
+.btnNavbar:hover{
+    -fx-border-color: springgreen;
+    -fx-border-width:0px 0px 0px 3px;
 }
 
