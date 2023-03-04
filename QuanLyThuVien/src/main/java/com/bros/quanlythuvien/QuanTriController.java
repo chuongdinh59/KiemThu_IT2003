@@ -26,7 +26,7 @@ public class QuanTriController implements Initializable  {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        paneslide.setTranslateX(-160);
+        paneslide.setTranslateX(-170);
         bar1.setVisible(true);
         bar2.setVisible(false);
     }
@@ -54,7 +54,7 @@ public class QuanTriController implements Initializable  {
         slide.setDuration(Duration.seconds(0.4));
         slide.setNode(paneslide);
 
-        slide.setToX(-160);
+        slide.setToX(-170);
         slide.play();
 
         paneslide.setTranslateX(0);

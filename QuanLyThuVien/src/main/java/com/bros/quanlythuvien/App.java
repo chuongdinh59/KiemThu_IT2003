@@ -9,8 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import static javafx.application.Application.launch;
-
-
+import javafx.scene.input.MouseEvent;
 
 /**
  * JavaFX App
@@ -18,10 +17,30 @@ import static javafx.application.Application.launch;
 public class App extends Application {
 
     private static Scene scene;
+//    private double x = 0;
+//    private double y = 0;
+//    private static Parent root;
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("QuanTriUI"));
+        scene = new Scene(loadFXML("DashBoardUI"));
+//            Parent root = FXMLLoader.load(getClass().getResource("DashBoardUI.fxml"))
+
+
+//        root.setOnMousePressed((MouseEvent event) -> {
+//            x = event.getSceneX();
+//            y = event.getSceneY();
+//        });
+//        root.setOnMouseDragged((MouseEvent event) -> {
+//            stage.setX(event.getSceneX() - x);
+//            stage.setY(event.getSceneY() - y);
+//
+//            stage.setOpacity(.8);
+//        });
+//        
+//        root.setOnMouseReleased((MouseEvent event) ->{
+//            stage.setOpacity(1);
+//        });
 
         stage.setScene(scene);
         stage.show();
