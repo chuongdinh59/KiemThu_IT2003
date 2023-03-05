@@ -4,11 +4,20 @@
  */
 package com.bros.quanlythuvien.service;
 
+import com.bros.quanlythuvien.model.BookModel;
+import java.util.List;
+import java.util.Map;
+
 /**
  *
  * @author Dinh Chuong
  */
-public class BookService {
-    
-    
+public interface BookService {
+
+    // tên sách, tên tác giả,
+    //năm xuất bản, danh mục.?
+    List<BookModel> findBooks(Map<String, Object> searchMap, Integer page);
+
+    BookModel findById(Integer id);
+
 }

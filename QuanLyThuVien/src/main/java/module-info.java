@@ -1,5 +1,6 @@
 module com.bros.quanlythuvien {
     requires java.sql;
+    requires commons.beanutils;
     requires lombok;
     requires modelmapper;
     requires javafx.controls;
