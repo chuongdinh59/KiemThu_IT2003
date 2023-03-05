@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import static javafx.application.Application.launch;
-import javafx.scene.input.MouseEvent;
 
 /**
  * JavaFX App
@@ -23,7 +22,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("QuanTriSachUI"));
+        scene = new Scene(loadFXML("CustomerUI"));
 //            Parent root = FXMLLoader.load(getClass().getResource("DashBoardUI.fxml"))
 
 
