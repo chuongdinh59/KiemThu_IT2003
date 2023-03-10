@@ -6,16 +6,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     Created on : Feb 24, 2023, 9:53:50 PM
     Author     : ADMIN
 */
-GridPane.GPHeader{
+.GPHeader{
     -fx-background-color: orange;
     -fx-padding:10;
 }
 Text.txtNameLibH{
     -fx-fill: white;
-    -fx-font-size:15;
+    -fx-font-size:20;
     -fx-font-weight:bold;
 }
-Button.btnAddNew{
+.btnAddNew{
     -fx-text-fill:white;
     -fx-background-color: green;
     -fx-font-weight:bold;
@@ -29,10 +29,29 @@ Text.txtNameLib{
 GridPane.GPAdmin{
     -fx-border-color: black;
     -fx-padding:5;
-   
+
 }
 .txtBold{
     -fx-font-weight:bold;
     -fx-font-size:14;
+}
+.purpleUnder:hover{
+    -fx-border-color:purple;
+    -fx-border-width:0px 0px 3px 0px;
+}
+.redUnder:hover{
+    -fx-border-color:red;
+    -fx-border-width:0px 0px 3px 0px;
+}
+.yellowUnder:hover{
+    -fx-border-color:yellow;
+    -fx-border-width:0px 0px 3px 0px;
+}
+.btnNavbar{
+    -fx-text-fill:white;
+}
+.btnNavbar:hover{
+    -fx-border-color: springgreen;
+    -fx-border-width:0px 0px 0px 3px;
 }
 
