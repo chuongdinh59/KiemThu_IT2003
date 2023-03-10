@@ -14,7 +14,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -25,70 +24,31 @@ import javafx.stage.Stage;
 public class EmployeeController implements Initializable {
 
      @FXML
-    private AnchorPane availableBooks_form;
+    private Button borrowBook_Btn;
 
     @FXML
-    private Button availableBooks_importBtn;
+    private Button createLoanslipBtn;
 
     @FXML
-    private TextField infomation_address;
+    private AnchorPane borrowBook_viewForm;
 
     @FXML
-    private DatePicker infomation_birthDay;
+    private AnchorPane borrow_bookingStatusView;
 
     @FXML
-    private TableColumn<?, ?> infomation_col_address;
-
-    @FXML
-    private TableColumn<?, ?> infomation_col_birthDay;
-
-    @FXML
-    private TableColumn<?, ?> infomation_col_customerID;
-
-    @FXML
-    private TableColumn<?, ?> infomation_col_email;
-
-    @FXML
-    private TableColumn<?, ?> infomation_col_gender;
-
-    @FXML
-    private TableColumn<?, ?> infomation_col_name;
-
-    @FXML
-    private TableColumn<?, ?> infomation_col_number;
-
-    @FXML
-    private TextField infomation_email;
-
-    @FXML
-    private TextField infomation_gender;
-
-    @FXML
-    private ImageView infomation_importView;
-
-    @FXML
-    private TextField infomation_name;
-
-    @FXML
-    private TextField infomation_number;
-
-    @FXML
-    private TextField infomation_position;
-
-    @FXML
-    private Button infomation_updateBtn;
-
-    @FXML
-    private Button information_Btn;
-
-    @FXML
-    private AnchorPane information_viewForm;
+    private AnchorPane loanslip_viewForm;
 
     @FXML
     private Button logOut;
 
     @FXML
     private AnchorPane mainForm;
+
+    @FXML
+    private Button returnBook_Btn;
+
+    @FXML
+    private AnchorPane returnBook_viewForm;
 
     @FXML
     private Button searchBook_Btn;
@@ -115,6 +75,9 @@ public class EmployeeController implements Initializable {
     private TableColumn<?, ?> searchBook_col_location;
 
     @FXML
+    private TableColumn<?, ?> searchBook_col_location1;
+
+    @FXML
     private TableColumn<?, ?> searchBook_col_publishedDate;
 
     @FXML
@@ -130,30 +93,16 @@ public class EmployeeController implements Initializable {
     private AnchorPane searchBook_viewForm;
 
     @FXML
+    private Button status_Btn;
+
+    @FXML
+    private AnchorPane status_viewForm;
+
+    @FXML
     private Label username;
-     @FXML
-    private Button borrowBook_Btn;
-
-    @FXML
-    private AnchorPane borrowBook_viewForm;
-
-    @FXML
-    private Button borrow_ortherCustomerBtn;
-
-    @FXML
-    private AnchorPane borrow_ortherCustomerView;
-
-    @FXML
-    private Button borrow_thisCustomerBtn;
-
-    @FXML
-    private AnchorPane borrow_thisCustomerView;
     
     @FXML
-    private Button borrow_exitCheckThisCustomer;
-    
-    @FXML
-    private Button borrow_exitCheckOrtherCustomer;
+    private Button loanslip_exitBtn;
 
     @FXML
     public void minimize() {
@@ -171,26 +120,44 @@ public class EmployeeController implements Initializable {
         if (event.getSource() == borrowBook_Btn) {
             borrowBook_viewForm.setVisible(true);
             searchBook_viewForm.setVisible(false);
+            status_viewForm.setVisible(false);
+            loanslip_viewForm.setVisible(false);
+            returnBook_viewForm.setVisible(false);
         }
         if (event.getSource() == searchBook_Btn) {
             borrowBook_viewForm.setVisible(false);
             searchBook_viewForm.setVisible(true);
+            status_viewForm.setVisible(false);
+            loanslip_viewForm.setVisible(false);
+            returnBook_viewForm.setVisible(false);
         }
-    }
-    
-    @FXML
-    public void switchForm2(ActionEvent event) {
-        if (event.getSource() == borrow_thisCustomerBtn) {
-            borrow_thisCustomerView.setVisible(true);
-            borrow_ortherCustomerView.setVisible(false);
+        if (event.getSource() == status_Btn) {
+             borrowBook_viewForm.setVisible(false);
+            searchBook_viewForm.setVisible(false);
+            status_viewForm.setVisible(true);
+            loanslip_viewForm.setVisible(false);
+            returnBook_viewForm.setVisible(false);
         }
-        if (event.getSource() == borrow_ortherCustomerBtn) {
-            borrow_thisCustomerView.setVisible(false);
-            borrow_ortherCustomerView.setVisible(true);
+        if (event.getSource() == createLoanslipBtn) {
+             borrowBook_viewForm.setVisible(false);
+            searchBook_viewForm.setVisible(false);
+            status_viewForm.setVisible(false);
+            loanslip_viewForm.setVisible(true);
+            returnBook_viewForm.setVisible(false);
         }
-        if (event.getSource() == borrow_exitCheckThisCustomer || event.getSource() == borrow_exitCheckOrtherCustomer) {
-            borrow_thisCustomerView.setVisible(true);
-            borrow_ortherCustomerView.setVisible(true);
+        if (event.getSource() == returnBook_Btn) {
+             borrowBook_viewForm.setVisible(false);
+            searchBook_viewForm.setVisible(false);
+            status_viewForm.setVisible(false);
+            loanslip_viewForm.setVisible(false);
+            returnBook_viewForm.setVisible(true);
+        } 
+        if (event.getSource() == loanslip_exitBtn) {
+             borrowBook_viewForm.setVisible(false);
+            searchBook_viewForm.setVisible(false);
+            status_viewForm.setVisible(true);
+            loanslip_viewForm.setVisible(false);
+            returnBook_viewForm.setVisible(false);
         }
     }
 
