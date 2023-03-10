@@ -28,9 +28,6 @@ public class QuanTriSachController implements Initializable {
     private Button availableBooks_Btn;
 
     @FXML
-    private TextField availableBooks_Price;
-
-    @FXML
     private Button availableBooks_addBtn;
 
     @FXML
@@ -40,36 +37,40 @@ public class QuanTriSachController implements Initializable {
     private TextField availableBooks_bookID;
 
     @FXML
-    private TextField availableBooks_bookTitle;
+    private TextField availableBooks_category;
 
     @FXML
     private Button availableBooks_clearID;
 
     @FXML
     private TableColumn<?, ?> availableBooks_col_author;
+
     @FXML
     private TableColumn<?, ?> availableBooks_col_bookID;
 
     @FXML
-    private TableColumn<?, ?> availableBooks_col_bookTitle;
+    private TableColumn<?, ?> availableBooks_col_category;
 
     @FXML
-    private TableColumn<?, ?> availableBooks_col_genre;
+    private TableColumn<?, ?> availableBooks_col_description;
 
     @FXML
-    private TableColumn<?, ?> availableBooks_col_price;
+    private TableColumn<?, ?> availableBooks_col_location;
 
     @FXML
     private TableColumn<?, ?> availableBooks_col_publishedDate;
 
     @FXML
+    private TableColumn<?, ?> availableBooks_col_publishedPlace;
+
+    @FXML
     private Button availableBooks_deleteID;
 
     @FXML
-    private AnchorPane availableBooks_form;
+    private TextField availableBooks_description;
 
     @FXML
-    private TextField availableBooks_genre;
+    private AnchorPane availableBooks_form;
 
     @FXML
     private Button availableBooks_importBtn;
@@ -78,7 +79,13 @@ public class QuanTriSachController implements Initializable {
     private ImageView availableBooks_importView;
 
     @FXML
+    private TextField availableBooks_location;
+
+    @FXML
     private DatePicker availableBooks_publishedDate;
+
+    @FXML
+    private TextField availableBooks_publishedPlace;
 
     @FXML
     private TextField availableBooks_search;
@@ -87,7 +94,13 @@ public class QuanTriSachController implements Initializable {
     private Button availableBooks_updateID;
 
     @FXML
-    private Button dashBoard_Btn;
+    private AnchorPane availableBooks_viewForm;
+
+    @FXML
+    private Button customer_btn;
+
+    @FXML
+    private AnchorPane customer_viewForm;
 
     @FXML
     private Button logOut;
@@ -96,17 +109,8 @@ public class QuanTriSachController implements Initializable {
     private AnchorPane mainForm;
 
     @FXML
-    private Button purchase_Btn;
-
-    @FXML
     private Label username;
 
-    @FXML
-    private Button customer_btn;
-    @FXML
-    private AnchorPane availableBooks_viewForm;
-    @FXML
-    private AnchorPane customer_viewForm;
 
     @FXML
     public void minimize() {

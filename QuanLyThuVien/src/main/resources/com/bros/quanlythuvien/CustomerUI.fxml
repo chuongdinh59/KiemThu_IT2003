@@ -49,7 +49,7 @@
                <left>
                   <AnchorPane prefHeight="554.0" prefWidth="201.0" stylesheets="@style/CustomerStyle.css" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="dashBoard_Btn" layoutX="13.0" layoutY="196.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" styleClass="navBtn" stylesheets="@style/CustomerStyle.css" text="Information">
+                        <Button fx:id="information_Btn" layoutX="12.0" layoutY="211.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="40.0" prefWidth="180.0" styleClass="navBtn" stylesheets="@style/CustomerStyle.css" text="Information">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="USER" size="1.5EM" />
                            </graphic>
@@ -66,14 +66,9 @@
                            </font>
                         </Label>
                         <Line endX="86.19999694824219" endY="-1.52587890625E-5" layoutX="101.0" layoutY="171.0" startX="-84.19999694824219" startY="-1.52587890625E-5" stroke="WHITE" />
-                        <Button fx:id="availableBooks_Btn" layoutX="11.0" layoutY="247.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="40.0" prefWidth="180.0" styleClass="navBtn" stylesheets="@style/CustomerStyle.css" text="Available Books">
+                        <Button fx:id="searchBook_Btn" layoutX="10.0" layoutY="286.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="40.0" prefWidth="180.0" styleClass="navBtn" stylesheets="@style/CustomerStyle.css" text="Search Books">
                            <graphic>
-                              <FontAwesomeIconView fill="WHITE" glyphName="BOOK" size="1.5EM" />
-                           </graphic>
-                        </Button>
-                        <Button fx:id="purchase_Btn" layoutX="11.0" layoutY="299.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" styleClass="navBtn" stylesheets="@style/CustomerStyle.css" text="Purchase">
-                           <graphic>
-                              <FontAwesomeIconView fill="WHITE" glyphName="SHOPPING_CART" size="1.5EM" />
+                              <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="1.5EM" />
                            </graphic>
                         </Button>
                         <Button fx:id="logOut" layoutX="9.0" layoutY="514.0" mnemonicParsing="false" stylesheets="@style/CustomerStyle.css" textFill="WHITE">
@@ -85,11 +80,6 @@
                               <String fx:value="shadow" />
                            </styleClass>
                         </Button>
-                        <Button fx:id="customer_btn" layoutX="11.0" layoutY="347.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="40.0" prefWidth="180.0" styleClass="navBtn" stylesheets="@style/CustomerStyle.css" text="Customer">
-                           <graphic>
-                              <FontAwesomeIconView fill="WHITE" glyphName="USER" size="1.5EM" />
-                           </graphic>
-                        </Button>
                      </children>
                      <styleClass>
                         <String fx:value="navForm" />
@@ -100,7 +90,7 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="availableBooks_viewForm" layoutX="14.0" layoutY="14.0" prefHeight="554.4" prefWidth="898.4" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="14.0">
+                        <AnchorPane fx:id="information_viewForm" layoutX="14.0" layoutY="14.0" prefHeight="554.4" prefWidth="898.4" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="14.0">
                            <children>
                               <AnchorPane layoutX="-3.0" layoutY="-7.0" prefHeight="546.0" prefWidth="283.0" stylesheets="@style/CustomerStyle.css">
                                  <styleClass>
@@ -114,7 +104,7 @@
                                           <String fx:value="shadow" />
                                        </styleClass>
                                        <children>
-                                          <ImageView fx:id="availableBooks_importView" fitHeight="137.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" />
+                                          <ImageView fx:id="infomation_importView" fitHeight="137.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" />
                                           <Button fx:id="availableBooks_importBtn" layoutY="112.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="112.0" styleClass="addBtn" stylesheets="@style/CustomerStyle.css" text="Import" />
                                        </children>
                                     </AnchorPane>
@@ -123,13 +113,13 @@
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="availableBooks_bookID" layoutX="118.0" layoutY="170.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <TextField fx:id="infomation_name" layoutX="118.0" layoutY="170.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
                                     <Label layoutX="59.0" layoutY="219.0" text="Gender:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="availableBooks_bookTitle" layoutX="118.0" layoutY="214.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <TextField fx:id="infomation_gender" layoutX="118.0" layoutY="214.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
                                     <Label layoutX="52.0" layoutY="262.0" text="BirthDay:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
@@ -140,27 +130,27 @@
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="availableBooks_genre" layoutX="118.0" layoutY="303.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
-                                    <Button fx:id="availableBooks_updateID" layoutX="100.0" layoutY="488.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="90.0" styleClass="updateBtn" stylesheets="@style/CustomerStyle.css" text="Update" />
+                                    <TextField fx:id="infomation_position" layoutX="118.0" layoutY="303.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <Button fx:id="infomation_updateBtn" layoutX="100.0" layoutY="488.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="90.0" styleClass="updateBtn" stylesheets="@style/CustomerStyle.css" text="Update" />
                                     <Label layoutX="71.0" layoutY="347.0" text="Email:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="availableBooks_bookTitle1" layoutX="118.0" layoutY="342.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <TextField fx:id="infomation_email" layoutX="118.0" layoutY="342.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
                                     <Label layoutX="55.0" layoutY="390.0" text="Address:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="availableBooks_author1" layoutX="118.0" layoutY="386.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <TextField fx:id="infomation_address" layoutX="118.0" layoutY="386.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
                                     <Label layoutX="58.0" layoutY="435.0" text="Number:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="availableBooks_genre1" layoutX="118.0" layoutY="431.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
-                                    <DatePicker layoutX="116.0" layoutY="259.0" prefHeight="26.0" prefWidth="146.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <TextField fx:id="infomation_number" layoutX="118.0" layoutY="431.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <DatePicker fx:id="infomation_birthDay" layoutX="116.0" layoutY="259.0" prefHeight="26.0" prefWidth="146.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane fx:id="availableBooks_form" layoutX="296.0" layoutY="-7.0" prefHeight="548.0" prefWidth="581.0" stylesheets="@style/CustomerStyle.css">
@@ -171,17 +161,88 @@
                                  <children>
                                     <TableView layoutX="9.0" layoutY="8.0" prefHeight="535.0" prefWidth="563.0" styleClass="my-tableview" stylesheets="@style/CustomerStyle.css">
                                       <columns>
-                                        <TableColumn fx:id="availableBooks_col_bookID" prefWidth="84.0" text="Customer ID" />
-                                        <TableColumn fx:id="availableBooks_col_bookTitle" prefWidth="88.0" text="Name" />
-                                          <TableColumn fx:id="availableBooks_col_author" prefWidth="74.40005493164062" text="Gender" />
-                                          <TableColumn fx:id="availableBooks_col_genre" prefWidth="88.0" text="Genre" />
-                                          <TableColumn fx:id="availableBooks_col_publishedDate" prefWidth="116.79998779296875" text="Published Date" />
-                                          <TableColumn fx:id="availableBooks_col_price" prefWidth="112.80010986328125" text="Price" />
+                                        <TableColumn fx:id="infomation_col_customerID" prefWidth="80.800048828125" text="Customer ID" />
+                                        <TableColumn fx:id="infomation_col_name" minWidth="0.0" prefWidth="56.0" text="Name" />
+                                          <TableColumn fx:id="infomation_col_gender" minWidth="0.0" prefWidth="40.0" text="Gender" />
+                                          <TableColumn fx:id="infomation_col_birthDay" prefWidth="58.400054931640625" text="BirthDay" />
+                                          <TableColumn fx:id="infomation_col_email" prefWidth="49.60003662109375" text="Email" />
+                                          <TableColumn fx:id="infomation_col_address" minWidth="0.0" prefWidth="111.199951171875" text="Address" />
+                                          <TableColumn fx:id="infomation_col_number" prefWidth="288.800048828125" text="Number" />
                                       </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
                                     </TableView>
                                  </children>
                               </AnchorPane>
                            </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="searchBook_viewForm" layoutX="273.0" layoutY="134.0" prefHeight="554.4" prefWidth="898.4" stylesheets="@style/CustomerStyle.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <AnchorPane layoutX="10.0" layoutY="166.0" prefHeight="381.0" prefWidth="880.0">
+                                 <children>
+                                    <TableView layoutX="224.0" layoutY="72.0" prefHeight="381.6" prefWidth="880.0" styleClass="my-tableview" stylesheets="@style/CustomerStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columns>
+                                        <TableColumn fx:id="searchBook_col_bookID" prefWidth="75.0" text="Book ID" />
+                                        <TableColumn fx:id="searchBook_col_author" prefWidth="75.0" text="Author" />
+                                          <TableColumn fx:id="searchBook_col_description" prefWidth="75.0" text="Description" />
+                                          <TableColumn fx:id="searchBook_col_publishedPlace" prefWidth="75.0" text="Published Place" />
+                                          <TableColumn fx:id="searchBook_col_publishedDate" prefWidth="75.0" text="Published Date" />
+                                          <TableColumn fx:id="searchBook_col_category" prefWidth="75.0" text="Category" />
+                                          <TableColumn fx:id="searchBook_col_location" prefWidth="75.0" text="Location" />
+                                      </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                 </children>
+                                 <styleClass>
+                                    <String fx:value="whiteBg" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </AnchorPane>
+                              <AnchorPane layoutX="9.0" layoutY="8.0" prefHeight="152.0" prefWidth="879.0">
+                                 <children>
+                                    <Label layoutX="31.0" layoutY="24.0" text="Name: ">
+                                       <font>
+                                          <Font name="Arial" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="searchBook_name" layoutX="129.0" layoutY="18.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <Label layoutX="375.0" layoutY="24.0" text="Author: ">
+                                       <font>
+                                          <Font name="Arial" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="31.0" layoutY="85.0" text="Category: ">
+                                       <font>
+                                          <Font name="Arial" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="searchBook_author" layoutX="496.0" layoutY="20.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <Label layoutX="375.0" layoutY="85.0" text="Published Date: ">
+                                       <font>
+                                          <Font name="Arial" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <DatePicker fx:id="searchBook_publishedDate" layoutX="496.0" layoutY="79.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <Button layoutX="732.0" layoutY="70.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="114.0" styleClass="updateBtn" stylesheets="@style/CustomerStyle.css" text="Search">
+                                       <graphic>
+                                          <FontAwesomeIconView fill="#918989" glyphName="SEARCH" size="1.5EM" />
+                                       </graphic>
+                                    </Button>
+                                    <TextField fx:id="searchBook_category" layoutX="129.0" layoutY="79.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                 </children>
+                                 <styleClass>
+                                    <String fx:value="whiteBg" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                              </AnchorPane>
+                           </children>
+                           <styleClass>
+                              <String fx:value="whiteBg" />
+                              <String fx:value="shadow" />
+                           </styleClass>
                         </AnchorPane>
                      </children>
                   </AnchorPane>

@@ -22,7 +22,7 @@ import javafx.stage.Stage;
  *
  * @author ADMIN
  */
-public class CustomerController implements Initializable {
+public class EmployeeController implements Initializable {
 
      @FXML
     private AnchorPane availableBooks_form;
@@ -131,6 +131,29 @@ public class CustomerController implements Initializable {
 
     @FXML
     private Label username;
+     @FXML
+    private Button borrowBook_Btn;
+
+    @FXML
+    private AnchorPane borrowBook_viewForm;
+
+    @FXML
+    private Button borrow_ortherCustomerBtn;
+
+    @FXML
+    private AnchorPane borrow_ortherCustomerView;
+
+    @FXML
+    private Button borrow_thisCustomerBtn;
+
+    @FXML
+    private AnchorPane borrow_thisCustomerView;
+    
+    @FXML
+    private Button borrow_exitCheckThisCustomer;
+    
+    @FXML
+    private Button borrow_exitCheckOrtherCustomer;
 
     @FXML
     public void minimize() {
@@ -145,13 +168,29 @@ public class CustomerController implements Initializable {
 
     @FXML
     public void switchForm(ActionEvent event) {
-        if (event.getSource() == information_Btn) {
-            information_viewForm.setVisible(true);
+        if (event.getSource() == borrowBook_Btn) {
+            borrowBook_viewForm.setVisible(true);
             searchBook_viewForm.setVisible(false);
         }
         if (event.getSource() == searchBook_Btn) {
-            information_viewForm.setVisible(false);
+            borrowBook_viewForm.setVisible(false);
             searchBook_viewForm.setVisible(true);
+        }
+    }
+    
+    @FXML
+    public void switchForm2(ActionEvent event) {
+        if (event.getSource() == borrow_thisCustomerBtn) {
+            borrow_thisCustomerView.setVisible(true);
+            borrow_ortherCustomerView.setVisible(false);
+        }
+        if (event.getSource() == borrow_ortherCustomerBtn) {
+            borrow_thisCustomerView.setVisible(false);
+            borrow_ortherCustomerView.setVisible(true);
+        }
+        if (event.getSource() == borrow_exitCheckThisCustomer || event.getSource() == borrow_exitCheckOrtherCustomer) {
+            borrow_thisCustomerView.setVisible(true);
+            borrow_ortherCustomerView.setVisible(true);
         }
     }
 
