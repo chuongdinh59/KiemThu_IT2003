@@ -14,4 +14,5 @@ import java.util.Map;
  */
 public interface BookRepository extends CommonRepository<BookEntity>{
     List<BookEntity> findBooks(Map<String, Object> searchMap, Integer page);
+
 }

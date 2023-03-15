@@ -9,6 +9,7 @@ import com.bros.quanlythuvien.entity.BookEntity;
 import com.bros.quanlythuvien.repository.BookRepository;
 import com.bros.quanlythuvien.utils.QueryBuilderUtils;
 import com.bros.quanlythuvien.utils.ValidateUtils;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,12 +37,12 @@ public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> impleme
         }
          */
         StringBuilder query = new StringBuilder("SELECT * FROM book");
-
-        return null;
+        query.append(this.buildWhereStatementSearchBook(searchMap));
+        return super.findByCondition(query.toString());
     }
 
-    private String buildWhereStatementSearchBook(Map<String, Object> searchMap) {
-        StringBuilder whereStatement = new StringBuilder("WHERE " + QueryConstant.WHERE_ONE_EQUALS_ONE);
+    public String buildWhereStatementSearchBook(Map<String, Object> searchMap) {
+        StringBuilder whereStatement = new StringBuilder(QueryConstant.WHERE_ONE_EQUALS_ONE);
         for (Object key : searchMap.keySet()) {
             System.out.println("Key : " + key.toString() + " Value : " + searchMap.get(key));
 
@@ -55,8 +56,16 @@ public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> impleme
                 whereStatement.append(statementChild);
             }
         }
-        return null;
+        return whereStatement.toString();
 
+    }
+    public static void main(String[] args) {
+        BookRepositoryImpl bookRepository = new BookRepositoryImpl();
+        Map<String, Object> g = new HashMap<>();
+        g.put("author", "A");
+        g.put("title", "A");
+        g.put("PublicationYear", 2020);
+        System.err.println( bookRepository.buildWhereStatementSearchBook(g).toString());
     }
 
 }
