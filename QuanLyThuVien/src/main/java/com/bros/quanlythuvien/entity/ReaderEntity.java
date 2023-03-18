@@ -31,4 +31,13 @@ public class ReaderEntity {
     private Date dateOfBirth;
     @Column(name = "ReaderType")
     private String readerType;
+   
+    
+//    public Integer getId() {
+//        return id;
+//    }
+//
+//    public void setId(Integer id) {
+//        this.id = id;
+//    }
 }

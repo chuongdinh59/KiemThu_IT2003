@@ -67,3 +67,6 @@ CREATE TABLE report (
     overdue INT,
     fine double
 );
+
+insert into librarymanagement.readers(ReaderID,FullName, Gender,DateOfBirth,ReaderType) values (1,'phu','nam',2002-09-08,'quanly');
+insert into librarymanagement.readers(ReaderID,FullName, Gender,DateOfBirth,ReaderType) values (2,'chuong','nu',2003-09-08,'nhanvien');

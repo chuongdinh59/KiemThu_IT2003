@@ -4,7 +4,6 @@
  */
 package com.bros.quanlythuvien.model;
 
-
 import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +12,6 @@ import lombok.Setter;
  *
  * @author Dinh Chuong
  */
-
 @Getter
 @Setter
 public class ReaderModel {
@@ -23,4 +21,33 @@ public class ReaderModel {
     private String gender;
     private Date dateOfBirth;
     private String readerType;
+
+//    public Integer getId() {
+//        return id;
+//    }
+//
+//    public void setId(Integer id) {
+//        this.id = id;
+//    }
+//
+//    public String getFullName() {
+//        return fullName;
+//    }
+//    public void setFullName(String fullName) {
+//        this.fullName = fullName;
+//    }
+//
+//    public Date getDateOfBirth() {
+//        return dateOfBirth;
+//    }
+//    public void setDateOfBirth(Date dateOfBirth) {
+//        this.dateOfBirth = dateOfBirth;
+//    }
+//
+//    public String getReaderType() {
+//        return readerType;
+//    }
+//    public void setReaderType(String readerType) {
+//        this.readerType = readerType;
+//    }
 }

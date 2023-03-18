@@ -42,6 +42,10 @@ public class BookServiceImpl implements BookService {
         return resultsBookModel;
     }
     
-
+    
+    public static void main(String[] args) {
+        BookService bookService = new BookServiceImpl();
+        bookService.findBooks(null, null);
+    }
 
 }

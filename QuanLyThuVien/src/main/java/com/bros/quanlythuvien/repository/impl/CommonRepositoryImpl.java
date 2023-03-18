@@ -14,6 +14,7 @@ import com.bros.quanlythuvien.annotation.Table;
 import com.bros.quanlythuvien.mapper.ResultSetMapper;
 import com.bros.quanlythuvien.repository.CommonRepository;
 import com.bros.quanlythuvien.utils.ConnectionUtils;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.sql.Connection;
@@ -57,9 +58,7 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
 			return results;
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			ConnectionUtils.close(conn, stmt, rs);
-		}
+		} 
 
 		return null;
 	}
@@ -87,9 +86,7 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			ConnectionUtils.close(conn, stmt, rs);
-		}
+		} 
 
 		return null;
 	}
@@ -110,9 +107,7 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
 			return results;
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			ConnectionUtils.close(conn, stmt, rs);
-		}
+		} 
 
 		return null;
 	}
@@ -132,9 +127,7 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
 			stmt.executeUpdate(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			ConnectionUtils.close(conn, stmt, null);
-		}
+		} 
 	}
 
 	@Override
@@ -182,9 +175,7 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-		} finally {
-			ConnectionUtils.close(conn, pstmt, null);
-		}
+		} 
 	}
 
 	@Override
@@ -231,9 +222,7 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
 
 		} catch (SQLException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
-		} finally {
-			ConnectionUtils.close(conn, pstmt, rs);
-		}
+		} 
 
 		return null;
 	}

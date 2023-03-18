@@ -11,5 +11,7 @@ module com.bros.quanlythuvien {
     requires javafx.graphics;
     opens com.bros.quanlythuvien to javafx.fxml;
     exports com.bros.quanlythuvien;
+    exports com.bros.quanlythuvien.model;
+    exports com.bros.quanlythuvien.entity;
 
 }
