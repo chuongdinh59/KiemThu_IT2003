@@ -68,5 +68,15 @@ CREATE TABLE report (
     fine double
 );
 
+CREATE TABLE account (
+    AccountID INT AUTO_INCREMENT PRIMARY KEY,
+    user_name VARCHAR(255),
+    password VARCHAR(255),
+    type VARCHAR(255)
+);
+
 insert into librarymanagement.readers(ReaderID,FullName, Gender,DateOfBirth,ReaderType) values (1,'phu','nam',2002-09-08,'quanly');
 insert into librarymanagement.readers(ReaderID,FullName, Gender,DateOfBirth,ReaderType) values (2,'chuong','nu',2003-09-08,'nhanvien');
+
+insert into librarymanagement.account(AccountID,user_name,password,type) values (1,'admin','123','Admin');
+

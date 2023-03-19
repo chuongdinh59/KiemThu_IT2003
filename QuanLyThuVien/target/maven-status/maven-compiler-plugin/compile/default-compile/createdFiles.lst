@@ -43,3 +43,4 @@ com\bros\quanlythuvien\LoginController.class
 com\bros\quanlythuvien\annotation\Column.class
 com\bros\quanlythuvien\utils\QueryBuilderUtils.class
 com\bros\quanlythuvien\entity\ReaderEntity.class
+com\bros\quanlythuvien\repository\impl\ReaderRepositoryImpl.class
