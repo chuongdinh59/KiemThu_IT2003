@@ -2,7 +2,6 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -23,7 +22,7 @@
                      </font>
                   </Label>
                </children></AnchorPane>
-            <AnchorPane layoutX="320.0" prefHeight="430.0" prefWidth="320.0" styleClass="rightForm" stylesheets="@style/LoginStyle.css">
+            <AnchorPane fx:id="login_form" layoutX="320.0" onDragDetected="#login" prefHeight="430.0" prefWidth="320.0" styleClass="rightForm" stylesheets="@style/LoginStyle.css">
                <children>
                   <FontAwesomeIconView glyphName="USER" layoutX="154.0" layoutY="92.0" size="4em" />
                   <Label layoutX="115.0" layoutY="105.0" text="Login ">
@@ -31,20 +30,44 @@
                         <Font name="Arial Bold" size="20.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="username" layoutX="65.0" layoutY="170.0" prefHeight="30.0" prefWidth="220.0" promptText="User Name" styleClass="textField" stylesheets="@style/LoginStyle.css" />
-                  <PasswordField fx:id="password" layoutX="65.0" layoutY="220.0" prefHeight="30.0" prefWidth="220.0" promptText="Password" styleClass="textField" stylesheets="@style/LoginStyle.css" />
-                  <Button fx:id="loginBtn" layoutX="65.0" layoutY="298.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="220.0" styleClass="loginBtn" stylesheets="@style/LoginStyle.css" text="Login" />
+                  <TextField fx:id="username" layoutX="65.0" layoutY="184.0" onAction="#login" prefHeight="30.0" prefWidth="220.0" promptText="User Name" styleClass="textField" stylesheets="@style/LoginStyle.css" />
+                  <PasswordField fx:id="password" layoutX="65.0" layoutY="231.0" onAction="#login" prefHeight="30.0" prefWidth="220.0" promptText="Password" styleClass="textField" stylesheets="@style/LoginStyle.css" />
+                  <Button fx:id="loginBtn" layoutX="65.0" layoutY="284.0" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="220.0" styleClass="loginBtn" stylesheets="@style/LoginStyle.css" text="Login" />
                   <Button fx:id="close" layoutX="278.0" mnemonicParsing="false" onAction="#close" prefHeight="0.0" prefWidth="50.0" styleClass="close" stylesheets="@style/LoginStyle.css" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
                      <graphic>
                         <FontAwesomeIconView glyphName="CLOSE" size="1.2em" />
                      </graphic>
                   </Button>
-                  <ComboBox fx:id="cbxPosition" layoutX="62.0" layoutY="264.0" onAction="#comboBoxChange" prefHeight="26.0" prefWidth="220.0" promptText="Position" />
                   <Label fx:id="lbChangePosition" layoutX="174.0" layoutY="105.0" text="Library">
                      <font>
                         <Font name="Arial Bold" size="20.0" />
                      </font>
                   </Label>
+                  <Button fx:id="RegisterAccountBtn" layoutX="171.0" layoutY="369.0" mnemonicParsing="false" onAction="#switchForm" styleClass="BacktoLoginBtn" stylesheets="@style/LoginStyle.css" text="Register Account">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="register_form" layoutX="320.0" prefHeight="430.0" prefWidth="320.0" visible="false">
+               <children>
+                  <FontAwesomeIconView glyphName="USER" layoutX="143.0" layoutY="62.0" size="4em" />
+                  <Label layoutX="123.0" layoutY="74.0" text="Register">
+                     <font>
+                        <Font name="Arial Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="register_username" layoutX="53.0" layoutY="126.0" onAction="#register" prefHeight="30.0" prefWidth="220.0" promptText="User Name" styleClass="textField" stylesheets="@style/LoginStyle.css" />
+                  <TextField fx:id="register_fullname" layoutX="53.0" layoutY="235.0" onAction="#register" prefHeight="30.0" prefWidth="220.0" promptText="Full Name" styleClass="textField" stylesheets="@style/LoginStyle.css" />
+                  <TextField fx:id="register_email" layoutX="53.0" layoutY="288.0" onAction="#register" prefHeight="30.0" prefWidth="220.0" promptText="Email" styleClass="textField" stylesheets="@style/LoginStyle.css" />
+                  <PasswordField fx:id="register_password" layoutX="53.0" layoutY="180.0" onAction="#register" prefHeight="30.0" prefWidth="220.0" promptText="Password" styleClass="textField" stylesheets="@style/LoginStyle.css" />
+                  <Button fx:id="registerBtn" layoutX="53.0" layoutY="329.0" mnemonicParsing="false" onAction="#register" prefHeight="40.0" prefWidth="220.0" styleClass="loginBtn" stylesheets="@style/LoginStyle.css" text="Register" />
+                  <Button fx:id="BacktoLoginBtn" layoutX="189.0" layoutY="386.0" mnemonicParsing="false" onAction="#switchForm" styleClass="BacktoLoginBtn" stylesheets="@style/LoginStyle.css" text="Back to Login">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
                </children>
             </AnchorPane>
          </children>

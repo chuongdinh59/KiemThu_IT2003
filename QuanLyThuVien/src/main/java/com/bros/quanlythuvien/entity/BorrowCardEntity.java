@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BorrowCardEntity {
-    @Column(name = "BorrowCardID")
+    @Column(name = "id")
     private Integer id;
     @Column(name = "ReaderID")
     private Integer readerID;

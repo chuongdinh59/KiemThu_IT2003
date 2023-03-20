@@ -4,8 +4,16 @@
  */
 package com.bros.quanlythuvien;
 
+import com.bros.quanlythuvien.model.ReaderModel;
+import com.bros.quanlythuvien.service.ReaderService;
+import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
+import java.io.Reader;
 import java.net.URL;
+import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,7 +21,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -23,7 +33,7 @@ import javafx.stage.Stage;
  */
 public class EmployeeController implements Initializable {
 
-     @FXML
+    @FXML
     private Button borrowBook_Btn;
 
     @FXML
@@ -100,9 +110,12 @@ public class EmployeeController implements Initializable {
 
     @FXML
     private Label username;
-    
+
     @FXML
     private Button loanslip_exitBtn;
+
+    @FXML
+    private TableView<ReaderModel> tbReader;
 
     @FXML
     public void minimize() {
@@ -113,6 +126,38 @@ public class EmployeeController implements Initializable {
     @FXML
     public void close() {
         System.exit(0);
+    }
+
+    @FXML
+    private void loadReaderColumn() {
+        TableColumn colId = new TableColumn("ID");
+        colId.setCellValueFactory(new PropertyValueFactory("id"));
+        TableColumn colFName = new TableColumn("FullName");
+        colFName.setCellValueFactory(new PropertyValueFactory("fullname"));
+        TableColumn colGender = new TableColumn("Gender");
+        colGender.setCellValueFactory(new PropertyValueFactory("gender"));
+        TableColumn colBirth = new TableColumn("DateOfBirth");
+        colBirth.setCellValueFactory(new PropertyValueFactory("dateOfBirth"));
+        TableColumn colRType = new TableColumn("ReaderType");
+        colRType.setCellValueFactory(new PropertyValueFactory("readerType"));
+
+        this.tbReader.getColumns().addAll(colId, colFName, colGender, colBirth, colRType);
+    }
+
+    @FXML
+    private void loadReaderInfo(Integer id) {
+        ReaderService readerService = new ReaderServiceImpl();
+        List<ReaderModel> readerList = readerService.findReaderById(id, null);
+        for (ReaderModel reader : readerList) {
+            System.out.println("Reader ID: " + reader.getId());
+            System.out.println("Reader Name: " + reader.getFullname());
+            System.out.println("Reader Gender: " + reader.getGender());
+            System.out.println("Reader Date of Birth: " + reader.getDateOfBirth());
+            System.out.println("Reader Type: " + reader.getReaderType());
+            System.out.println("=======================");
+        }
+        System.out.println(" o day ne" + readerList);
+        this.tbReader.setItems(FXCollections.observableList(readerList));
     }
 
     @FXML
@@ -132,28 +177,28 @@ public class EmployeeController implements Initializable {
             returnBook_viewForm.setVisible(false);
         }
         if (event.getSource() == status_Btn) {
-             borrowBook_viewForm.setVisible(false);
+            borrowBook_viewForm.setVisible(false);
             searchBook_viewForm.setVisible(false);
             status_viewForm.setVisible(true);
             loanslip_viewForm.setVisible(false);
             returnBook_viewForm.setVisible(false);
         }
         if (event.getSource() == createLoanslipBtn) {
-             borrowBook_viewForm.setVisible(false);
+            borrowBook_viewForm.setVisible(false);
             searchBook_viewForm.setVisible(false);
             status_viewForm.setVisible(false);
             loanslip_viewForm.setVisible(true);
             returnBook_viewForm.setVisible(false);
         }
         if (event.getSource() == returnBook_Btn) {
-             borrowBook_viewForm.setVisible(false);
+            borrowBook_viewForm.setVisible(false);
             searchBook_viewForm.setVisible(false);
             status_viewForm.setVisible(false);
             loanslip_viewForm.setVisible(false);
             returnBook_viewForm.setVisible(true);
-        } 
+        }
         if (event.getSource() == loanslip_exitBtn) {
-             borrowBook_viewForm.setVisible(false);
+            borrowBook_viewForm.setVisible(false);
             searchBook_viewForm.setVisible(false);
             status_viewForm.setVisible(true);
             loanslip_viewForm.setVisible(false);
@@ -163,6 +208,7 @@ public class EmployeeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        loadReaderColumn();
+        loadReaderInfo(null);
     }
 }

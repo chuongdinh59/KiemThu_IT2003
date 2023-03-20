@@ -65,7 +65,8 @@ public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> impleme
         g.put("author", "A");
         g.put("title", "A");
         g.put("PublicationYear", 2020);
-        System.err.println( bookRepository.buildWhereStatementSearchBook(g).toString());
+        System.out.println( bookRepository.buildWhereStatementSearchBook(g).toString());
+        System.out.print(bookRepository.findBooks(null,null));
     }
 
 }

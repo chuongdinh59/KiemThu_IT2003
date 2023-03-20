@@ -20,7 +20,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ReportEntity {
-    @Column(name = "ReportID")
+    @Column(name = "id")
     private Integer id;
     @Column(name = "report_time")
     private Date report_time;
