@@ -9,7 +9,7 @@ CREATE TABLE category
     value nvarchar(100)
 );
 CREATE TABLE Books (
-  BookID INT PRIMARY KEY,
+  BookID INT AUTO_INCREMENT PRIMARY KEY,
   BookTitle VARCHAR(255),
   Author VARCHAR(255),
   Description TEXT,
@@ -22,7 +22,7 @@ CREATE TABLE Books (
 );
 
 CREATE TABLE Readers (
-  ReaderID INT PRIMARY KEY,
+  ReaderID INT AUTO_INCREMENT PRIMARY KEY,
   FullName VARCHAR(255),
   Gender VARCHAR(10),
   DateOfBirth DATE,
@@ -30,7 +30,7 @@ CREATE TABLE Readers (
 );
 
 CREATE TABLE BorrowCards (
-  BorrowCardID INT PRIMARY KEY,
+  BorrowCardID INT AUTO_INCREMENT PRIMARY KEY,
   ReaderID INT,
   IssuedDate DATE,
   ExpiryDate DATE,
@@ -38,7 +38,7 @@ CREATE TABLE BorrowCards (
 );
 
 CREATE TABLE BorrowDetails (
-  BorrowDetailID INT PRIMARY KEY,
+  BorrowDetailID INT AUTO_INCREMENT PRIMARY KEY,
   BorrowCardID INT,
   BookID INT,
   BorrowDate DATE,
@@ -49,7 +49,7 @@ CREATE TABLE BorrowDetails (
 );
 
 CREATE TABLE BookReservations (
-  BookReservationID INT PRIMARY KEY,
+  BookReservationID INT AUTO_INCREMENT PRIMARY KEY,
   ReaderID INT,
   BookID INT,
   ReservationDate DATE,
@@ -72,11 +72,14 @@ CREATE TABLE account (
     AccountID INT AUTO_INCREMENT PRIMARY KEY,
     user_name VARCHAR(255),
     password VARCHAR(255),
+    full_name VARCHAR(255),
+    email VARCHAR(255),
     type VARCHAR(255)
 );
 
-insert into librarymanagement.readers(ReaderID,FullName, Gender,DateOfBirth,ReaderType) values (1,'phu','nam',2002-09-08,'quanly');
-insert into librarymanagement.readers(ReaderID,FullName, Gender,DateOfBirth,ReaderType) values (2,'chuong','nu',2003-09-08,'nhanvien');
+insert into librarymanagement.readers(FullName, Gender,DateOfBirth,ReaderType) values ('phu','nam',2002-09-08,'quanly');
+insert into librarymanagement.readers(FullName, Gender,DateOfBirth,ReaderType) values ('chuong','nu',2003-09-08,'nhanvien');
 
-insert into librarymanagement.account(AccountID,user_name,password,type) values (1,'admin','123','Admin');
+insert into librarymanagement.account(user_name,password,full_name,email,type) values ('admin','123','Admin','admin@gmail.com','Admin');
+insert into librarymanagement.account(user_name,password,full_name,email,type) values ('employee','123','Employee','employee@gmail.com','Employee');
 

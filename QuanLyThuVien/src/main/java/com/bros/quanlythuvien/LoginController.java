@@ -32,13 +32,25 @@ import javafx.stage.Stage;
  *
  * @author ADMIN
  */
-public class LoginController implements Initializable {
+public class LoginController {
+
+    @FXML
+    private Button BacktoLoginBtn;
+
+    @FXML
+    private Button RegisterAccountBtn;
 
     @FXML
     private Button close;
 
     @FXML
+    private Label lbChangePosition;
+
+    @FXML
     private Button loginBtn;
+
+    @FXML
+    private AnchorPane login_form;
 
     @FXML
     private AnchorPane mainForm;
@@ -47,13 +59,25 @@ public class LoginController implements Initializable {
     private PasswordField password;
 
     @FXML
+    private Button registerBtn;
+
+    @FXML
+    private TextField register_email;
+
+    @FXML
+    private AnchorPane register_form;
+
+    @FXML
+    private TextField register_fullname;
+
+    @FXML
+    private PasswordField register_password;
+
+    @FXML
+    private TextField register_username;
+
+    @FXML
     private TextField username;
-
-    @FXML
-    private Label lbChangePosition;
-
-    @FXML
-    private ComboBox<String> cbxPosition;
 
     ObservableList<String> list = FXCollections.observableArrayList("Admin", "Employee", "Customer");
     private PreparedStatement statement;
@@ -64,14 +88,16 @@ public class LoginController implements Initializable {
         System.exit(0);
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        cbxPosition.setItems(list);
-    }
-
     @FXML
-    public void comboBoxChange(ActionEvent event) {
-        lbChangePosition.setText(cbxPosition.getValue());
+    public void switchForm(ActionEvent event) {
+        if (event.getSource() == RegisterAccountBtn) {
+            login_form.setVisible(false);
+            register_form.setVisible(true);
+        }
+        if (event.getSource() == BacktoLoginBtn) {
+            login_form.setVisible(true);
+            register_form.setVisible(false);
+        }
     }
 
     @FXML
@@ -83,15 +109,38 @@ public class LoginController implements Initializable {
             statement.setString(1, username.getText());
             statement.setString(2, password.getText());
             result = statement.executeQuery();
-            if(result.next()){
-                loginBtn.getScene().getWindow().hide();
-                Parent root = FXMLLoader.load(getClass().getResource("QuanTriUI.fxml"));
-                Scene scene = new Scene(root);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.setTitle("Admin");
-                stage.show();
-            }else{
+            if (result.next()) {
+                String accountType = result.getString("type");
+                if (accountType.equals("Admin")) {
+                    // Chuyển hướng đến trang quản trị viên
+                    loginBtn.getScene().getWindow().hide();
+                    Parent root = FXMLLoader.load(getClass().getResource("QuanTriSachUI.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage stage = new Stage();
+                    stage.setScene(scene);
+                    stage.setTitle("Admin");
+                    stage.show();
+                } else if (accountType.equals("Employee")) {
+                    // Chuyển hướng đến trang nhân viên
+                    loginBtn.getScene().getWindow().hide();
+                    Parent root = FXMLLoader.load(getClass().getResource("EmployeeUI.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage stage = new Stage();
+                    stage.setScene(scene);
+                    stage.setTitle("Employee");
+                    stage.show();
+                } else if (accountType.equals("Customer")) {
+                    // Chuyển hướng đến trang khách hàng
+                    loginBtn.getScene().getWindow().hide();
+                    Parent root = FXMLLoader.load(getClass().getResource("CustomerUI.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage stage = new Stage();
+                    stage.setScene(scene);
+                    stage.setTitle("Customer");
+                    stage.show();
+                }
+
+            } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Lỗi đăng nhập");
                 alert.setHeaderText("Error");
@@ -102,4 +151,57 @@ public class LoginController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    public void register(ActionEvent evt) {
+        Connection connect = getConnection();
+        try {
+            // Kiểm tra các trường dữ liệu
+            if (register_username.getText().isEmpty() || register_password.getText().isEmpty()
+                    || register_fullname.getText().isEmpty() || register_email.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Lỗi đăng ký");
+                alert.setHeaderText("Error");
+                alert.setContentText("Bạn phải nhập đầy đủ thông tin để đăng ký");
+                alert.showAndWait();
+                return;
+            }
+
+            // Kiểm tra username hoặc email có bị trùng
+            String sql = "SELECT * FROM librarymanagement.account WHERE user_name = ? OR email = ?";
+            PreparedStatement checkStatement = connect.prepareStatement(sql);
+            checkStatement.setString(1, register_username.getText());
+            checkStatement.setString(2, register_email.getText());
+            ResultSet resultSet = checkStatement.executeQuery();
+            if (resultSet.next()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Lỗi đăng ký");
+                alert.setHeaderText("Error");
+                alert.setContentText("Tên đăng nhập hoặc email đã tồn tại");
+                alert.showAndWait();
+                return;
+            }
+
+            // Nếu không có lỗi, thực hiện lệnh insert
+            String insertSql = "INSERT INTO librarymanagement.account (user_name, password, full_name, email, type) VALUES (?, ?, ?, ?, 'Customer')";
+            PreparedStatement insertStatement = connect.prepareStatement(insertSql);
+            insertStatement.setString(1, register_username.getText());
+            insertStatement.setString(2, register_password.getText());
+            insertStatement.setString(3, register_fullname.getText());
+            insertStatement.setString(4, register_email.getText());
+            int result = insertStatement.executeUpdate();
+            if (result > 0) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Register");
+                alert.setHeaderText("Successful");
+                alert.setContentText("Đăng ký thành công");
+                alert.showAndWait();
+                login_form.setVisible(true);
+                register_form.setVisible(false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

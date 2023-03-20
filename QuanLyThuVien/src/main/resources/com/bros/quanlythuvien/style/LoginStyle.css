@@ -48,3 +48,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .loginBtn:hover{
     -fx-background-color:linear-gradient(to top ,#4d8964,#42b583);
 }
+.BacktoLoginBtn{
+    -fx-background-color:transparent;
+}
+.BacktoLoginBtn:hover{
+    -fx-text-fill:linear-gradient(to top right, #3c2c21, #93773e);
+    -fx-cursor:hand;
+}
