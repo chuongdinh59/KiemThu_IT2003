@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 public class BookEntity {
 
-    @Column(name = "BookID")
+    @Column(name = "id")
     private Integer id;
     @Column(name = "BookTitle")
     private String title;

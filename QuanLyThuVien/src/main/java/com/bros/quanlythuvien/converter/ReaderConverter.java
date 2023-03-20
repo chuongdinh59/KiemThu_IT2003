@@ -8,7 +8,16 @@ package com.bros.quanlythuvien.converter;
  *
  * @author phu nguyen
  */
+import com.bros.quanlythuvien.entity.ReaderEntity;
 import com.bros.quanlythuvien.model.ReaderModel;
-public class ReaderConverter extends BaseConverter<ReaderModel>{
-    
+import com.bros.quanlythuvien.utils.DateUtils;
+import org.modelmapper.ModelMapper;
+public class ReaderConverter {
+    public static ModelMapper modelMapper = new ModelMapper();
+
+    public ReaderModel entityToModel(ReaderEntity entity, Class<ReaderModel> tClass) {
+        ReaderModel model = modelMapper.map(entity, tClass);
+        model.setDateOfBirth(DateUtils.convertDateToString(entity.getDateOfBirth()));
+        return model;
+    }
 }

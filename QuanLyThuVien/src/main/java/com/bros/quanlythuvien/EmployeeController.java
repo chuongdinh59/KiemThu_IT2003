@@ -127,9 +127,9 @@ public class EmployeeController implements Initializable {
     public void close() {
         System.exit(0);
     }
-    
+
     @FXML
-    private void loadReaderColumn(){
+    private void loadReaderColumn() {
         TableColumn colId = new TableColumn("ID");
         colId.setCellValueFactory(new PropertyValueFactory("id"));
         TableColumn colFName = new TableColumn("FullName");
@@ -137,21 +137,29 @@ public class EmployeeController implements Initializable {
         TableColumn colGender = new TableColumn("Gender");
         colGender.setCellValueFactory(new PropertyValueFactory("gender"));
         TableColumn colBirth = new TableColumn("DateOfBirth");
-        colBirth.setCellValueFactory(new PropertyValueFactory("dateofbirth"));
+        colBirth.setCellValueFactory(new PropertyValueFactory("dateOfBirth"));
         TableColumn colRType = new TableColumn("ReaderType");
-        colRType.setCellValueFactory(new PropertyValueFactory("readertype"));
-        
-        this.tbReader.getColumns().addAll(colId, colFName,colGender,colBirth,colRType);
+        colRType.setCellValueFactory(new PropertyValueFactory("readerType"));
+
+        this.tbReader.getColumns().addAll(colId, colFName, colGender, colBirth, colRType);
     }
-    
+
     @FXML
-    private void loadReaderInfo(Integer id){
+    private void loadReaderInfo(Integer id) {
         ReaderService readerService = new ReaderServiceImpl();
-        List<ReaderModel> readerlist = readerService.findReaderById(id, null);
-        System.out.println(" o day ne" + readerlist);
-        this.tbReader.setItems(FXCollections.observableList(readerlist));
+        List<ReaderModel> readerList = readerService.findReaderById(id, null);
+        for (ReaderModel reader : readerList) {
+            System.out.println("Reader ID: " + reader.getId());
+            System.out.println("Reader Name: " + reader.getFullname());
+            System.out.println("Reader Gender: " + reader.getGender());
+            System.out.println("Reader Date of Birth: " + reader.getDateOfBirth());
+            System.out.println("Reader Type: " + reader.getReaderType());
+            System.out.println("=======================");
+        }
+        System.out.println(" o day ne" + readerList);
+        this.tbReader.setItems(FXCollections.observableList(readerList));
     }
-    
+
     @FXML
     public void switchForm(ActionEvent event) {
         if (event.getSource() == borrowBook_Btn) {
@@ -200,7 +208,7 @@ public class EmployeeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-           loadReaderColumn();
-           loadReaderInfo(null);
+        loadReaderColumn();
+        loadReaderInfo(null);
     }
 }

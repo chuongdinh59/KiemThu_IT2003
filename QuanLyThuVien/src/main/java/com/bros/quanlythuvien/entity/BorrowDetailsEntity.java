@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 public class BorrowDetailsEntity {
 
-    @Column(name = "BorrowDetailID")
+    @Column(name = "id")
     private Integer id;
     @Column(name = "BorrowCardID")
     private Integer borrowCardID;

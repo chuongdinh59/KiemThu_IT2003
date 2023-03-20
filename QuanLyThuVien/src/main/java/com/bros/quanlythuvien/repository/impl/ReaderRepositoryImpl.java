@@ -25,48 +25,29 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
 
     @Override
     public List<ReaderEntity> findReaderById(Integer readerId, Integer page) {
-        List<ReaderEntity> readerList = new ArrayList<>();
-        String query;
         if (readerId == null) {
-            query = "SELECT * FROM readers";
-        } else {
-            query = "SELECT * FROM readers WHERE ReaderID = ?";
+            return super.findAll();
         }
-
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS); 
-            PreparedStatement stmt = conn.prepareStatement(query)) {
-            if (readerId != null){
-            stmt.setInt(1, readerId);
-            }
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                ReaderEntity reader = new ReaderEntity();
-                reader.setId(rs.getInt("ReaderID"));
-                reader.setFullName(rs.getString("FullName"));
-                reader.setGender(rs.getString("Gender"));
-                reader.setDateOfBirth(rs.getDate("DateOfBirth"));
-                reader.setReaderType(rs.getString("ReaderType"));
-                readerList.add(reader);
-                System.out.println(readerList);
-            }
-        } catch (SQLException e) {
+        List<ReaderEntity> list = new ArrayList<>();
+        ReaderEntity r = super.findById(readerId);
+        if (r != null) {
+            list.add(r);
         }
-
-        return readerList;
+        return list;
     }
 
-//    public static void main(String[] args) {
-//        ReaderRepositoryImpl readerRepository = new ReaderRepositoryImpl();
-//        List<ReaderEntity> readerList = readerRepository.findReaderById(1, null);
-//        for (ReaderEntity reader : readerList) {
-//            System.out.println("Reader ID: " + reader.getId());
-//            System.out.println("Reader Name: " + reader.getFullName());
-//            System.out.println("Reader Address: " + reader.getGender());
-//            System.out.println("Reader Email: " + reader.getDateOfBirth());
-//            System.out.println("Reader Email: " + reader.getReaderType());
-//
-//        }
-//
-//    }
+    public static void main(String[] args) {
+        ReaderRepositoryImpl readerRepository = new ReaderRepositoryImpl();
+        List<ReaderEntity> readerList = readerRepository.findReaderById(1, null);
+        for (ReaderEntity reader : readerList) {
+            System.out.println("Reader ID: " + reader.getId());
+            System.out.println("Reader Name: " + reader.getFullName());
+            System.out.println("Reader Address: " + reader.getGender());
+            System.out.println("Reader Email: " + reader.getDateOfBirth());
+            System.out.println("Reader Email: " + reader.getReaderType());
+
+        }
+
+    }
 
 }

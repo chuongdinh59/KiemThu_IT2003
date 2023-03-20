@@ -20,8 +20,8 @@ import lombok.Setter;
 @Setter
 public class CategoryEntity {
 
-    @Column(name = "CategoryID")
-    private Integer categoryID;
+    @Column(name = "id")
+    private Integer id;
     @Column(name = "code")
     private String code;
     @Column(name = "value")
