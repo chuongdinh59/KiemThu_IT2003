@@ -4,17 +4,15 @@
  */
 package com.bros.quanlythuvien.service;
 
-import com.bros.quanlythuvien.model.ReaderModel;
+
+import com.bros.quanlythuvien.model.BorrowCardModel;
 import java.util.List;
 
 /**
  *
  * @author phu nguyen
  */
-public interface ReaderService {
-
-    public ReaderModel findReaderById(Integer id);
-
-    public List<ReaderModel> findAll();
-
+public interface BorrowCardService {
+    public BorrowCardModel findBorrowCardByRID(int ReaderID);
+    public List<BorrowCardModel> findAll();
 }

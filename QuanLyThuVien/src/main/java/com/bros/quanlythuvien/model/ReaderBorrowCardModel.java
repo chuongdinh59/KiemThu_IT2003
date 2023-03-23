@@ -4,27 +4,37 @@
  */
 package com.bros.quanlythuvien.model;
 
-import com.bros.quanlythuvien.annotation.Column;
-
 import java.util.Date;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
- * @author Dinh Chuong
+ * @author ADMIN
  */
-//@Getter
-//@Setter
-public class BorrowCardModel {
+public class ReaderBorrowCardModel {
+    
+     public ReaderBorrowCardModel() {
+       
+    }
 
-    private Integer id;
+    public ReaderBorrowCardModel(Integer id, String fullname, Integer readerID, String issuedDate, String expiredDate) {
+        this.id = id;
+        this.fullname = fullname;
+        this.readerID = readerID;
+        this.issuedDate = issuedDate;
+        this.expiredDate = expiredDate;
+    }
+     private Integer id;
+    private String fullname;
     private Integer readerID;
     private String issuedDate;
     private String expiredDate;
 
     public Integer getId() {
         return id;
+    }
+
+    public String getFullname() {
+        return fullname;
     }
 
     public Integer getReaderID() {
@@ -43,6 +53,10 @@ public class BorrowCardModel {
         this.id = id;
     }
 
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
     public void setReaderID(Integer readerID) {
         this.readerID = readerID;
     }
@@ -55,4 +69,5 @@ public class BorrowCardModel {
         this.expiredDate = expiredDate;
     }
 
+   
 }

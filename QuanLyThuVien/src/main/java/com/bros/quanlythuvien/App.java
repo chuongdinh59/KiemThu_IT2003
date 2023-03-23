@@ -22,7 +22,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("LoginUI"));
+        scene = new Scene(loadFXML("EmployeeUI"));
 //            Parent root = FXMLLoader.load(getClass().getResource("DashBoardUI.fxml"))
 
 

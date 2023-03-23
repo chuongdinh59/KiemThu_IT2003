@@ -13,5 +13,7 @@ import java.util.Map;
  * @author phu nguyen
  */
 public interface ReaderRepository extends CommonRepository<ReaderEntity>{
-       public List<ReaderEntity> findReaderById(Integer ReaderID, Integer page);
+       public ReaderEntity findReaderById(Integer ReaderID);
+       public List<ReaderEntity> findAll(Integer page);
+
 }

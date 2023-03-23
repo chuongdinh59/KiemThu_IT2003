@@ -17,9 +17,10 @@ import lombok.Setter;
  */
 @Entity
 @Table(name = "borrowcards")
-@Getter
-@Setter
+//@Getter
+//@Setter
 public class BorrowCardEntity {
+
     @Column(name = "id")
     private Integer id;
     @Column(name = "ReaderID")
@@ -28,4 +29,37 @@ public class BorrowCardEntity {
     private Date issuedDate;
     @Column(name = "ExpiryDate")
     private Date expiredDate;
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setReaderID(Integer readerID) {
+        this.readerID = readerID;
+    }
+
+    public void setIssuedDate(Date issuedDate) {
+        this.issuedDate = issuedDate;
+    }
+
+    public void setExpiredDate(Date expiredDate) {
+        this.expiredDate = expiredDate;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Integer getReaderID() {
+        return readerID;
+    }
+
+    public Date getIssuedDate() {
+        return issuedDate;
+    }
+
+    public Date getExpiredDate() {
+        return expiredDate;
+    }
+
 }
