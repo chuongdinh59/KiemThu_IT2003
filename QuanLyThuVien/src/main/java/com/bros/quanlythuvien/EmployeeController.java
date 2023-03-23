@@ -4,19 +4,29 @@
  */
 package com.bros.quanlythuvien;
 
+import com.bros.quanlythuvien.model.BorrowCardModel;
+import com.bros.quanlythuvien.model.ReaderBorrowCardModel;
 import com.bros.quanlythuvien.model.ReaderModel;
+import com.bros.quanlythuvien.service.BorrowCardService;
 import com.bros.quanlythuvien.service.ReaderService;
+import com.bros.quanlythuvien.service.impl.BorrowCardServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
 import java.io.Reader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -115,7 +125,16 @@ public class EmployeeController implements Initializable {
     private Button loanslip_exitBtn;
 
     @FXML
-    private TableView<ReaderModel> tbReader;
+    private TableView<ReaderBorrowCardModel> tbReader;
+
+    @FXML
+    private Button findAllReaderBtn;
+
+    @FXML
+    private Button SearchReaderBtn;
+
+    @FXML
+    private TextField TFReaderId;
 
     @FXML
     public void minimize() {
@@ -130,34 +149,108 @@ public class EmployeeController implements Initializable {
 
     @FXML
     private void loadReaderColumn() {
-        TableColumn colId = new TableColumn("ID");
+        TableColumn colId = new TableColumn("BorrowCardID");
         colId.setCellValueFactory(new PropertyValueFactory("id"));
         TableColumn colFName = new TableColumn("FullName");
         colFName.setCellValueFactory(new PropertyValueFactory("fullname"));
-        TableColumn colGender = new TableColumn("Gender");
-        colGender.setCellValueFactory(new PropertyValueFactory("gender"));
-        TableColumn colBirth = new TableColumn("DateOfBirth");
-        colBirth.setCellValueFactory(new PropertyValueFactory("dateOfBirth"));
-        TableColumn colRType = new TableColumn("ReaderType");
-        colRType.setCellValueFactory(new PropertyValueFactory("readerType"));
+        TableColumn colRId = new TableColumn("ReaderId");
+        colRId.setCellValueFactory(new PropertyValueFactory("readerID"));
+        TableColumn colIssuedDate = new TableColumn("IssuedDate");
+        colIssuedDate.setCellValueFactory(new PropertyValueFactory("issuedDate"));
+        TableColumn colExpiredDate = new TableColumn("ExpiredDate");
+        colExpiredDate.setCellValueFactory(new PropertyValueFactory("expiredDate"));
 
-        this.tbReader.getColumns().addAll(colId, colFName, colGender, colBirth, colRType);
+        this.tbReader.getColumns().addAll(colId, colFName, colRId, colIssuedDate, colExpiredDate);
     }
 
     @FXML
     private void loadReaderInfo(Integer id) {
-        ReaderService readerService = new ReaderServiceImpl();
-        List<ReaderModel> readerList = readerService.findReaderById(id, null);
-        for (ReaderModel reader : readerList) {
-            System.out.println("Reader ID: " + reader.getId());
-            System.out.println("Reader Name: " + reader.getFullname());
-            System.out.println("Reader Gender: " + reader.getGender());
-            System.out.println("Reader Date of Birth: " + reader.getDateOfBirth());
-            System.out.println("Reader Type: " + reader.getReaderType());
-            System.out.println("=======================");
+        if (id != null) {
+            ReaderService readerService = new ReaderServiceImpl();
+            ReaderModel reader = readerService.findReaderById(id);
+            BorrowCardService borrowCardService = new BorrowCardServiceImpl();
+            BorrowCardModel borrowCard = borrowCardService.findBorrowCardByRID(id);
+
+            List<ReaderBorrowCardModel> readerBorrowCardList = new ArrayList<>();
+            ReaderBorrowCardModel readerBorrowCard = new ReaderBorrowCardModel(
+                    borrowCard.getId(),
+                    reader.getFullname(),
+                    borrowCard.getReaderID(),
+                    borrowCard.getIssuedDate(),
+                    borrowCard.getExpiredDate()
+            );
+            readerBorrowCardList.add(readerBorrowCard);
+
+            this.tbReader.setItems(FXCollections.observableList(readerBorrowCardList));
+        } else if (id == null) {
+            ReaderService readerService = new ReaderServiceImpl();
+            List<ReaderModel> readerList = readerService.findAll();
+            BorrowCardService borrowCardService = new BorrowCardServiceImpl();
+            List<BorrowCardModel> borrowCardList = borrowCardService.findAll();
+
+            List<ReaderBorrowCardModel> readerBorrowCardList = new ArrayList<>();
+            for (ReaderModel reader : readerList) {
+                for (BorrowCardModel borrowCard : borrowCardList) {
+                    if (!Objects.equals(borrowCard.getId(), reader.getId())) {
+                        continue;
+                    }
+                    ReaderBorrowCardModel readerBorrowCard = new ReaderBorrowCardModel(
+                            borrowCard.getId(),
+                            reader.getFullname(),
+                            borrowCard.getReaderID(),
+                            borrowCard.getIssuedDate(),
+                            borrowCard.getExpiredDate()
+                    );
+                    readerBorrowCardList.add(readerBorrowCard);
+                }
+            }
+
+            this.tbReader.setItems(FXCollections.observableList(readerBorrowCardList));
         }
-        System.out.println(" o day ne" + readerList);
-        this.tbReader.setItems(FXCollections.observableList(readerList));
+    }
+
+    @FXML
+    public void loadAllReader() {
+        loadReaderInfo(null);
+    }
+
+    @FXML
+    public void loadReaderId() {
+        String strId = TFReaderId.getText();
+        System.out.println("chuoi o day ne : " + strId);
+        if (!"".equals(strId)) {
+            try {
+                Integer id = Integer.valueOf(strId);
+                BorrowCardService borrowCardService = new BorrowCardServiceImpl();
+                BorrowCardModel borrowCard = borrowCardService.findBorrowCardByRID(id);
+                System.out.println("borrowCard ơ day ne" + borrowCard);
+                if (borrowCard != null) {
+                    System.out.println("dang khong bang null ");
+                    loadReaderInfo(id);
+                } else if (borrowCard == null) {
+                    System.out.println("dang bang null ne");
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Lỗi");
+                    alert.setHeaderText("Error");
+                    alert.setContentText("Không tìm thấy khách hàng");
+                    alert.showAndWait();
+                }
+
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText("Error");
+                alert.setContentText("Bạn cần phải nhập số");
+                alert.showAndWait();
+            }
+        } else if ("".equals(strId)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText("Error");
+            alert.setContentText("Bạn chưa nhập id");
+            alert.showAndWait();
+        }
+
     }
 
     @FXML
@@ -209,6 +302,6 @@ public class EmployeeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         loadReaderColumn();
-        loadReaderInfo(null);
+//        loadReaderInfo(1);
     }
 }

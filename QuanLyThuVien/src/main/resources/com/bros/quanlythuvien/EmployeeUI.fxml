@@ -181,8 +181,8 @@
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField layoutX="105.0" layoutY="6.0" styleClass="textField" />
-                                    <Button layoutX="263.0" layoutY="4.0" mnemonicParsing="false" prefHeight="2.0" prefWidth="85.0" styleClass="updateBtn" text="Search">
+                                    <TextField fx:id="TFReaderId" layoutX="105.0" layoutY="6.0" styleClass="textField" />
+                                    <Button fx:id="SearchReaderBtn" layoutX="263.0" layoutY="4.0" mnemonicParsing="false" onMouseClicked="#loadReaderId" prefHeight="2.0" prefWidth="85.0" styleClass="updateBtn" text="Search">
                                        <graphic>
                                           <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="1.5em" />
                                        </graphic>
@@ -195,6 +195,11 @@
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                        </columnResizePolicy>
                                     </TableView>
+                                    <Button fx:id="findAllReaderBtn" layoutX="365.0" layoutY="4.0" mnemonicParsing="false" onMouseClicked="#loadAllReader" prefHeight="0.0" prefWidth="85.0" styleClass="deleteBtn" text="Find All">
+                                       <font>
+                                          <Font name="Arial" size="14.0" />
+                                       </font>
+                                    </Button>
                                  </children>
                               </AnchorPane>
                               <AnchorPane layoutX="7.0" layoutY="255.0" prefHeight="288.0" prefWidth="886.0">

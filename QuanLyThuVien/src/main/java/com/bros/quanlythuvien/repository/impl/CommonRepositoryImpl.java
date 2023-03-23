@@ -90,6 +90,34 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
 
 		return null;
 	}
+        
+        @Override
+	public T findByRId(Integer id) {
+		String tableName = getTableName();
+		if (tableName == null) {
+			return null;
+		}
+
+		List<T> results = new ArrayList<>();
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			conn = ConnectionUtils.getConnection();
+			String sql = "SELECT * FROM " + tableName + "  WHERE ReaderID = " + id;
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			results = resultSetMapper.mapRow(rs, tClass);
+
+			return results.size() > 0 ? results.get(0) : null;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+
+		return null;
+	}
 
 	@Override
 	public List<T> findByCondition(String sql) {

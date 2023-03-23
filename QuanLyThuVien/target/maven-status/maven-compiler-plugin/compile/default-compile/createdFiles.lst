@@ -39,6 +39,7 @@ com\bros\quanlythuvien\enums\RoleEnums.class
 com\bros\quanlythuvien\model\CategoryModel.class
 com\bros\quanlythuvien\service\BookService.class
 com\bros\quanlythuvien\repository\impl\CommonRepositoryImpl.class
+com\bros\quanlythuvien\utils\DateUtils.class
 com\bros\quanlythuvien\LoginController.class
 com\bros\quanlythuvien\annotation\Column.class
 com\bros\quanlythuvien\utils\QueryBuilderUtils.class
