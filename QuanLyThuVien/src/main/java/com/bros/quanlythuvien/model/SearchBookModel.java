@@ -4,29 +4,44 @@
  */
 package com.bros.quanlythuvien.model;
 
-import com.bros.quanlythuvien.annotation.Column;
 import java.util.Date;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
- * @author Dinh Chuong
+ * @author ADMIN
  */
-//@Getter
-//@Setter
-public class BookModel {
+public class SearchBookModel {
 
-   
+    public SearchBookModel(Integer id, String title, String author, String publicationYear, String cate, Integer quantity) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.publicationYear = publicationYear;
+        this.cate = cate;
+        this.quantity = quantity;
+    }
 
-    private Integer id;
+    public SearchBookModel() {
+    }
+
+    public SearchBookModel(Integer id, String title, String author, String description, String publicationYear, String publicationPlace, String cate, String location) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.publicationYear = publicationYear;
+        this.publicationPlace = publicationPlace;
+        this.cate = cate;
+        this.location = location;
+    }
+    
+     private Integer id;
     private String title;
     private String author;
     private String description;
     private String publicationYear;
     private String publicationPlace;
-    private Date createAt;
-    private Integer categoryID;
+    private String cate;
     private String location;
     private Integer quantity;
 
@@ -38,19 +53,7 @@ public class BookModel {
         this.quantity = quantity;
     }
     
-    public BookModel(){}
     
-     public BookModel(Integer id, String title, String author, String description, String publicationYear, String publicationPlace,  Integer categoryID, String location) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.description = description;
-        this.publicationYear = publicationYear;
-        this.publicationPlace = publicationPlace;
-//        this.createAt = createAt;
-        this.categoryID = categoryID;
-        this.location = location;
-    }
 
     public Integer getId() {
         return id;
@@ -100,20 +103,12 @@ public class BookModel {
         this.publicationPlace = publicationPlace;
     }
 
-    public Date getCreateAt() {
-        return createAt;
+    public String getCate() {
+        return cate;
     }
 
-    public void setCreateAt(Date createAt) {
-        this.createAt = createAt;
-    }
-
-    public Integer getCategoryID() {
-        return categoryID;
-    }
-
-    public void setCategoryID(Integer categoryID) {
-        this.categoryID = categoryID;
+    public void setCate(String cate) {
+        this.cate = cate;
     }
 
     public String getLocation() {
@@ -124,4 +119,5 @@ public class BookModel {
         this.location = location;
     }
 
+   
 }

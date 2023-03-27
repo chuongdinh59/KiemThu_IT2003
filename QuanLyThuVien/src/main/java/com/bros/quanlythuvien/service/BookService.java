@@ -20,4 +20,6 @@ public interface BookService {
 
     BookModel findById(Integer id);
 
+    public List<BookModel> findAll( Integer page);
+
 }
