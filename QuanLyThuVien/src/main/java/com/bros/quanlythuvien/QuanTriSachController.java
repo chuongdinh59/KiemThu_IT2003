@@ -4,11 +4,15 @@
  */
 package com.bros.quanlythuvien;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -133,6 +137,17 @@ public class QuanTriSachController implements Initializable {
             availableBooks_viewForm.setVisible(false);
             customer_viewForm.setVisible(true);
         }
+    }
+    
+    @FXML
+    public void logOut() throws IOException{
+     logOut.getScene().getWindow().hide();
+                    Parent root = FXMLLoader.load(getClass().getResource("LoginUI.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage stage = new Stage();
+                    stage.setScene(scene);
+                    stage.setTitle("Login");
+                    stage.show();
     }
 
     @Override
