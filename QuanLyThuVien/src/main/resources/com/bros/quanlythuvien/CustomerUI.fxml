@@ -181,16 +181,7 @@
                            <children>
                               <AnchorPane layoutX="10.0" layoutY="166.0" prefHeight="381.0" prefWidth="880.0">
                                  <children>
-                                    <TableView layoutX="224.0" layoutY="72.0" prefHeight="381.6" prefWidth="880.0" styleClass="my-tableview" stylesheets="@style/CustomerStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                      <columns>
-                                        <TableColumn fx:id="searchBook_col_bookID" prefWidth="75.0" text="Book ID" />
-                                        <TableColumn fx:id="searchBook_col_author" prefWidth="75.0" text="Author" />
-                                          <TableColumn fx:id="searchBook_col_description" prefWidth="75.0" text="Description" />
-                                          <TableColumn fx:id="searchBook_col_publishedPlace" prefWidth="75.0" text="Published Place" />
-                                          <TableColumn fx:id="searchBook_col_publishedDate" prefWidth="75.0" text="Published Date" />
-                                          <TableColumn fx:id="searchBook_col_category" prefWidth="75.0" text="Category" />
-                                          <TableColumn fx:id="searchBook_col_location" prefWidth="75.0" text="Location" />
-                                      </columns>
+                                    <TableView fx:id="TBRSearchBook" layoutX="224.0" layoutY="72.0" prefHeight="381.6" prefWidth="880.0" styleClass="my-tableview" stylesheets="@style/CustomerStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                        </columnResizePolicy>
@@ -203,12 +194,12 @@
                               </AnchorPane>
                               <AnchorPane layoutX="9.0" layoutY="8.0" prefHeight="152.0" prefWidth="879.0">
                                  <children>
-                                    <Label layoutX="31.0" layoutY="24.0" text="Name: ">
+                                    <Label layoutX="31.0" layoutY="24.0" text="Title:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="searchBook_name" layoutX="129.0" layoutY="18.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <TextField fx:id="RsearchBook_name" layoutX="129.0" layoutY="18.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
                                     <Label layoutX="375.0" layoutY="24.0" text="Author: ">
                                        <font>
                                           <Font name="Arial" size="14.0" />
@@ -219,19 +210,19 @@
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="searchBook_author" layoutX="496.0" layoutY="20.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
-                                    <Label layoutX="375.0" layoutY="85.0" text="Published Date: ">
+                                    <TextField fx:id="RsearchBook_author" layoutX="496.0" layoutY="20.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <Label layoutX="375.0" layoutY="85.0" text="Published Year: ">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <DatePicker fx:id="searchBook_publishedDate" layoutX="496.0" layoutY="79.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
-                                    <Button layoutX="732.0" layoutY="70.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="114.0" styleClass="updateBtn" stylesheets="@style/CustomerStyle.css" text="Search">
+                                    <Button layoutX="732.0" layoutY="70.0" mnemonicParsing="false" onMouseClicked="#loadRSearch" prefHeight="45.0" prefWidth="114.0" styleClass="updateBtn" stylesheets="@style/CustomerStyle.css" text="Search">
                                        <graphic>
                                           <FontAwesomeIconView fill="#918989" glyphName="SEARCH" size="1.5EM" />
                                        </graphic>
                                     </Button>
-                                    <TextField fx:id="searchBook_category" layoutX="129.0" layoutY="79.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <TextField fx:id="RsearchBook_category" layoutX="129.0" layoutY="79.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <TextField fx:id="RsearchBook_publish" layoutX="496.0" layoutY="79.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
                                  </children>
                                  <styleClass>
                                     <String fx:value="whiteBg" />

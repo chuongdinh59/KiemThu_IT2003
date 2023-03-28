@@ -4,25 +4,32 @@
  */
 package com.bros.quanlythuvien;
 
+import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.BorrowCardModel;
+import com.bros.quanlythuvien.model.CategoryModel;
 import com.bros.quanlythuvien.model.ReaderBorrowCardModel;
 import com.bros.quanlythuvien.model.ReaderModel;
+import com.bros.quanlythuvien.model.SearchBookModel;
+import com.bros.quanlythuvien.service.BookService;
 import com.bros.quanlythuvien.service.BorrowCardService;
+import com.bros.quanlythuvien.service.CategoryService;
 import com.bros.quanlythuvien.service.ReaderService;
+import com.bros.quanlythuvien.service.impl.BookServiceImpl;
 import com.bros.quanlythuvien.service.impl.BorrowCardServiceImpl;
+import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
-import java.io.Reader;
+import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -80,30 +87,6 @@ public class EmployeeController implements Initializable {
     private TextField searchBook_category;
 
     @FXML
-    private TableColumn<?, ?> searchBook_col_author;
-
-    @FXML
-    private TableColumn<?, ?> searchBook_col_bookID;
-
-    @FXML
-    private TableColumn<?, ?> searchBook_col_category;
-
-    @FXML
-    private TableColumn<?, ?> searchBook_col_description;
-
-    @FXML
-    private TableColumn<?, ?> searchBook_col_location;
-
-    @FXML
-    private TableColumn<?, ?> searchBook_col_location1;
-
-    @FXML
-    private TableColumn<?, ?> searchBook_col_publishedDate;
-
-    @FXML
-    private TableColumn<?, ?> searchBook_col_publishedPlace;
-
-    @FXML
     private TextField searchBook_name;
 
     @FXML
@@ -137,6 +120,15 @@ public class EmployeeController implements Initializable {
     private TextField TFReaderId;
 
     @FXML
+    private TableView<SearchBookModel> tbBook;
+
+    @FXML
+    private TextField TFBookId;
+
+    @FXML
+    private Button findAllBookBtn;
+
+    @FXML
     public void minimize() {
         Stage stage = (Stage) mainForm.getScene().getWindow();
         stage.setIconified(true);
@@ -161,6 +153,24 @@ public class EmployeeController implements Initializable {
         colExpiredDate.setCellValueFactory(new PropertyValueFactory("expiredDate"));
 
         this.tbReader.getColumns().addAll(colId, colFName, colRId, colIssuedDate, colExpiredDate);
+    }
+
+    @FXML
+    private void loadBookColumn() {
+        TableColumn colId = new TableColumn("BookID");
+        colId.setCellValueFactory(new PropertyValueFactory("id"));
+        TableColumn colName = new TableColumn("Title");
+        colName.setCellValueFactory(new PropertyValueFactory("title"));
+        TableColumn colAuthor = new TableColumn("Author");
+        colAuthor.setCellValueFactory(new PropertyValueFactory("author"));
+        TableColumn colPubDate = new TableColumn("Published Year");
+        colPubDate.setCellValueFactory(new PropertyValueFactory("publicationYear"));
+        TableColumn colcate = new TableColumn("Category");
+        colcate.setCellValueFactory(new PropertyValueFactory("cate"));
+        TableColumn colquantity = new TableColumn("Quantity");
+        colquantity.setCellValueFactory(new PropertyValueFactory("quantity"));
+
+        this.tbBook.getColumns().addAll(colId, colName, colAuthor, colPubDate, colcate, colquantity);
     }
 
     @FXML
@@ -208,6 +218,84 @@ public class EmployeeController implements Initializable {
             this.tbReader.setItems(FXCollections.observableList(readerBorrowCardList));
         }
     }
+    private PreparedStatement statement;
+    private ResultSet result;
+
+    @FXML
+    private void loadBookInfo(Integer id) {
+        int categoryID = 0;
+
+        if (id != null) {
+            BookService bookService = new BookServiceImpl();
+            Map<String, Object> g = new HashMap<>();
+            g.put("id", id);
+            List<BookModel> bookList = bookService.findBooks(g, null);
+
+            Connection connect = getConnection();
+            try {
+                String sql = "SELECT CategoryID FROM books WHERE id = ?";
+                PreparedStatement statement = connect.prepareStatement(sql);
+                statement.setInt(1, id);
+                result = statement.executeQuery();
+
+                if (result.next()) {
+                    categoryID = result.getInt("CategoryID");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            CategoryService cateService = new CategoryServiceImpl();
+            CategoryModel cate = cateService.findById(categoryID);
+
+            List<SearchBookModel> searchBookList = new ArrayList<>();
+
+            for (BookModel book : bookList) {
+                if (!Objects.equals(book.getCategoryID(), cate.getCategoryID())) {
+                    continue;
+                }
+
+                SearchBookModel searchBook = new SearchBookModel(
+                        book.getId(),
+                        book.getTitle(),
+                        book.getAuthor(),
+                        book.getPublicationYear(),
+                        cate.getValue(),
+                        book.getQuantity()
+                );
+                searchBookList.add(searchBook);
+            }
+
+            this.tbBook.setItems(FXCollections.observableList(searchBookList));
+        } else if (id == null) {
+
+            BookService bookService = new BookServiceImpl();
+            List<BookModel> bookList = bookService.findBooks(null, null);
+            CategoryService cateService = new CategoryServiceImpl();
+            List<CategoryModel> cateList = cateService.findAll();
+
+            List<SearchBookModel> searchBookList = new ArrayList<>();
+            for (BookModel book : bookList) {
+                for (CategoryModel cate : cateList) {
+                    if (!Objects.equals(book.getCategoryID(), cate.getCategoryID())) {
+                        continue;
+                    }
+                    SearchBookModel searchBook = new SearchBookModel(
+                            book.getId(),
+                            book.getTitle(),
+                            book.getAuthor(),
+                            book.getPublicationYear(),
+                            cate.getValue(),
+                            book.getQuantity()
+                    );
+                    searchBookList.add(searchBook);
+                }
+
+            }
+
+            this.tbBook.setItems(FXCollections.observableList(searchBookList));
+        }
+    }
 
     @FXML
     public void loadAllReader() {
@@ -215,20 +303,21 @@ public class EmployeeController implements Initializable {
     }
 
     @FXML
+    public void loadAllBook() {
+        loadBookInfo(null);
+    }
+
+    @FXML
     public void loadReaderId() {
         String strId = TFReaderId.getText();
-        System.out.println("chuoi o day ne : " + strId);
         if (!"".equals(strId)) {
             try {
                 Integer id = Integer.valueOf(strId);
                 BorrowCardService borrowCardService = new BorrowCardServiceImpl();
                 BorrowCardModel borrowCard = borrowCardService.findBorrowCardByRID(id);
-                System.out.println("borrowCard ơ day ne" + borrowCard);
                 if (borrowCard != null) {
-                    System.out.println("dang khong bang null ");
                     loadReaderInfo(id);
                 } else if (borrowCard == null) {
-                    System.out.println("dang bang null ne");
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Lỗi");
                     alert.setHeaderText("Error");
@@ -251,6 +340,51 @@ public class EmployeeController implements Initializable {
             alert.showAndWait();
         }
 
+    }
+
+    @FXML
+    public void loadBookId() {
+        String strId = TFBookId.getText();
+        int pass = 0;
+        if (!"".equals(strId)) {
+            try {
+                Integer id = Integer.valueOf(strId);
+                BookService bookService = new BookServiceImpl();
+
+                Map<String, Object> g = new HashMap<>();
+                g.put("id", id);
+
+                List<BookModel> bookList = bookService.findBooks(g, null);
+
+                for (BookModel book : bookList) {
+
+                    if (book != null) {
+                        loadBookInfo(id);
+                        pass++;
+                    }
+                }
+                if (pass == 0) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Lỗi");
+                    alert.setHeaderText("Error");
+                    alert.setContentText("Không tìm thấy sách");
+                    alert.showAndWait();
+                }
+
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText("Error");
+                alert.setContentText("Bạn cần phải nhập số");
+                alert.showAndWait();
+            }
+        } else if ("".equals(strId)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText("Error");
+            alert.setContentText("Bạn chưa nhập id");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -302,6 +436,8 @@ public class EmployeeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         loadReaderColumn();
-//        loadReaderInfo(1);
+        loadReaderInfo(null);
+        loadBookColumn();
+        loadBookInfo(null);
     }
 }

@@ -5,7 +5,6 @@ com\bros\quanlythuvien\entity\BookReservationEntity.class
 com\bros\quanlythuvien\service\ReaderService.class
 com\bros\quanlythuvien\model\ReportModel.class
 com\bros\quanlythuvien\utils\ConnectionUtils.class
-com\bros\quanlythuvien\CustomerController.class
 com\bros\quanlythuvien\entity\BookEntity.class
 com\bros\quanlythuvien\converter\ReaderConverter.class
 com\bros\quanlythuvien\QuanTriSachController.class

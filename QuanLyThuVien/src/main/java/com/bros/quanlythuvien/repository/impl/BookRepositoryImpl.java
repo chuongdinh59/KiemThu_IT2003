@@ -21,6 +21,12 @@ import java.util.Map;
 public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> implements BookRepository {
 
     @Override
+    public List<BookEntity> findAll(Integer page){
+        List<BookEntity> b = super.findAll();
+        return b;
+    }
+
+    @Override
     public List<BookEntity> findBooks(Map<String, Object> searchMap, Integer page) {
 
         if (ValidateUtils.isEmptyMap(searchMap)) {
@@ -36,7 +42,7 @@ public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> impleme
             danh mục.
         }
          */
-        StringBuilder query = new StringBuilder("SELECT * FROM book");
+        StringBuilder query = new StringBuilder("SELECT * FROM books ");
         query.append(this.buildWhereStatementSearchBook(searchMap));
         return super.findByCondition(query.toString());
     }
@@ -59,14 +65,14 @@ public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> impleme
         return whereStatement.toString();
 
     }
-    public static void main(String[] args) {
-        BookRepositoryImpl bookRepository = new BookRepositoryImpl();
-        Map<String, Object> g = new HashMap<>();
-        g.put("author", "A");
-        g.put("title", "A");
-        g.put("PublicationYear", 2020);
-        System.out.println( bookRepository.buildWhereStatementSearchBook(g).toString());
-        System.out.print(bookRepository.findBooks(null,null));
-    }
 
+//    public static void main(String[] args) {
+//        BookRepositoryImpl bookRepository = new BookRepositoryImpl();
+//        Map<String, Object> g = new HashMap<>();
+//        g.put("author", "A");
+////        g.put("booktitle", "A");
+////        g.put("PublicationYear", 2020);
+//        System.out.println(bookRepository.buildWhereStatementSearchBook(g).toString());
+//        System.out.println(bookRepository.findBooks(g, null).get(0).getTitle());
+//    }
 }
