@@ -90,7 +90,7 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="availableBooks_viewForm" layoutX="14.0" layoutY="14.0" prefHeight="554.4" prefWidth="898.4" visible="false" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="14.0">
+                        <AnchorPane fx:id="availableBooks_viewForm" layoutX="14.0" layoutY="14.0" prefHeight="554.4" prefWidth="898.4" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="14.0">
                            <children>
                               <AnchorPane layoutX="-3.0" layoutY="-7.0" prefHeight="546.0" prefWidth="283.0" stylesheets="@style/QuanTriSachStyle.css">
                                  <styleClass>
@@ -164,16 +164,7 @@
                                  <children>
                                     <TextField fx:id="availableBooks_search" layoutX="14.0" layoutY="12.0" prefHeight="30.0" prefWidth="263.0" promptText="Search" styleClass="search" stylesheets="@style/QuanTriSachStyle.css" />
                                     <FontAwesomeIconView fill="#969696" glyphName="SEARCH" layoutX="17.0" layoutY="33.0" size="1.5EM" />
-                                    <TableView layoutX="9.0" layoutY="50.0" prefHeight="492.0" prefWidth="563.0" styleClass="my-tableview" stylesheets="@style/QuanTriSachStyle.css">
-                                      <columns>
-                                        <TableColumn fx:id="availableBooks_col_bookID" prefWidth="75.0" text="Book ID" />
-                                        <TableColumn fx:id="availableBooks_col_author" prefWidth="96.79998779296875" text="Author" />
-                                          <TableColumn fx:id="availableBooks_col_description" prefWidth="74.40005493164062" text="Description" />
-                                          <TableColumn fx:id="availableBooks_col_publishedPlace" prefWidth="88.0" text="Published Place" />
-                                          <TableColumn fx:id="availableBooks_col_publishedDate" prefWidth="116.79998779296875" text="Published Date" />
-                                          <TableColumn fx:id="availableBooks_col_category" prefWidth="112.80010986328125" text="Category" />
-                                          <TableColumn fx:id="availableBooks_col_location" prefWidth="112.80010986328125" text="Location" />
-                                      </columns>
+                                    <TableView fx:id="tbBook" layoutX="9.0" layoutY="74.0" prefHeight="492.0" prefWidth="563.0" styleClass="my-tableview" stylesheets="@style/QuanTriSachStyle.css">
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                        </columnResizePolicy>
@@ -182,7 +173,7 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                            <AnchorPane fx:id="customer_viewForm" layoutX="14.0" layoutY="14.0" prefHeight="554.4" prefWidth="898.4" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="14.0">
+                            <AnchorPane fx:id="customer_viewForm" layoutX="14.0" layoutY="14.0" prefHeight="554.4" prefWidth="898.4" visible="false" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="14.0">
                            <children>
                               <AnchorPane layoutX="-3.0" layoutY="-7.0" prefHeight="546.0" prefWidth="283.0" stylesheets="@style/CustomerStyle.css">
                                  <styleClass>

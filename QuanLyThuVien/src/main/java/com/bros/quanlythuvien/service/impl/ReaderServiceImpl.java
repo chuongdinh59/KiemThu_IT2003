@@ -41,7 +41,10 @@ public class ReaderServiceImpl implements ReaderService {
 
 //    public static void main(String[] args) {
 //        ReaderService readerService = new ReaderServiceImpl();
-//        ReaderModel reader = readerService.findReaderById(1);
+//        ReaderModel reader = readerService.findReaderById(6);
+//             System.out.println("name ne: " + reader.getFullname());
+//
+//    }
 ////    List<ReaderModel> readerList = readerService.findAll();
 //
 ////    for (ReaderModel reader : readerList) {

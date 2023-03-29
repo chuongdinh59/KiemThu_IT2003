@@ -15,9 +15,14 @@ import lombok.Setter;
  */
 //@Getter
 //@Setter
-public class BookModel {
+public class BookModel {   
 
-   
+    public BookModel(Integer id, String title, String author, Integer quantity) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.quantity = quantity;
+    }
 
     private Integer id;
     private String title;
