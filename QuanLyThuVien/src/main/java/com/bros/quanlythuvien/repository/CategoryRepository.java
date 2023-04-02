@@ -12,8 +12,8 @@ import java.util.List;
  * @author phu nguyen
  */
 public interface CategoryRepository extends CommonRepository<CategoryEntity>{
-           public List<CategoryEntity> findAll(Integer page);
-           
-           public CategoryEntity findById (Integer id);
+        public List<CategoryEntity> findAll(Integer page);
+
+        public CategoryEntity findById (Integer id);
 
 }

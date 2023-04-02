@@ -53,7 +53,6 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
             results = resultSetMapper.mapRow(rs, tClass);
-
             return results;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,35 +60,50 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
 
         return null;
     }
-
     @Override
     public T findById(Integer id) {
         String tableName = getTableName();
         if (tableName == null) {
             return null;
         }
-
-        List<T> results = new ArrayList<>();
         Connection conn = null;
-        Statement stmt = null;
+        PreparedStatement pstmt = null;
         ResultSet rs = null;
-
         try {
             conn = ConnectionUtils.getConnection();
-            String sql = "SELECT * FROM " + tableName + "  WHERE id = " + id;
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(sql);
-            results = resultSetMapper.mapRow(rs, tClass);
-
-            return results.size() > 0 ? results.get(0) : null;
-
+            String sql = "SELECT * FROM " + tableName + " WHERE id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            rs = pstmt.executeQuery();
+            List<T> results = resultSetMapper.mapRow(rs, tClass);
+            return !results.isEmpty() ? results.get(0) : null;
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-
+        } 
         return null;
     }
-
+//    @Override
+//    public T findById(Integer id) {
+//    String tableName = getTableName();
+//    if (tableName == null) {
+//        return null;
+//    }
+//
+//    try (Connection conn = ConnectionUtils.getConnection();
+//         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM " + tableName + " WHERE id = ?")) {
+//        pstmt.setInt(1, id);
+//        try (ResultSet rs = pstmt.executeQuery()) {
+//            List<T> results = resultSetMapper.mapRow(rs, tClass);
+//            return !results.isEmpty() ? results.get(0) : null;
+//        }
+//    } catch (SQLException e) {
+//        System.err.println("kckckkckc");
+//        e.printStackTrace();
+//    }
+//
+//    return null;
+//}
+    
     @Override
     public T findByRId(Integer id) {
         String tableName = getTableName();
@@ -108,13 +122,10 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
             results = resultSetMapper.mapRow(rs, tClass);
-
             return results.size() > 0 ? results.get(0) : null;
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -130,12 +141,23 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
             results = resultSetMapper.mapRow(rs, tClass);
-
             return results;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        finally{
+            try{
+                if (conn != null) conn.close();
+                if (stmt != null)stmt.close();
+                if (rs != null)rs.close();
+                
+                
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+            
+        }
         return null;
     }
 
@@ -143,7 +165,6 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
     public List<T> findByCondition(PreparedStatement pstmt) {
         List<T> results;
         ResultSet rs = null;
-
         try {
             rs = pstmt.executeQuery();
             results = resultSetMapper.mapRow(rs, tClass);
@@ -284,6 +305,10 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
 
         return null;
     }
+
+    
+
+
 
     private StringBuilder createSqlInsert() {
         String tableName = getTableName();

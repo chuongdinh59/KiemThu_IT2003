@@ -15,5 +15,5 @@ public interface CategoryService {
         public List<CategoryModel> findAll();
         
         public CategoryModel findById(Integer id);
-
+        
 }

@@ -12,6 +12,7 @@ import com.bros.quanlythuvien.service.CategoryService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
 import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
+import com.bros.quanlythuvien.utils.ValidateUtils;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -127,7 +128,15 @@ public class CustomerController implements Initializable {
     public void close() {
         System.exit(0);
     }
-
+    private BookService bookService ;
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        bookService = new BookServiceImpl();
+        loadRSearchBookColumn();
+        // Hàm này lỗi chỗ converter --> fix khỏi đóng conn hơi kì :v
+        loadRSearchBookInfo(null, null);
+    }
+   
     @FXML
     private void loadRSearchBookColumn() {
         TableColumn colId = new TableColumn("BookID");
@@ -151,137 +160,19 @@ public class CustomerController implements Initializable {
     }
 
     @FXML
-    private void loadRSearchBookInfo(Map<String, Object> searchMap) {
-        BookService bookService = new BookServiceImpl();
-        List<BookModel> bookList = bookService.findBooks(searchMap, null);
-        CategoryService cateService = new CategoryServiceImpl();
-        List<CategoryModel> cateList = cateService.findAll();
-
-        List<SearchBookModel> searchBookList = new ArrayList<>();
-        for (BookModel book : bookList) {
-            for (CategoryModel cate : cateList) {
-                if (!Objects.equals(book.getCategoryID(), cate.getCategoryID())) {
-                    continue;
-                }
-                SearchBookModel searchBook = new SearchBookModel(
-                        book.getId(),
-                        book.getTitle(),
-                        book.getAuthor(),
-                        book.getDescription(),
-                        book.getPublicationYear(),
-                        book.getPublicationPlace(),
-                        cate.getValue(),
-                        book.getLocation()
-                );
-                searchBookList.add(searchBook);
-            }
-        }
-
+    private void loadRSearchBookInfo(Map<String, Object> searchMap, Integer page) {
+        List<SearchBookModel> searchBookList = bookService.getSearchBookList(searchMap, page);
         this.TBRSearchBook.setItems(FXCollections.observableList(searchBookList));
     }
-    private PreparedStatement statement;
-    private ResultSet result;
-
     @FXML
     private void loadRSearch() {
         String strTitle = RsearchBook_name.getText();
         String strAuthor = RsearchBook_author.getText();
         String strCate = RsearchBook_category.getText();
         String strPublish = RsearchBook_publish.getText();
-        try {
-            Map<String, Object> g = new HashMap<>();
-            if (!"".equals(strTitle)) {
-
-                Connection connect = getConnection();
-                try {
-                    String sql = "SELECT * FROM books WHERE BookTitle LIKE CONCAT('%', _utf8mb4 ?, '%') COLLATE utf8mb4_unicode_ci;";
-                    statement = connect.prepareStatement(sql);
-                    statement.setString(1, strTitle);
-                    result = statement.executeQuery();
-
-                    if (result.next()) {
-                        g.put("BookTitle", strTitle);
-                    } else {
-                        g.put("BookTitle", "1234567898765542537");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-            if (!"".equals(strAuthor)) {
-
-                Connection connect = getConnection();
-                try {
-                    String sql = "SELECT * FROM books WHERE Author LIKE CONCAT('%', _utf8mb4 ?, '%') COLLATE utf8mb4_unicode_ci;";
-                    statement = connect.prepareStatement(sql);
-                    statement.setString(1, strAuthor);
-                    result = statement.executeQuery();
-
-                    if (result.next()) {
-                        g.put("Author", strAuthor);
-                    } else {
-                        g.put("Author", "1234567898765542537");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            if (!"".equals(strCate)) {
-                Connection connect = getConnection();
-                try {
-                    String sql = "SELECT id FROM category WHERE value LIKE CONCAT('%', _utf8mb4 ?, '%') COLLATE utf8mb4_unicode_ci;";
-                    statement = connect.prepareStatement(sql);
-                    statement.setString(1, strCate);
-                    result = statement.executeQuery();
-
-                    if (result.next()) {
-                        String Cid = result.getString("id");
-
-                        Integer Cate = Integer.valueOf(Cid);
-                        g.put("categoryID", Cate);
-                    } else {
-                        g.put("categoryID", "ádhbakdshbaksd");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (!"".equals(strPublish)) {
-
-                Connection connect = getConnection();
-                try {
-                    String sql = "SELECT * FROM books WHERE PublicationYear = ?";
-                    statement = connect.prepareStatement(sql);
-                    statement.setString(1, strPublish);
-                    result = statement.executeQuery();
-
-                    if (result.next()) {
-                        Integer Publish = Integer.valueOf(strPublish);
-                        g.put("publicationYear", Publish);
-                    } else {
-                        g.put("publicationYear", "ádhbakdshbaksd");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-               
-            }
-            loadRSearchBookInfo(g);
-
-        } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Lỗi");
-            alert.setHeaderText("Error");
-            alert.setContentText("Bạn cần phải nhập số");
-            alert.showAndWait();
-        }
+        Map<String,Object> searchMap = bookService.getSearchMap(strTitle,strAuthor, strCate, strPublish);
+        loadRSearchBookInfo(searchMap, null);
     }
-
     @FXML
     public void switchForm(ActionEvent event) {
         if (event.getSource() == information_Btn) {
@@ -305,9 +196,5 @@ public class CustomerController implements Initializable {
                     stage.show();
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        loadRSearchBookColumn();
-        loadRSearchBookInfo(null);
-    }
+    
 }

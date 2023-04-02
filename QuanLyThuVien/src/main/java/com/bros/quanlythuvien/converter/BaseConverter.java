@@ -20,4 +20,8 @@ public class BaseConverter<Model> {
         Object model = modelMapper.map(obj, modelClass);
         return (Model)model;
     }
+    public Object AToB(Object obj, Class<?> modelClass) {
+        Object o = modelMapper.map(obj, modelClass);
+        return o;
+    }
 }

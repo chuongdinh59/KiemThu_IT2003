@@ -5,6 +5,7 @@
 package com.bros.quanlythuvien.service;
 
 import com.bros.quanlythuvien.model.BookModel;
+import com.bros.quanlythuvien.model.SearchBookModel;
 import java.util.List;
 import java.util.Map;
 
@@ -21,5 +22,11 @@ public interface BookService {
     BookModel findById(Integer id);
 
     public List<BookModel> findAll( Integer page);
-
+    
+    public List<SearchBookModel> getSearchBookList(Map<String, Object> searchMap ,Integer page);
+    
+    public Map<String,Object> getSearchMap(String strTitle, String strAuthor, String strCate, String strPublish);
+    
+    
 }
+    

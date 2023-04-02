@@ -26,17 +26,5 @@ public class CategoryRepositoryImpl extends CommonRepositoryImpl<CategoryEntity>
         return c;
     }
 
-//       public static void main(String[] args) {
-//       CategoryRepositoryImpl cateRepository = new CategoryRepositoryImpl();
-//        List<CategoryEntity> cateList = cateRepository.findAll();
-////        ReaderEntity reader = readerRepository.findReaderById(1, null);
-//
-//        for (CategoryEntity cate : cateList) {
-//            System.out.println(" ID: " + cate.getId());
-//            System.out.println("code: " + cate.getCode());
-//            System.out.println("value: " + cate.getValue());
-//
-//        }
-//
-//    }
+
 }

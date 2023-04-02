@@ -35,20 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryModel findById(Integer id){
-         CategoryEntity categoryEntity = categoryRepository.findById(id);
+        CategoryEntity categoryEntity = categoryRepository.findById(id);
         return categoryConverter.entityToModel(categoryEntity, CategoryModel.class);
-    }
-
-    public static void main(String[] args) {
-        CategoryService cateService = new CategoryServiceImpl();
-//        CategoryModel cate = CategoryService.findReaderById(1);
-        List<CategoryModel> cateList = cateService.findAll();
-
-        for (CategoryModel cate : cateList) {
-            System.out.println(" ID: " + cate.getCategoryID());
-            System.out.println("code: " + cate.getCode());
-            System.out.println("value: " + cate.getValue());
-            System.out.println("=======================");
-        }
     }
 }
