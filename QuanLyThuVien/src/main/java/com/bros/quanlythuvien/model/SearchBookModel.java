@@ -12,6 +12,11 @@ import java.util.Date;
  */
 public class SearchBookModel {
 
+    public SearchBookModel(String title, String author) {
+        this.title = title;
+        this.author = author;
+    }
+
     public SearchBookModel(Integer id, String title, String author, String publicationYear, String cate, Integer quantity) {
         this.id = id;
         this.title = title;

@@ -71,7 +71,7 @@
                               <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="1.5EM" />
                            </graphic>
                         </Button>
-                        <Button fx:id="logOut" layoutX="9.0" layoutY="514.0" mnemonicParsing="false" stylesheets="@style/CustomerStyle.css" textFill="WHITE">
+                        <Button fx:id="logOut" layoutX="9.0" layoutY="514.0" mnemonicParsing="false" onMouseClicked="#logOut" stylesheets="@style/CustomerStyle.css" textFill="WHITE">
                            <graphic>
                               <FontAwesomeIconView fill="WHITE" glyphName="SIGN_OUT" size="2EM" />
                            </graphic>

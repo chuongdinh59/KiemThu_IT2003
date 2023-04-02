@@ -8,19 +8,24 @@ package com.bros.quanlythuvien.repository;
  *
  * @author Dinh Chuong
  */
+import java.sql.PreparedStatement;
 import java.util.List;
 
 public interface CommonRepository<T> {
-	List<T> findAll();
 
-	T findById(Integer id);
-        T findByRId(Integer id);
+    List<T> findAll();
 
-	List<T> findByCondition(String sql);
+    T findById(Integer id);
 
-	Integer insert(Object object);
+    T findByRId(Integer id);
 
-	void update(Object object);
+    List<T> findByCondition(String sql);
 
-	void delete(Integer id);
+    List<T> findByCondition(PreparedStatement pstmt);
+
+    Integer insert(Object object);
+
+    void update(Object object);
+
+    void delete(Integer id);
 }

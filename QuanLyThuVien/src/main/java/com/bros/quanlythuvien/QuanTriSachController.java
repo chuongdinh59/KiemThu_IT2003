@@ -4,16 +4,46 @@
  */
 package com.bros.quanlythuvien;
 
+import com.bros.quanlythuvien.model.BookModel;
+import com.bros.quanlythuvien.model.BorrowCardModel;
+import com.bros.quanlythuvien.model.CategoryModel;
+import com.bros.quanlythuvien.model.ReaderBorrowCardModel;
+import com.bros.quanlythuvien.model.ReaderModel;
+import com.bros.quanlythuvien.model.SearchBookModel;
+import com.bros.quanlythuvien.service.BookService;
+import com.bros.quanlythuvien.service.BorrowCardService;
+import com.bros.quanlythuvien.service.CategoryService;
+import com.bros.quanlythuvien.service.ReaderService;
+import com.bros.quanlythuvien.service.impl.BookServiceImpl;
+import com.bros.quanlythuvien.service.impl.BorrowCardServiceImpl;
+import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
+import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
+import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
+import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -111,6 +141,8 @@ public class QuanTriSachController implements Initializable {
     @FXML
     private Label username;
 
+    @FXML
+    private TableView<SearchBookModel> tbBook;
 
     @FXML
     public void minimize() {
@@ -135,8 +167,118 @@ public class QuanTriSachController implements Initializable {
         }
     }
 
+    @FXML
+    public void logOut() throws IOException {
+        logOut.getScene().getWindow().hide();
+        Parent root = FXMLLoader.load(getClass().getResource("LoginUI.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Login");
+        stage.show();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        loadBookColumn();
+        loadBookInfo(null);
+    }
 
+    @FXML
+    private void loadBookColumn() {
+        TableColumn colId = new TableColumn("BookID");
+        colId.setCellValueFactory(new PropertyValueFactory("id"));
+        TableColumn colName = new TableColumn("Title");
+        colName.setCellValueFactory(new PropertyValueFactory("title"));
+        TableColumn colAuthor = new TableColumn("Author");
+        colAuthor.setCellValueFactory(new PropertyValueFactory("author"));
+        TableColumn colPubDate = new TableColumn("Published Year");
+        colPubDate.setCellValueFactory(new PropertyValueFactory("publicationYear"));
+        TableColumn colcate = new TableColumn("Category");
+        colcate.setCellValueFactory(new PropertyValueFactory("cate"));
+        TableColumn colquantity = new TableColumn("Quantity");
+        colquantity.setCellValueFactory(new PropertyValueFactory("quantity"));
+
+        this.tbBook.getColumns().addAll(colId, colName, colAuthor, colPubDate, colcate, colquantity);
+    }
+    private PreparedStatement statement;
+    private ResultSet result;
+
+    @FXML
+    private void loadBookInfo(Integer id) {
+        int categoryID = 0;
+
+        if (id != null) {
+            BookService bookService = new BookServiceImpl();
+            Map<String, Object> g = new HashMap<>();
+            g.put("id", id);
+            List<BookModel> bookList = bookService.findBooks(g, null);
+
+            Connection connect = getConnection();
+            try {
+                String sql = "SELECT CategoryID FROM books WHERE id = ?";
+                PreparedStatement statement = connect.prepareStatement(sql);
+                statement.setInt(1, id);
+                result = statement.executeQuery();
+
+                if (result.next()) {
+                    categoryID = result.getInt("CategoryID");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            CategoryService cateService = new CategoryServiceImpl();
+            CategoryModel cate = cateService.findById(categoryID);
+
+            List<SearchBookModel> searchBookList = new ArrayList<>();
+
+            for (BookModel book : bookList) {
+                if (!Objects.equals(book.getCategoryID(), cate.getCategoryID())) {
+                    continue;
+                }
+
+                SearchBookModel searchBook = new SearchBookModel(
+                        book.getId(),
+                        book.getTitle(),
+                        book.getAuthor(),
+                        book.getPublicationYear(),
+                        cate.getValue(),
+                        book.getQuantity()
+                );
+                searchBookList.add(searchBook);
+            }
+
+            this.tbBook.setItems(FXCollections.observableList(searchBookList));
+            
+            
+        } else if (id == null) {
+
+            BookService bookService = new BookServiceImpl();
+            List<BookModel> bookList = bookService.findBooks(null, null);
+            CategoryService cateService = new CategoryServiceImpl();
+            List<CategoryModel> cateList = cateService.findAll();
+
+            List<SearchBookModel> searchBookList = new ArrayList<>();
+            for (BookModel book : bookList) {
+                for (CategoryModel cate : cateList) {
+                    if (!Objects.equals(book.getCategoryID(), cate.getCategoryID())) {
+                        continue;
+                    }
+                    SearchBookModel searchBook = new SearchBookModel(
+                            book.getId(),
+                            book.getTitle(),
+                            book.getAuthor(),
+                            book.getPublicationYear(),
+                            cate.getValue(),
+                            book.getQuantity()
+                    );
+                    searchBookList.add(searchBook);
+                }
+
+            }
+
+            this.tbBook.setItems(FXCollections.observableList(searchBookList));
+        }
     }
 }
