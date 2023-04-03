@@ -66,7 +66,7 @@ public class BookServiceImpl implements BookService {
 
     
     @Override
-    public Map<String,Object> getSearchMap(String strTitle, String strAuthor, String strCate, String strPublish){
+    public Map<String,Object> getSearchMap(String strTitle, String strAuthor, Integer strCate, String strPublish){
         Map<String,Object> searchMap = new HashMap<>();
         if(ValidateUtils.isValid(strTitle)) {
             searchMap.put("BookTitle", strTitle);

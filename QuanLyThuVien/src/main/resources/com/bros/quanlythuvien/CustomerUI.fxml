@@ -3,6 +3,7 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -221,8 +222,8 @@
                                           <FontAwesomeIconView fill="#918989" glyphName="SEARCH" size="1.5EM" />
                                        </graphic>
                                     </Button>
-                                    <TextField fx:id="RsearchBook_category" layoutX="129.0" layoutY="79.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
                                     <TextField fx:id="RsearchBook_publish" layoutX="496.0" layoutY="79.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <ComboBox fx:id="RsearchBook_category" layoutX="128.0" layoutY="80.0" prefHeight="26.0" prefWidth="185.0" />
                                  </children>
                                  <styleClass>
                                     <String fx:value="whiteBg" />

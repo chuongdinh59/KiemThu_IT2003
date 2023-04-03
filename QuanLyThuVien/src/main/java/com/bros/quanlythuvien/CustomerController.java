@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,6 +34,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -53,7 +55,7 @@ public class CustomerController implements Initializable {
     private TextField RsearchBook_author;
 
     @FXML
-    private TextField RsearchBook_category;
+    private ComboBox<String> RsearchBook_category;
 
     @FXML
     private TextField RsearchBook_name;
@@ -128,15 +130,38 @@ public class CustomerController implements Initializable {
     public void close() {
         System.exit(0);
     }
-    private BookService bookService ;
+    private BookService bookService;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         bookService = new BookServiceImpl();
         loadRSearchBookColumn();
         // Hàm này lỗi chỗ converter --> fix khỏi đóng conn hơi kì :v
         loadRSearchBookInfo(null, null);
+        loadSearchCategory();
     }
-   
+
+    private PreparedStatement statement;
+    private ResultSet result;
+
+    @FXML
+    private void loadSearchCategory() {
+        Connection connect = getConnection();
+        RsearchBook_category.setPromptText("Chọn thể loại");
+        try {
+            String sql = "select * from category;";
+            statement = connect.prepareStatement(sql);
+            result = statement.executeQuery();
+            while (result.next()) {
+                int id = result.getInt("id");
+                RsearchBook_category.getItems().add(result.getString("value"));
+               RsearchBook_category.setUserData(id);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     private void loadRSearchBookColumn() {
         TableColumn colId = new TableColumn("BookID");
@@ -164,15 +189,20 @@ public class CustomerController implements Initializable {
         List<BookModel> searchBookList = bookService.findBooks(searchMap, page);
         this.TBRSearchBook.setItems(FXCollections.observableList(searchBookList));
     }
+
     @FXML
     private void loadRSearch() {
         String strTitle = RsearchBook_name.getText();
         String strAuthor = RsearchBook_author.getText();
-        String strCate = RsearchBook_category.getText();
+//        String strCate = RsearchBook_category.getValue();
+        Integer cateID = Integer.valueOf(RsearchBook_category.getUserData().toString());
+        System.out.print(cateID);
         String strPublish = RsearchBook_publish.getText();
-        Map<String,Object> searchMap = bookService.getSearchMap(strTitle,strAuthor, strCate, strPublish);
+        Map<String, Object> searchMap = bookService.getSearchMap(strTitle, strAuthor, cateID, strPublish);
+
         loadRSearchBookInfo(searchMap, null);
     }
+
     @FXML
     public void switchForm(ActionEvent event) {
         if (event.getSource() == information_Btn) {
@@ -184,17 +214,16 @@ public class CustomerController implements Initializable {
             searchBook_viewForm.setVisible(true);
         }
     }
-    
+
     @FXML
-    public void logOut() throws IOException{
-     logOut.getScene().getWindow().hide();
-                    Parent root = FXMLLoader.load(getClass().getResource("LoginUI.fxml"));
-                    Scene scene = new Scene(root);
-                    Stage stage = new Stage();
-                    stage.setScene(scene);
-                    stage.setTitle("Login");
-                    stage.show();
+    public void logOut() throws IOException {
+        logOut.getScene().getWindow().hide();
+        Parent root = FXMLLoader.load(getClass().getResource("LoginUI.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Login");
+        stage.show();
     }
 
-    
 }
