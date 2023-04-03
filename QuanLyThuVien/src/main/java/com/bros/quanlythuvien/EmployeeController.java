@@ -131,7 +131,7 @@ public class EmployeeController implements Initializable {
     private TextField TFReaderId;
 
     @FXML
-    private TableView<SearchBookModel> tbBook;
+    private TableView<BookModel> tbBook;
 
     @FXML
     private TextField TFBookId;
@@ -183,7 +183,8 @@ public class EmployeeController implements Initializable {
 
     @FXML
     private Button exitBookListBtn;
-
+    
+    BookService bookService;
 //    @FXML
 //    public ArrayList<BookModel> LSbookList = new ArrayList();
     @FXML
@@ -278,81 +279,9 @@ public class EmployeeController implements Initializable {
     }
     private PreparedStatement statement;
     private ResultSet result;
-
-    @FXML
-    private void loadBookInfo(Integer id) {
-        int categoryID = 0;
-
-        if (id != null) {
-            BookService bookService = new BookServiceImpl();
-            Map<String, Object> g = new HashMap<>();
-            g.put("id", id);
-            List<BookModel> bookList = bookService.findBooks(g, null);
-
-            Connection connect = getConnection();
-            try {
-                String sql = "SELECT CategoryID FROM books WHERE id = ?";
-                PreparedStatement statement = connect.prepareStatement(sql);
-                statement.setInt(1, id);
-                result = statement.executeQuery();
-
-                if (result.next()) {
-                    categoryID = result.getInt("CategoryID");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            CategoryService cateService = new CategoryServiceImpl();
-            CategoryModel cate = cateService.findById(categoryID);
-
-            List<SearchBookModel> searchBookList = new ArrayList<>();
-
-            for (BookModel book : bookList) {
-                if (!Objects.equals(book.getCategoryID(), cate.getCategoryID())) {
-                    continue;
-                }
-
-                SearchBookModel searchBook = new SearchBookModel(
-                        book.getId(),
-                        book.getTitle(),
-                        book.getAuthor(),
-                        book.getPublicationYear(),
-                        cate.getValue(),
-                        book.getQuantity()
-                );
-                searchBookList.add(searchBook);
-            }
-
-            this.tbBook.setItems(FXCollections.observableList(searchBookList));
-        } else if (id == null) {
-
-            BookService bookService = new BookServiceImpl();
-            List<BookModel> bookList = bookService.findBooks(null, null);
-            CategoryService cateService = new CategoryServiceImpl();
-            List<CategoryModel> cateList = cateService.findAll();
-
-            List<SearchBookModel> searchBookList = new ArrayList<>();
-            for (BookModel book : bookList) {
-                for (CategoryModel cate : cateList) {
-                    if (!Objects.equals(book.getCategoryID(), cate.getCategoryID())) {
-                        continue;
-                    }
-                    SearchBookModel searchBook = new SearchBookModel(
-                            book.getId(),
-                            book.getTitle(),
-                            book.getAuthor(),
-                            book.getPublicationYear(),
-                            cate.getValue(),
-                            book.getQuantity()
-                    );
-                    searchBookList.add(searchBook);
-                }
-
-            }
-
-            this.tbBook.setItems(FXCollections.observableList(searchBookList));
-        }
+    private void loadBookInfo(Map<String, Object> searchMap, Integer page) {
+        List<BookModel> searchBookList = bookService.findBooks(searchMap, page);
+        this.tbBook.setItems(FXCollections.observableList(searchBookList));
     }
 
     @FXML
@@ -362,7 +291,7 @@ public class EmployeeController implements Initializable {
 
     @FXML
     public void loadAllBook() {
-        loadBookInfo(null);
+        loadBookInfo(null, null);
     }
 
     @FXML
@@ -417,7 +346,7 @@ public class EmployeeController implements Initializable {
                 for (BookModel book : bookList) {
 
                     if (book != null) {
-                        loadBookInfo(id);
+//                        loadBookInfo(id);
                         pass++;
                     }
                 }
@@ -867,10 +796,11 @@ public class EmployeeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        bookService = new BookServiceImpl();
         loadReaderColumn();
         loadReaderInfo(null);
         loadBookColumn();
-        loadBookInfo(null);
+        loadBookInfo(null, null);
         loadLSDate();
         loadLSBookListColumn();
 

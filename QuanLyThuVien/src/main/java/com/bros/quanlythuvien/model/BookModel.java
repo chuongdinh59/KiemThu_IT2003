@@ -32,6 +32,7 @@ public class BookModel {
     private String publicationPlace;
     private Date createAt;
     private Integer categoryID;
+    private String categoryValue;
     private String location;
     private Integer quantity;
 
@@ -129,4 +130,12 @@ public class BookModel {
         this.location = location;
     }
 
+    public String getCategoryValue() {
+        return categoryValue;
+    }
+
+    public void setCategoryValue(String categoryValue) {
+        this.categoryValue = categoryValue;
+    }
+    
 }

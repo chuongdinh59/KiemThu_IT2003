@@ -56,25 +56,14 @@ public class BookServiceImpl implements BookService {
         List<BookModel> resultsBookModel = new ArrayList<>();
 
         for (BookEntity entity : resultsBookEntity) {
-            BookModel bookModel = bookConverter.entityToModel(entity, BookModel.class);
+            CategoryEntity category = categoryRepository.findById(entity.getCategoryID());
+            BookModel bookModel = bookConverter.entityToModel(category, entity, BookModel.class);
             resultsBookModel.add(bookModel);
         }
-        
         return resultsBookModel;
     }
 
-    @Override
-    public List<SearchBookModel> getSearchBookList(Map<String, Object> searchMap , Integer page) {
-        List<BookModel> bookList = findBooks(searchMap, null);
-        List<SearchBookModel> searchBookList = new ArrayList<>();
-        for (BookModel book : bookList) {
-            CategoryEntity category = categoryRepository.findById(book.getCategoryID());
-            SearchBookModel searchBookModel = bookConverter
-                    .BookModelToSearchBookModel( category, book, SearchBookModel.class);
-            searchBookList.add(searchBookModel);
-        }
-        return searchBookList;
-    }
+
     
     @Override
     public Map<String,Object> getSearchMap(String strTitle, String strAuthor, Integer strCate, String strPublish){

@@ -23,10 +23,10 @@ public interface BookService {
 
     public List<BookModel> findAll( Integer page);
     
-    public List<SearchBookModel> getSearchBookList(Map<String, Object> searchMap ,Integer page);
+
     
     public Map<String,Object> getSearchMap(String strTitle, String strAuthor, Integer strCate, String strPublish);
-    
+
     
 }
     
