@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 
 /**
  *
@@ -81,5 +83,26 @@ public class BookServiceImpl implements BookService {
             searchMap.put("PublicationYear", strPublish);
         }
         return searchMap;
+    }
+    
+//    public BookModel get1Book(Integer id,String title,String author,String description, Integer publicationYear,String publicationPlace,Integer categoryID,String location){
+//        BookModel book = new BookModel(id, title, author, description, publicationYear, publicationPlace, categoryID, location);
+//        return book;
+//    }
+    
+    @Override
+    public  BookModel getBook(TextField id,TextField title,TextField author,TextField description
+            ,TextField publicationPlace,TextField publicationYear ,ComboBox<String> category,TextField location){
+        BookModel book = new BookModel();
+        book.setId(Integer.valueOf(id.getText()));
+        book.setTitle(title.getText());
+        book.setAuthor(author.getText());
+        book.setDescription(description.getText());
+        System.out.print(publicationYear.getText());
+        book.setPublicationYear(Integer.valueOf(publicationYear.getText()));
+        book.setPublicationPlace(publicationPlace.getText());
+        book.setCategoryValue(category.getValue());
+        book.setLocation(location.getText());
+        return book;
     }
 }

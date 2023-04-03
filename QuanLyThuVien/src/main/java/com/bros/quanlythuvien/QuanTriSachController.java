@@ -38,9 +38,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -67,31 +69,10 @@ public class QuanTriSachController implements Initializable {
     private TextField availableBooks_bookID;
 
     @FXML
-    private TextField availableBooks_category;
+    private ComboBox<String> availableBooks_category;
 
     @FXML
     private Button availableBooks_clearID;
-
-    @FXML
-    private TableColumn<?, ?> availableBooks_col_author;
-
-    @FXML
-    private TableColumn<?, ?> availableBooks_col_bookID;
-
-    @FXML
-    private TableColumn<?, ?> availableBooks_col_category;
-
-    @FXML
-    private TableColumn<?, ?> availableBooks_col_description;
-
-    @FXML
-    private TableColumn<?, ?> availableBooks_col_location;
-
-    @FXML
-    private TableColumn<?, ?> availableBooks_col_publishedDate;
-
-    @FXML
-    private TableColumn<?, ?> availableBooks_col_publishedPlace;
 
     @FXML
     private Button availableBooks_deleteID;
@@ -112,7 +93,7 @@ public class QuanTriSachController implements Initializable {
     private TextField availableBooks_location;
 
     @FXML
-    private DatePicker availableBooks_publishedDate;
+    private TextField availableBooks_publishedYear;
 
     @FXML
     private TextField availableBooks_publishedPlace;
@@ -140,11 +121,15 @@ public class QuanTriSachController implements Initializable {
 
     @FXML
     private Label username;
+    
+    @FXML
+    private TextField availableBooks_title;
 
     @FXML
     private TableView<BookModel> tbBook;
-    
+
     BookService bookService;
+
     @FXML
     public void minimize() {
         Stage stage = (Stage) mainForm.getScene().getWindow();
@@ -184,6 +169,7 @@ public class QuanTriSachController implements Initializable {
         bookService = new BookServiceImpl();
         loadBookColumn();
         loadBookInfo(null, null);
+        loadCate();
     }
 
     @FXML
@@ -197,15 +183,73 @@ public class QuanTriSachController implements Initializable {
         TableColumn colPubDate = new TableColumn("Published Year");
         colPubDate.setCellValueFactory(new PropertyValueFactory("publicationYear"));
         TableColumn colcate = new TableColumn("Category");
-        colcate.setCellValueFactory(new PropertyValueFactory("cate"));
+        colcate.setCellValueFactory(new PropertyValueFactory("categoryValue"));
         TableColumn colquantity = new TableColumn("Quantity");
         colquantity.setCellValueFactory(new PropertyValueFactory("quantity"));
 
         this.tbBook.getColumns().addAll(colId, colName, colAuthor, colPubDate, colcate, colquantity);
     }
 
+    @FXML
     private void loadBookInfo(Map<String, Object> searchMap, Integer page) {
         List<BookModel> searchBookList = bookService.findBooks(searchMap, page);
         this.tbBook.setItems(FXCollections.observableList(searchBookList));
     }
+
+    @FXML
+    private void TBInfor() {
+        BookModel rowData = tbBook.getSelectionModel().getSelectedItem();
+        if (rowData != null) {
+            availableBooks_bookID.setText(rowData.getId().toString());
+            availableBooks_author.setText(rowData.getAuthor());
+            availableBooks_description.setText(rowData.getDescription());
+            availableBooks_publishedPlace.setText(rowData.getPublicationPlace());
+            availableBooks_publishedYear.setText(rowData.getPublicationYear().toString());
+            availableBooks_category.setValue(rowData.getCategoryValue());
+            availableBooks_location.setText(rowData.getLocation());
+
+        }
+    }
+
+    private PreparedStatement statement;
+    private ResultSet result;
+    private Map<Integer, String> categoriesMap = new HashMap<>();
+
+    @FXML
+    private void loadCate() {
+        Connection connect = getConnection();
+        availableBooks_category.setPromptText("Chọn thể loại");
+        availableBooks_category.getItems().add(0, "Chọn thể loại");
+        categoriesMap.clear();
+        try {
+            String sql = "select * from category;";
+            statement = connect.prepareStatement(sql);
+            result = statement.executeQuery();
+            while (result.next()) {
+                Integer id = result.getInt("id");
+                String value = result.getString("value");
+                categoriesMap.put(id, value);
+            }
+            availableBooks_category.getItems().addAll(categoriesMap.values());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @FXML
+    private void updateBook(){
+        String selectedCategory = availableBooks_category.getValue();
+        Integer cateID = null;
+        for (Map.Entry<Integer, String> entry : categoriesMap.entrySet()) {
+            if (entry.getValue().equals(selectedCategory)) {
+                cateID = entry.getKey();
+                break;
+            }
+        }
+        BookModel book =  bookService.getBook(availableBooks_bookID, availableBooks_title, 
+                availableBooks_author, availableBooks_description,  availableBooks_publishedPlace, 
+                availableBooks_publishedYear, availableBooks_category, availableBooks_location);
+        int a =1;
+                }
+
 }

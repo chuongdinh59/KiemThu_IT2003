@@ -28,7 +28,7 @@ public class BookModel {
     private String title;
     private String author;
     private String description;
-    private String publicationYear;
+    private Integer publicationYear;
     private String publicationPlace;
     private Date createAt;
     private Integer categoryID;
@@ -46,7 +46,7 @@ public class BookModel {
     
     public BookModel(){}
     
-     public BookModel(Integer id, String title, String author, String description, String publicationYear, String publicationPlace,  Integer categoryID, String location) {
+     public BookModel(Integer id, String title, String author, String description, Integer publicationYear, String publicationPlace,  Integer categoryID, String location) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -90,11 +90,11 @@ public class BookModel {
         this.description = description;
     }
 
-    public String getPublicationYear() {
+    public Integer getPublicationYear() {
         return publicationYear;
     }
 
-    public void setPublicationYear(String publicationYear) {
+    public void setPublicationYear(Integer publicationYear) {
         this.publicationYear = publicationYear;
     }
 
