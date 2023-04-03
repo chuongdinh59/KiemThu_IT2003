@@ -119,7 +119,7 @@ public class EmployeeController implements Initializable {
     private Button loanslip_exitBtn;
 
     @FXML
-    private TableView<ReaderBorrowCardModel> tbReader;
+    private TableView<BorrowCardModel> tbReader;
 
     @FXML
     private Button findAllReaderBtn;
@@ -200,18 +200,18 @@ public class EmployeeController implements Initializable {
 
     @FXML
     private void loadReaderColumn() {
+        TableColumn colRId  = new TableColumn("ReaderId");
+        colRId.setCellValueFactory(new PropertyValueFactory("readerID"));
         TableColumn colId = new TableColumn("BorrowCardID");
         colId.setCellValueFactory(new PropertyValueFactory("id"));
         TableColumn colFName = new TableColumn("FullName");
-        colFName.setCellValueFactory(new PropertyValueFactory("fullname"));
-        TableColumn colRId = new TableColumn("ReaderId");
-        colRId.setCellValueFactory(new PropertyValueFactory("readerID"));
+        colFName.setCellValueFactory(new PropertyValueFactory("fullName"));
         TableColumn colIssuedDate = new TableColumn("IssuedDate");
         colIssuedDate.setCellValueFactory(new PropertyValueFactory("issuedDate"));
         TableColumn colExpiredDate = new TableColumn("ExpiredDate");
         colExpiredDate.setCellValueFactory(new PropertyValueFactory("expiredDate"));
 
-        this.tbReader.getColumns().addAll(colId, colFName, colRId, colIssuedDate, colExpiredDate);
+        this.tbReader.getColumns().addAll(colRId, colFName, colId, colIssuedDate, colExpiredDate);
     }
 
     @FXML
@@ -225,57 +225,34 @@ public class EmployeeController implements Initializable {
         TableColumn colPubDate = new TableColumn("Published Year");
         colPubDate.setCellValueFactory(new PropertyValueFactory("publicationYear"));
         TableColumn colcate = new TableColumn("Category");
-        colcate.setCellValueFactory(new PropertyValueFactory("cate"));
+        colcate.setCellValueFactory(new PropertyValueFactory("categoryValue"));
         TableColumn colquantity = new TableColumn("Quantity");
         colquantity.setCellValueFactory(new PropertyValueFactory("quantity"));
 
         this.tbBook.getColumns().addAll(colId, colName, colAuthor, colPubDate, colcate, colquantity);
     }
-
+    
+    
+    // T sửa thành nếu có id thì tìm theo id nếu không có id tìm tất cả,
+    // thấy khúc này sai ý m thì kêu t fix
+    private ReaderService readerService ;
+    private BorrowCardService borrowCardService;
     @FXML
     private void loadReaderInfo(Integer id) {
+        List<BorrowCardModel> readerBorrowCardList = new ArrayList<>();
         if (id != null) {
-            ReaderService readerService = new ReaderServiceImpl();
-            ReaderModel reader = readerService.findReaderById(id);
-            BorrowCardService borrowCardService = new BorrowCardServiceImpl();
             BorrowCardModel borrowCard = borrowCardService.findBorrowCardByRID(id);
-
-            List<ReaderBorrowCardModel> readerBorrowCardList = new ArrayList<>();
-            ReaderBorrowCardModel readerBorrowCard = new ReaderBorrowCardModel(
-                    borrowCard.getId(),
-                    reader.getFullname(),
-                    borrowCard.getReaderID(),
-                    borrowCard.getIssuedDate(),
-                    borrowCard.getExpiredDate()
-            );
-            readerBorrowCardList.add(readerBorrowCard);
-
-            this.tbReader.setItems(FXCollections.observableList(readerBorrowCardList));
-        } else if (id == null) {
-            ReaderService readerService = new ReaderServiceImpl();
-            List<ReaderModel> readerList = readerService.findAll();
-            BorrowCardService borrowCardService = new BorrowCardServiceImpl();
-            List<BorrowCardModel> borrowCardList = borrowCardService.findAll();
-
-            List<ReaderBorrowCardModel> readerBorrowCardList = new ArrayList<>();
-            for (ReaderModel reader : readerList) {
-                for (BorrowCardModel borrowCard : borrowCardList) {
-                    if (!Objects.equals(borrowCard.getId(), reader.getId())) {
-                        continue;
-                    }
-                    ReaderBorrowCardModel readerBorrowCard = new ReaderBorrowCardModel(
-                            borrowCard.getId(),
-                            reader.getFullname(),
-                            borrowCard.getReaderID(),
-                            borrowCard.getIssuedDate(),
-                            borrowCard.getExpiredDate()
-                    );
-                    readerBorrowCardList.add(readerBorrowCard);
-                }
+            ReaderModel reader = readerService.findById(borrowCard.getReaderID());
+            borrowCard.setFullName(reader.getFullname());
+            readerBorrowCardList.add(borrowCard);
+        } else  {
+            List<BorrowCardModel> borrowCardModels = borrowCardService.findAll();
+            for ( BorrowCardModel b:  borrowCardModels){
+                readerBorrowCardList.add(b);
             }
-
-            this.tbReader.setItems(FXCollections.observableList(readerBorrowCardList));
         }
+        this.tbReader.setItems(FXCollections.observableList(readerBorrowCardList));
+
     }
     private PreparedStatement statement;
     private ResultSet result;
@@ -769,7 +746,7 @@ public class EmployeeController implements Initializable {
             loanslip_viewForm.setVisible(false);
             returnBook_viewForm.setVisible(true);
         }
-        if (event.getSource() == loanslip_exitBtn) {
+        if (event.getSource() == loanslip_exitBtn) {    
             borrowBook_viewForm.setVisible(true);
             loanslip_viewForm.setVisible(false);
         }
@@ -797,6 +774,8 @@ public class EmployeeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         bookService = new BookServiceImpl();
+        readerService = new ReaderServiceImpl();
+        borrowCardService = new BorrowCardServiceImpl();
         loadReaderColumn();
         loadReaderInfo(null);
         loadBookColumn();

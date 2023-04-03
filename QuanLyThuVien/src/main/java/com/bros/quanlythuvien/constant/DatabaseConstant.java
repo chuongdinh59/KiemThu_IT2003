@@ -9,7 +9,7 @@ package com.bros.quanlythuvien.constant;
  * @author Dinh Chuong
  */
 public class DatabaseConstant {
-	public static final String DB_URL = "jdbc:mysql://localhost:3306/librarymanagement";
+	public static final String DB_URL = "jdbc:mysql://localhost:3306/librarymanagement2?useSSL=false";
 	public static final String USER = "root";
 	public static final String PASS = "75760208lv";
 }

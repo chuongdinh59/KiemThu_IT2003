@@ -132,7 +132,7 @@ public class QuanTriSachController implements Initializable {
     private TextField availableBooks_quantity;
 
     BookService bookService;
-
+    CategoryService categoryService;
     @FXML
     public void minimize() {
         Stage stage = (Stage) mainForm.getScene().getWindow();
@@ -169,7 +169,8 @@ public class QuanTriSachController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        bookService = new BookServiceImpl();
+        this.bookService = new BookServiceImpl();
+        this.categoryService = new CategoryServiceImpl();
         loadBookColumn();
         loadBookInfo(null, null);
         loadCate();
@@ -230,24 +231,18 @@ public class QuanTriSachController implements Initializable {
         availableBooks_quantity.setText("");
     }
 
-    private PreparedStatement statement;
-    private ResultSet result;
     private Map<Integer, String> categoriesMap = new HashMap<>();
 
     @FXML
     private void loadCate() {
-        Connection connect = getConnection();
         availableBooks_category.setPromptText("Chọn thể loại");
         availableBooks_category.getItems().add(0, "Chọn thể loại");
         categoriesMap.clear();
+        
         try {
-            String sql = "select * from category;";
-            statement = connect.prepareStatement(sql);
-            result = statement.executeQuery();
-            while (result.next()) {
-                Integer id = result.getInt("id");
-                String value = result.getString("value");
-                categoriesMap.put(id, value);
+            List<CategoryModel> categories = categoryService.findAll();
+            for ( CategoryModel c: categories){
+                categoriesMap.put(c.getCategoryID(), c.getValue());
             }
             availableBooks_category.getItems().addAll(categoriesMap.values());
         } catch (Exception e) {
@@ -261,7 +256,6 @@ public class QuanTriSachController implements Initializable {
 //            availableBooks_publishedYear, availableBooks_category, availableBooks_location, availableBooks_quantity, categoriesMap);
     @FXML
     private void updateBook() {
-
         BookModel book = bookService.getBook(availableBooks_bookID, availableBooks_title,
                 availableBooks_author, availableBooks_description, availableBooks_publishedPlace,
                 availableBooks_publishedYear, availableBooks_category, availableBooks_location, availableBooks_quantity, categoriesMap);

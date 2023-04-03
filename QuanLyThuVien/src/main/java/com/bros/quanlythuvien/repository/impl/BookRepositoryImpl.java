@@ -145,7 +145,6 @@ public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> impleme
     public String buildWhereStatementSearchBook(Map<String, Object> searchMap) {
         StringBuilder whereStatement = new StringBuilder(QueryConstant.WHERE_ONE_EQUALS_ONE);
         for (Object key : searchMap.keySet()) {
-            System.out.println("Key : " + key.toString() + " Value : " + searchMap.get(key));
             Object value = searchMap.get(key);
             if (value instanceof Integer) {
                 String statementChild = QueryBuilderUtils.withOperator(key.toString().toLowerCase(), value, QueryConstant.EQUAL_OPERATOR);
@@ -155,7 +154,6 @@ public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> impleme
                 whereStatement.append(statementChild);
             }
         }
-        System.out.print(whereStatement.toString() + "\n");
         return whereStatement.toString();
 
     }

@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface ReaderService {
 
-    public ReaderModel findReaderById(Integer id);
+    public ReaderModel findById(Integer id);
 
     public List<ReaderModel> findAll();
 

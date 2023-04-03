@@ -23,8 +23,8 @@ public class ReaderServiceImpl implements ReaderService {
     ReaderConverter readerConverter = new ReaderConverter();
 
     @Override
-    public ReaderModel findReaderById(Integer id) {
-        ReaderEntity readerEntity = readerRepository.findReaderById(id);
+    public ReaderModel findById(Integer id) {
+        ReaderEntity readerEntity = readerRepository.findById(id);
         return readerConverter.entityToModel(readerEntity, ReaderModel.class);
     }
 
@@ -32,29 +32,10 @@ public class ReaderServiceImpl implements ReaderService {
     public List<ReaderModel> findAll() {
         List<ReaderEntity> borrowCardList = readerRepository.findAll(null);
         List<ReaderModel> resultsBorrowCardModel = new ArrayList<>();
-
         for (ReaderEntity entity : borrowCardList) {
             resultsBorrowCardModel.add(readerConverter.entityToModel(entity, ReaderModel.class));
         }
         return resultsBorrowCardModel;
     }
-
-//    public static void main(String[] args) {
-//        ReaderService readerService = new ReaderServiceImpl();
-//        ReaderModel reader = readerService.findReaderById(6);
-//             System.out.println("name ne: " + reader.getFullname());
-//
-//    }
-////    List<ReaderModel> readerList = readerService.findAll();
-//
-////    for (ReaderModel reader : readerList) {
-//        System.out.println("Reader ID: " + reader.getId());
-//        System.out.println("Reader Name: " + reader.getFullname());
-//        System.out.println("Reader Gender: " + reader.getGender());
-//        System.out.println("Reader Date of Birth: " + reader.getDateOfBirth());
-//        System.out.println("Reader Type: " + reader.getReaderType());
-//        System.out.println("=======================");
-////    }
-//    }
 
 }

@@ -23,7 +23,7 @@ public class ReaderBorrowCardModel {
         this.issuedDate = issuedDate;
         this.expiredDate = expiredDate;
     }
-     private Integer id;
+    private Integer id;
     private String fullname;
     private Integer readerID;
     private String issuedDate;

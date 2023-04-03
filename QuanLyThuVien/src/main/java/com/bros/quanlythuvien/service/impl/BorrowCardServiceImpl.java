@@ -6,9 +6,12 @@ package com.bros.quanlythuvien.service.impl;
 
 import com.bros.quanlythuvien.converter.BorrowCardConverter;
 import com.bros.quanlythuvien.entity.BorrowCardEntity;
+import com.bros.quanlythuvien.entity.ReaderEntity;
 import com.bros.quanlythuvien.model.BorrowCardModel;
 import com.bros.quanlythuvien.repository.BorrowCardRepository;
+import com.bros.quanlythuvien.repository.ReaderRepository;
 import com.bros.quanlythuvien.repository.impl.BorrowCardRepositoryImpl;
+import com.bros.quanlythuvien.repository.impl.ReaderRepositoryImpl;
 import com.bros.quanlythuvien.service.BorrowCardService;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,35 +22,25 @@ import java.util.List;
  */
 public class BorrowCardServiceImpl implements BorrowCardService {
 
-    BorrowCardRepository borrowCardRepository = new BorrowCardRepositoryImpl();
-    BorrowCardConverter borrowCardConverter = new BorrowCardConverter();
-
+    private BorrowCardRepository borrowCardRepository = new BorrowCardRepositoryImpl();
+    private BorrowCardConverter borrowCardConverter = new BorrowCardConverter();
+    private ReaderRepository readerRepository = new ReaderRepositoryImpl();
     @Override
     public BorrowCardModel findBorrowCardByRID(int ReaderID) {
         BorrowCardEntity borrowCardEntity = borrowCardRepository.findBorrowCardByRID(ReaderID);
         if (borrowCardEntity == null){return null;}
         return borrowCardConverter.entityToModel(borrowCardEntity, BorrowCardModel.class);
     }
-
     @Override
     public List<BorrowCardModel> findAll() {
         List<BorrowCardEntity> borrowCardList = borrowCardRepository.findAll(null);
         List<BorrowCardModel> resultsBorrowCardModel = new ArrayList<>();
-
         for (BorrowCardEntity entity : borrowCardList) {
-            resultsBorrowCardModel.add(borrowCardConverter.entityToModel(entity, BorrowCardModel.class));
+            ReaderEntity reader = readerRepository.findById(entity.getReaderID());
+            resultsBorrowCardModel.add(borrowCardConverter.entityToModel(reader,entity, BorrowCardModel.class));
         }
         return resultsBorrowCardModel;
     }
 
-    public static void main(String[] args) {
-        BorrowCardService borrowCardService = new BorrowCardServiceImpl();
-        List<BorrowCardModel> borrowCardModel = borrowCardService.findAll();
-        for (BorrowCardModel borrow : borrowCardModel) {
-        System.out.println("ID: " + borrow.getId());
-        System.out.println("Reader ID: " + borrow.getReaderID());
-        System.out.println("Issued Date: " + borrow.getIssuedDate());
-        System.out.println("Expiry Date: " + borrow.getExpiredDate());
-        }
-    }
+
 }

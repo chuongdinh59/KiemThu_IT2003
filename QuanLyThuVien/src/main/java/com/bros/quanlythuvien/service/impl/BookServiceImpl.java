@@ -80,15 +80,11 @@ public class BookServiceImpl implements BookService {
             searchMap.put("CategoryID", cateID);
         }
         if (ValidateUtils.isValid(strPublish)) {
-            searchMap.put("PublicationYear", strPublish);
+            searchMap.put("PublicationYear", Integer.valueOf(strPublish));
         }
         return searchMap;
     }
 
-//    public BookModel get1Book(Integer id,String title,String author,String description, Integer publicationYear,String publicationPlace,Integer categoryID,String location){
-//        BookModel book = new BookModel(id, title, author, description, publicationYear, publicationPlace, categoryID, location);
-//        return book;
-//    }
     @Override
     public BookModel getBook(TextField id, TextField title, TextField author, TextField description,
             TextField publicationPlace, TextField publicationYear, ComboBox<String> category, TextField location, TextField quantity, Map<Integer, String> catemap) {

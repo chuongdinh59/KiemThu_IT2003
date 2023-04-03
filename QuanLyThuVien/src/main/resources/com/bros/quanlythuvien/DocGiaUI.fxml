@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-<Pane stylesheets="@style/DocGiaStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bros.quanlythuvien.DocGiaController">
+<Pane stylesheets="@style/DocGiaStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Text layoutX="26.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtTitle" text="Mã độc giả :" />
         <Text layoutX="26.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txtTitle" text="Đối tượng :" />

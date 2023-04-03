@@ -53,12 +53,9 @@ public class QuanTriController implements Initializable  {
         TranslateTransition slide = new TranslateTransition();
         slide.setDuration(Duration.seconds(0.4));
         slide.setNode(paneslide);
-
         slide.setToX(-170);
         slide.play();
-
         paneslide.setTranslateX(0);
-
         slide.setOnFinished((ActionEvent e) -> {
             bar1.setVisible(true);
             bar2.setVisible(false);
