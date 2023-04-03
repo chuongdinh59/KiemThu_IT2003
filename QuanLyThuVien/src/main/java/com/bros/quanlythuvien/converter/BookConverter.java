@@ -16,5 +16,6 @@ public class BookConverter extends BaseConverter<BookModel> {
         BookModel bookModel = super.entityToModel(obj, modelClass);
         bookModel.setCategoryValue(category.getValue());
         return bookModel;
+
     }
 }
