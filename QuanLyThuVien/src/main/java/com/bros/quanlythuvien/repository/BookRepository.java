@@ -5,6 +5,7 @@
 package com.bros.quanlythuvien.repository;
 
 import com.bros.quanlythuvien.entity.BookEntity;
+import com.bros.quanlythuvien.model.BookModel;
 import java.util.List;
 import java.util.Map;
 
@@ -17,4 +18,9 @@ public interface BookRepository extends CommonRepository<BookEntity>{
     
     List<BookEntity> findAll(Integer page);
 
+    public boolean updateBook(BookModel book);
+    
+    public boolean insertBook(BookModel book);
+    
+    public boolean deleteBook(Integer id);
 }

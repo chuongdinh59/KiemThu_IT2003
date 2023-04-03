@@ -4,7 +4,6 @@
  */
 package com.bros.quanlythuvien.model;
 
-import com.bros.quanlythuvien.annotation.Column;
 import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;

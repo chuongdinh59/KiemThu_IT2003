@@ -25,7 +25,13 @@ public interface BookService {
     public List<BookModel> findAll( Integer page);
 
     public Map<String,Object> getSearchMap(String strTitle, String strAuthor, Integer strCate, String strPublish);
+    
+    public void updateBook(BookModel book);
+    
+    public void inserBook(BookModel book);
+    
+    public void deleteBook(Integer id);
 
-    public  BookModel getBook(TextField id,TextField title,TextField author,TextField description,TextField publicationYear,TextField publicationPlace,ComboBox<String> category,TextField location);
+    public  BookModel getBook(TextField id,TextField title,TextField author,TextField description,TextField publicationYear,TextField publicationPlace,ComboBox<String> category,TextField locationn,TextField quantity,Map<Integer,String> catemap);
 }
     

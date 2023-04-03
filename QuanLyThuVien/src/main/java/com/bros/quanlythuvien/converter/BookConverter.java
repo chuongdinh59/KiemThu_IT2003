@@ -11,11 +11,18 @@ package com.bros.quanlythuvien.converter;
 import com.bros.quanlythuvien.entity.BookEntity;
 import com.bros.quanlythuvien.entity.CategoryEntity;
 import com.bros.quanlythuvien.model.BookModel;
+
 public class BookConverter extends BaseConverter<BookModel> {
-     public BookModel entityToModel(CategoryEntity category ,BookEntity obj, Class<?> modelClass) {
+
+    public BookModel entityToModel(CategoryEntity category, BookEntity obj, Class<?> modelClass) {
         BookModel bookModel = super.entityToModel(obj, modelClass);
         bookModel.setCategoryValue(category.getValue());
         return bookModel;
-
     }
+
+//    public BookEntity modelToEntity(BookModel bookModel) {
+//        BookEntity book = super.modelToEntity(bookModel, BookEntity.class);
+//        return book;
+//    }
+
 }
