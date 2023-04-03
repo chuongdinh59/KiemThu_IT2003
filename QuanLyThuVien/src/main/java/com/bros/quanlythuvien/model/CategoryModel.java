@@ -15,6 +15,11 @@ import lombok.Setter;
 //@Setter
 public class CategoryModel {
 
+    public CategoryModel(Integer categoryID, String value) {
+        this.categoryID = categoryID;
+        this.value = value;
+    }
+
     private Integer categoryID;
     private String code;
     private String value;

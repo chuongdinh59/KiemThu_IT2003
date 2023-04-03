@@ -16,7 +16,7 @@ import com.bros.quanlythuvien.repository.impl.CategoryRepositoryImpl;
 public class BookConverter extends BaseConverter<BookModel> {
     public SearchBookModel BookModelToSearchBookModel(CategoryEntity category , BookModel obj, Class<SearchBookModel> SearchBookModelClass) {
         SearchBookModel searchBookModel = (SearchBookModel)super.AToB(obj, SearchBookModelClass);
-//        searchBookModel.setCate(category.getValue());
+        searchBookModel.setCate(category.getValue());
         return searchBookModel;
     }
 }

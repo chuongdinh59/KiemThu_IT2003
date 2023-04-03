@@ -25,7 +25,7 @@ public interface BookService {
     
     public List<SearchBookModel> getSearchBookList(Map<String, Object> searchMap ,Integer page);
     
-    public Map<String,Object> getSearchMap(String strTitle, String strAuthor, String strCate, String strPublish);
+    public Map<String,Object> getSearchMap(String strTitle, String strAuthor, Integer strCate, String strPublish);
     
     
 }
