@@ -143,20 +143,26 @@ public class CustomerController implements Initializable {
 
     private PreparedStatement statement;
     private ResultSet result;
+    private Map<Integer, String> categoriesMap = new HashMap<>();
 
     @FXML
     private void loadSearchCategory() {
         Connection connect = getConnection();
         RsearchBook_category.setPromptText("Chọn thể loại");
+         RsearchBook_category.getItems().add(0, "Chọn thể loại");
+         categoriesMap.clear();
         try {
             String sql = "select * from category;";
             statement = connect.prepareStatement(sql);
             result = statement.executeQuery();
             while (result.next()) {
-                int id = result.getInt("id");
-                RsearchBook_category.getItems().add(result.getString("value"));
-               RsearchBook_category.setUserData(id);
+//                RsearchBook_category.getItems().add(result.getString("value"));
+//                RsearchBook_category.setUserData(id);
+                Integer id = result.getInt("id");
+                String value = result.getString("value");
+                categoriesMap.put(id, value);
             }
+            RsearchBook_category.getItems().addAll(categoriesMap.values());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -194,9 +200,14 @@ public class CustomerController implements Initializable {
     private void loadRSearch() {
         String strTitle = RsearchBook_name.getText();
         String strAuthor = RsearchBook_author.getText();
-//        String strCate = RsearchBook_category.getValue();
-        Integer cateID = Integer.valueOf(RsearchBook_category.getUserData().toString());
-        System.out.print(cateID);
+        String selectedCategory = RsearchBook_category.getValue();
+        Integer cateID = null;
+        for (Map.Entry<Integer, String> entry : categoriesMap.entrySet()) {
+            if (entry.getValue().equals(selectedCategory)) {
+                cateID = entry.getKey();
+                break;
+            }
+        }
         String strPublish = RsearchBook_publish.getText();
         Map<String, Object> searchMap = bookService.getSearchMap(strTitle, strAuthor, cateID, strPublish);
 

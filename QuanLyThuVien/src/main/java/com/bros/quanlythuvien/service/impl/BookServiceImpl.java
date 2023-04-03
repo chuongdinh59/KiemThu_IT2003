@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 
 /**
  *
@@ -66,7 +68,7 @@ public class BookServiceImpl implements BookService {
 
     
     @Override
-    public Map<String,Object> getSearchMap(String strTitle, String strAuthor, Integer strCate, String strPublish){
+    public Map<String,Object> getSearchMap(String strTitle, String strAuthor, Integer cateID, String strPublish){
         Map<String,Object> searchMap = new HashMap<>();
         if(ValidateUtils.isValid(strTitle)) {
             searchMap.put("BookTitle", strTitle);
@@ -74,12 +76,33 @@ public class BookServiceImpl implements BookService {
         if(ValidateUtils.isValid(strAuthor)) {
             searchMap.put("Author", strAuthor);
         }
-        if(ValidateUtils.isValid(strCate)) {
-            searchMap.put("CategoryID", strPublish);
+        if(ValidateUtils.isValid(cateID)) {
+            searchMap.put("CategoryID", cateID);
         }
         if(ValidateUtils.isValid(strPublish)) {
-            searchMap.put("PublicationYear", strTitle);
+            searchMap.put("PublicationYear", strPublish);
         }
         return searchMap;
+    }
+    
+//    public BookModel get1Book(Integer id,String title,String author,String description, Integer publicationYear,String publicationPlace,Integer categoryID,String location){
+//        BookModel book = new BookModel(id, title, author, description, publicationYear, publicationPlace, categoryID, location);
+//        return book;
+//    }
+    
+    @Override
+    public  BookModel getBook(TextField id,TextField title,TextField author,TextField description
+            ,TextField publicationPlace,TextField publicationYear ,ComboBox<String> category,TextField location){
+        BookModel book = new BookModel();
+        book.setId(Integer.valueOf(id.getText()));
+        book.setTitle(title.getText());
+        book.setAuthor(author.getText());
+        book.setDescription(description.getText());
+        System.out.print(publicationYear.getText());
+        book.setPublicationYear(Integer.valueOf(publicationYear.getText()));
+        book.setPublicationPlace(publicationPlace.getText());
+        book.setCategoryValue(category.getValue());
+        book.setLocation(location.getText());
+        return book;
     }
 }

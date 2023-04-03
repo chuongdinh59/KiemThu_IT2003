@@ -5,9 +5,10 @@
 package com.bros.quanlythuvien.service;
 
 import com.bros.quanlythuvien.model.BookModel;
-import com.bros.quanlythuvien.model.SearchBookModel;
 import java.util.List;
 import java.util.Map;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 
 /**
  *
@@ -22,11 +23,9 @@ public interface BookService {
     BookModel findById(Integer id);
 
     public List<BookModel> findAll( Integer page);
-    
 
-    
     public Map<String,Object> getSearchMap(String strTitle, String strAuthor, Integer strCate, String strPublish);
 
-    
+    public  BookModel getBook(TextField id,TextField title,TextField author,TextField description,TextField publicationYear,TextField publicationPlace,ComboBox<String> category,TextField location);
 }
     

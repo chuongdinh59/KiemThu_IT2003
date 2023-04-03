@@ -62,6 +62,7 @@ public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> impleme
                 whereStatement.append(statementChild);
             }
         }
+        System.out.print(whereStatement.toString() + "\n");
         return whereStatement.toString();
 
     }
