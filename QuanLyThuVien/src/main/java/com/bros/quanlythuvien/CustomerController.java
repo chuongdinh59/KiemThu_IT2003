@@ -194,19 +194,10 @@ public class CustomerController implements Initializable {
     private void loadRSearch() {
         String strTitle = RsearchBook_name.getText();
         String strAuthor = RsearchBook_author.getText();
-<<<<<<< HEAD
-        Integer cateID = ValidateUtils.isValid(RsearchBook_category.getText().toString()) ?
-                Integer.valueOf(RsearchBook_category.getText().toString()) : null;
+//        Integer cateID = ValidateUtils.isValid(RsearchBook_category.getText().toString()) ?
+//                Integer.valueOf(RsearchBook_category.getText().toString()) : null;
         String strPublish = RsearchBook_publish.getText();
-        Map<String,Object> searchMap = bookService.getSearchMap(strTitle,strAuthor, cateID, strPublish);
-=======
-//        String strCate = RsearchBook_category.getValue();
-        Integer cateID = Integer.valueOf(RsearchBook_category.getUserData().toString());
-        System.out.print(cateID);
-        String strPublish = RsearchBook_publish.getText();
-        Map<String, Object> searchMap = bookService.getSearchMap(strTitle, strAuthor, cateID, strPublish);
-
->>>>>>> 16f3b9e9524180d4ae93f4d5ccc8faef7f679bb0
+        Map<String,Object> searchMap = bookService.getSearchMap(strTitle,strAuthor, 1, strPublish);
         loadRSearchBookInfo(searchMap, null);
     }
 

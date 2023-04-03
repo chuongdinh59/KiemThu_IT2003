@@ -66,11 +66,7 @@ public class BookServiceImpl implements BookService {
 
     
     @Override
-<<<<<<< HEAD
     public Map<String,Object> getSearchMap(String strTitle, String strAuthor, Integer cateID, String strPublish){
-=======
-    public Map<String,Object> getSearchMap(String strTitle, String strAuthor, Integer strCate, String strPublish){
->>>>>>> 16f3b9e9524180d4ae93f4d5ccc8faef7f679bb0
         Map<String,Object> searchMap = new HashMap<>();
         if(ValidateUtils.isValid(strTitle)) {
             searchMap.put("BookTitle", strTitle);
