@@ -168,9 +168,10 @@ public class CustomerController implements Initializable {
     private void loadRSearch() {
         String strTitle = RsearchBook_name.getText();
         String strAuthor = RsearchBook_author.getText();
-        String strCate = RsearchBook_category.getText();
+        Integer cateID = ValidateUtils.isValid(RsearchBook_category.getText().toString()) ?
+                Integer.valueOf(RsearchBook_category.getText().toString()) : null;
         String strPublish = RsearchBook_publish.getText();
-        Map<String,Object> searchMap = bookService.getSearchMap(strTitle,strAuthor, strCate, strPublish);
+        Map<String,Object> searchMap = bookService.getSearchMap(strTitle,strAuthor, cateID, strPublish);
         loadRSearchBookInfo(searchMap, null);
     }
     @FXML
