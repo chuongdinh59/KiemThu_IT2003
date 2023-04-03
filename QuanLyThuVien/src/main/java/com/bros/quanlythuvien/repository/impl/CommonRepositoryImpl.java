@@ -145,19 +145,6 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        finally{
-            try{
-                if (conn != null) conn.close();
-                if (stmt != null)stmt.close();
-                if (rs != null)rs.close();
-                
-                
-            }
-            catch(Exception e){
-                e.printStackTrace();
-            }
-            
-        }
         return null;
     }
 

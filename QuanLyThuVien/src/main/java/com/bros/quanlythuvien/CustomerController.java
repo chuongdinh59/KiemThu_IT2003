@@ -62,7 +62,7 @@ public class CustomerController implements Initializable {
     private TextField RsearchBook_publish;
 
     @FXML
-    private TableView<SearchBookModel> TBRSearchBook;
+    private TableView<BookModel> TBRSearchBook;
 
     @FXML
     private AnchorPane availableBooks_form;
@@ -152,7 +152,7 @@ public class CustomerController implements Initializable {
         TableColumn colPublishedPlace = new TableColumn("Published Place");
         colPublishedPlace.setCellValueFactory(new PropertyValueFactory("publicationPlace"));
         TableColumn colCategory = new TableColumn("Category");
-        colCategory.setCellValueFactory(new PropertyValueFactory("cate"));
+        colCategory.setCellValueFactory(new PropertyValueFactory("categoryValue"));
         TableColumn colLocation = new TableColumn("Location");
         colLocation.setCellValueFactory(new PropertyValueFactory("location"));
 
@@ -161,7 +161,7 @@ public class CustomerController implements Initializable {
 
     @FXML
     private void loadRSearchBookInfo(Map<String, Object> searchMap, Integer page) {
-        List<SearchBookModel> searchBookList = bookService.getSearchBookList(searchMap, page);
+        List<BookModel> searchBookList = bookService.findBooks(searchMap, page);
         this.TBRSearchBook.setItems(FXCollections.observableList(searchBookList));
     }
     @FXML
