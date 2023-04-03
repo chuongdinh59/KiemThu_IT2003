@@ -24,7 +24,8 @@ public interface BookService {
 
     public List<BookModel> findAll( Integer page);
 
-    public Map<String,Object> getSearchMap(String strTitle, String strAuthor, Integer strCate, String strPublish);
+    public Map<String,Object> getSearchMap(String strTitle, String strAuthor, Integer cateID, String strPublish);
+
 
     public  BookModel getBook(TextField id,TextField title,TextField author,TextField description,TextField publicationYear,TextField publicationPlace,ComboBox<String> category,TextField location);
 }
