@@ -200,6 +200,7 @@ public class CustomerController implements Initializable {
     private void loadRSearch() {
         String strTitle = RsearchBook_name.getText();
         String strAuthor = RsearchBook_author.getText();
+
         String selectedCategory = RsearchBook_category.getValue();
         Integer cateID = null;
         for (Map.Entry<Integer, String> entry : categoriesMap.entrySet()) {
@@ -208,9 +209,10 @@ public class CustomerController implements Initializable {
                 break;
             }
         }
-        String strPublish = RsearchBook_publish.getText();
-        Map<String, Object> searchMap = bookService.getSearchMap(strTitle, strAuthor, cateID, strPublish);
 
+
+        String strPublish = RsearchBook_publish.getText();
+        Map<String,Object> searchMap = bookService.getSearchMap(strTitle,strAuthor, 1, strPublish);
         loadRSearchBookInfo(searchMap, null);
     }
 
