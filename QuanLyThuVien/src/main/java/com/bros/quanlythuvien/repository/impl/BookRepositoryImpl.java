@@ -6,12 +6,19 @@ package com.bros.quanlythuvien.repository.impl;
 
 import com.bros.quanlythuvien.constant.QueryConstant;
 import com.bros.quanlythuvien.entity.BookEntity;
+import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.repository.BookRepository;
+import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import com.bros.quanlythuvien.utils.QueryBuilderUtils;
 import com.bros.quanlythuvien.utils.ValidateUtils;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javafx.scene.control.Alert;
 
 /**
  *
@@ -21,9 +28,96 @@ import java.util.Map;
 public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> implements BookRepository {
 
     @Override
-    public List<BookEntity> findAll(Integer page){
+    public List<BookEntity> findAll(Integer page) {
         List<BookEntity> b = super.findAll();
         return b;
+    }
+
+    private PreparedStatement statement;
+    Connection connect = getConnection();
+
+    @Override
+    public boolean updateBook(BookModel book) {
+
+        if (book == null) {
+            return false;
+        }
+
+        try {
+            String sql = "UPDATE books SET BookTitle = ?, Author = ?, Description = ?, PublicationYear = ?, PublicationPlace = ?, Location = ?, CategoryID = ?,Quantity = ? WHERE id = ?";
+            statement = connect.prepareStatement(sql);
+            statement.setString(1, book.getTitle());
+            statement.setString(2, book.getAuthor());
+            statement.setString(3, book.getDescription());
+            statement.setInt(4, book.getPublicationYear());
+            statement.setString(5, book.getPublicationPlace());
+            statement.setString(6, book.getLocation());
+            statement.setInt(7, book.getCategoryID());
+            statement.setInt(8, book.getQuantity());
+            statement.setInt(9, book.getId());
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean insertBook(BookModel book) {
+//        INSERT INTO `librarymanagement`.`books` (`BookTitle`, `Author`, `Description`, `PublicationYear`, `PublicationPlace`, `Location`, `CategoryID`) VALUES ('c', 'c', 'c', '2132', 'c', 'c', '2');
+
+        if (book == null) {
+            return false;
+        }
+
+        try {
+            String sql = "INSERT INTO books (BookTitle, Author, Description, PublicationYear, PublicationPlace, Location, CategoryID,Quantity) VALUES (?, ?, ?, ?, ?, ?, ?,?)";
+            statement = connect.prepareStatement(sql);
+            statement.setString(1, book.getTitle());
+            statement.setString(2, book.getAuthor());
+            statement.setString(3, book.getDescription());
+            statement.setInt(4, book.getPublicationYear());
+            statement.setString(5, book.getPublicationPlace());
+            statement.setString(6, book.getLocation());
+            statement.setInt(7, book.getCategoryID());
+            statement.setInt(8, book.getQuantity());
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+    
+    @Override
+     public boolean deleteBook(Integer id) {
+
+        if (id == null) {
+            return false;
+        }
+
+        try {
+            String sql = "DELETE FROM books WHERE (id = ?);";
+            statement = connect.prepareStatement(sql);
+            statement.setInt(1, id);
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
     }
 
     @Override

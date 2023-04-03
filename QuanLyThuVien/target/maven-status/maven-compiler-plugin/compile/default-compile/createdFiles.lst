@@ -10,7 +10,6 @@ com\bros\quanlythuvien\utils\ConnectionUtils.class
 com\bros\quanlythuvien\CustomerController.class
 com\bros\quanlythuvien\entity\BookEntity.class
 com\bros\quanlythuvien\converter\ReaderConverter.class
-com\bros\quanlythuvien\QuanTriSachController.class
 com\bros\quanlythuvien\mapper\ResultSetMapper.class
 com\bros\quanlythuvien\entity\CategoryEntity.class
 com\bros\quanlythuvien\converter\BookConverter.class

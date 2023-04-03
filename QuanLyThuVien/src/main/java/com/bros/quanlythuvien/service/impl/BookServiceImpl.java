@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
@@ -34,9 +35,10 @@ public class BookServiceImpl implements BookService {
     private BookRepository bookRepository = new BookRepositoryImpl();
     private BookConverter bookConverter = new BookConverter();
     private CategoryRepository categoryRepository = new CategoryRepositoryImpl();
+
     @Override
-    public List<BookModel> findAll(Integer page){
-           List<BookEntity> bookList = bookRepository.findAll(null);
+    public List<BookModel> findAll(Integer page) {
+        List<BookEntity> bookList = bookRepository.findAll(null);
         List<BookModel> resultsBookModel = new ArrayList<>();
 
         for (BookEntity entity : bookList) {
@@ -65,44 +67,131 @@ public class BookServiceImpl implements BookService {
         return resultsBookModel;
     }
 
-
-    
     @Override
-    public Map<String,Object> getSearchMap(String strTitle, String strAuthor, Integer cateID, String strPublish){
-        Map<String,Object> searchMap = new HashMap<>();
-        if(ValidateUtils.isValid(strTitle)) {
+    public Map<String, Object> getSearchMap(String strTitle, String strAuthor, Integer cateID, String strPublish) {
+        Map<String, Object> searchMap = new HashMap<>();
+        if (ValidateUtils.isValid(strTitle)) {
             searchMap.put("BookTitle", strTitle);
         }
-        if(ValidateUtils.isValid(strAuthor)) {
+        if (ValidateUtils.isValid(strAuthor)) {
             searchMap.put("Author", strAuthor);
         }
-        if(ValidateUtils.isValid(cateID)) {
+        if (ValidateUtils.isValid(cateID)) {
             searchMap.put("CategoryID", cateID);
         }
-        if(ValidateUtils.isValid(strPublish)) {
+        if (ValidateUtils.isValid(strPublish)) {
             searchMap.put("PublicationYear", strPublish);
         }
         return searchMap;
     }
-    
+
 //    public BookModel get1Book(Integer id,String title,String author,String description, Integer publicationYear,String publicationPlace,Integer categoryID,String location){
 //        BookModel book = new BookModel(id, title, author, description, publicationYear, publicationPlace, categoryID, location);
 //        return book;
 //    }
-    
     @Override
-    public  BookModel getBook(TextField id,TextField title,TextField author,TextField description
-            ,TextField publicationPlace,TextField publicationYear ,ComboBox<String> category,TextField location){
+    public BookModel getBook(TextField id, TextField title, TextField author, TextField description,
+            TextField publicationPlace, TextField publicationYear, ComboBox<String> category, TextField location, TextField quantity, Map<Integer, String> catemap) {
         BookModel book = new BookModel();
+        if ("".equals(id.getText())) {
+            return book = null;
+        }
+        if ("".equals(title.getText()) && "".equals(author.getText())) {
+            return book = null;
+        }
         book.setId(Integer.valueOf(id.getText()));
         book.setTitle(title.getText());
         book.setAuthor(author.getText());
         book.setDescription(description.getText());
-        System.out.print(publicationYear.getText());
-        book.setPublicationYear(Integer.valueOf(publicationYear.getText()));
+        if (!"".equals(publicationYear.getText())) {
+            try {
+                book.setPublicationYear(Integer.valueOf(publicationYear.getText()));
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ERROR");
+                alert.setHeaderText("ERROR");
+                alert.setContentText("Vui lòng nhập số");
+                alert.showAndWait();
+            }
+        }
+
         book.setPublicationPlace(publicationPlace.getText());
-        book.setCategoryValue(category.getValue());
+        if (!"".equals(quantity.getText())) {
+            try {
+                book.setQuantity(Integer.valueOf(quantity.getText()));
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ERROR");
+                alert.setHeaderText("ERROR");
+                alert.setContentText("Vui lòng nhập số");
+                alert.showAndWait();
+            }
+        }
+
+        String selectedCategory = category.getValue();
+        Integer cateID = null;
+        for (Map.Entry<Integer, String> entry : catemap.entrySet()) {
+            if (entry.getValue().equals(selectedCategory)) {
+                cateID = entry.getKey();
+                break;
+            }
+        }
+        book.setCategoryID(cateID);
         book.setLocation(location.getText());
         return book;
+    }
+
+    @Override
+    public void updateBook(BookModel book) {
+        boolean rs = bookRepository.updateBook(book);
+        if (rs) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Success");
+            alert.setContentText("Sửa đổi dữ liệu thành công");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setHeaderText("ERROR");
+            alert.setContentText("Sửa đổi dữ liệu thất bại");
+            alert.showAndWait();
+        }
+    }
+
+    @Override
+    public void inserBook(BookModel book) {
+        boolean rs = bookRepository.insertBook(book);
+        if (rs) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Success");
+            alert.setContentText("Thêm dữ liệu thành công");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setHeaderText("ERROR");
+            alert.setContentText("Thêm dữ liệu thất bại");
+            alert.showAndWait();
+        }
+    }
+
+    @Override
+    public void deleteBook(Integer id) {
+        boolean rs = bookRepository.deleteBook(id);
+        if (rs) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("Success");
+            alert.setContentText("Xóa dữ liệu thành công");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setHeaderText("ERROR");
+            alert.setContentText("Xóa dữ liệu thất bại");
+            alert.showAndWait();
+        }
     }
 }

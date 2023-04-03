@@ -121,12 +121,15 @@ public class QuanTriSachController implements Initializable {
 
     @FXML
     private Label username;
-    
+
     @FXML
     private TextField availableBooks_title;
 
     @FXML
     private TableView<BookModel> tbBook;
+
+    @FXML
+    private TextField availableBooks_quantity;
 
     BookService bookService;
 
@@ -170,6 +173,7 @@ public class QuanTriSachController implements Initializable {
         loadBookColumn();
         loadBookInfo(null, null);
         loadCate();
+        clear();
     }
 
     @FXML
@@ -201,14 +205,29 @@ public class QuanTriSachController implements Initializable {
         BookModel rowData = tbBook.getSelectionModel().getSelectedItem();
         if (rowData != null) {
             availableBooks_bookID.setText(rowData.getId().toString());
+            availableBooks_title.setText(rowData.getTitle());
             availableBooks_author.setText(rowData.getAuthor());
             availableBooks_description.setText(rowData.getDescription());
             availableBooks_publishedPlace.setText(rowData.getPublicationPlace());
             availableBooks_publishedYear.setText(rowData.getPublicationYear().toString());
             availableBooks_category.setValue(rowData.getCategoryValue());
             availableBooks_location.setText(rowData.getLocation());
+            availableBooks_quantity.setText(rowData.getQuantity().toString());
 
         }
+    }
+
+    @FXML
+    private void clear() {
+        availableBooks_bookID.setText("");
+        availableBooks_title.setText("");
+        availableBooks_author.setText("");
+        availableBooks_description.setText("");
+        availableBooks_publishedPlace.setText("");
+        availableBooks_publishedYear.setText("");
+        availableBooks_category.setValue("Chọn thể loại");
+        availableBooks_location.setText("");
+        availableBooks_quantity.setText("");
     }
 
     private PreparedStatement statement;
@@ -235,21 +254,50 @@ public class QuanTriSachController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
+//    @FXML
+//    private BookModel bookAdmin = bookService.getBook(availableBooks_bookID, availableBooks_title,
+//            availableBooks_author, availableBooks_description, availableBooks_publishedPlace,
+//            availableBooks_publishedYear, availableBooks_category, availableBooks_location, availableBooks_quantity, categoriesMap);
     @FXML
-    private void updateBook(){
-        String selectedCategory = availableBooks_category.getValue();
-        Integer cateID = null;
-        for (Map.Entry<Integer, String> entry : categoriesMap.entrySet()) {
-            if (entry.getValue().equals(selectedCategory)) {
-                cateID = entry.getKey();
-                break;
-            }
+    private void updateBook() {
+
+        BookModel book = bookService.getBook(availableBooks_bookID, availableBooks_title,
+                availableBooks_author, availableBooks_description, availableBooks_publishedPlace,
+                availableBooks_publishedYear, availableBooks_category, availableBooks_location, availableBooks_quantity, categoriesMap);
+        bookService.updateBook(book);
+        loadBookInfo(null, null);
+        clear();
+
+    }
+
+    @FXML
+    private void insertBook() {
+
+        availableBooks_bookID.setText("0");
+
+        BookModel book = bookService.getBook(availableBooks_bookID, availableBooks_title,
+                availableBooks_author, availableBooks_description, availableBooks_publishedPlace,
+                availableBooks_publishedYear, availableBooks_category, availableBooks_location, availableBooks_quantity, categoriesMap);
+        if (book != null) {
+            bookService.inserBook(book);
         }
-        BookModel book =  bookService.getBook(availableBooks_bookID, availableBooks_title, 
-                availableBooks_author, availableBooks_description,  availableBooks_publishedPlace, 
-                availableBooks_publishedYear, availableBooks_category, availableBooks_location);
-        int a =1;
-                }
+        loadBookInfo(null, null);
+        clear();
+
+    }
+
+    @FXML
+    private void deleteBook() {
+        BookModel book = bookService.getBook(availableBooks_bookID, availableBooks_title,
+                availableBooks_author, availableBooks_description, availableBooks_publishedPlace,
+                availableBooks_publishedYear, availableBooks_category, availableBooks_location, availableBooks_quantity, categoriesMap);
+        if (book != null) {
+            bookService.deleteBook(book.getId());
+        }
+        loadBookInfo(null, null);
+        clear();
+
+    }
 
 }

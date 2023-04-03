@@ -114,7 +114,7 @@
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="availableBooks_bookID" layoutX="118.0" layoutY="165.0" styleClass="textField" stylesheets="@style/QuanTriSachStyle.css" />
+                                    <TextField fx:id="availableBooks_bookID" disable="true" layoutX="118.0" layoutY="165.0" styleClass="textField" stylesheets="@style/QuanTriSachStyle.css" />
                                     <Label layoutX="7.0" layoutY="233.0" text="Author:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
@@ -138,10 +138,10 @@
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="availableBooks_addBtn" layoutX="25.0" layoutY="444.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="90.0" styleClass="addBtn" stylesheets="@style/QuanTriSachStyle.css" text="Add" />
-                                    <Button fx:id="availableBooks_updateID" layoutX="156.0" layoutY="444.0" mnemonicParsing="false" onMouseClicked="#updateBook" prefHeight="43.0" prefWidth="90.0" styleClass="updateBtn" stylesheets="@style/QuanTriSachStyle.css" text="Update" />
-                                    <Button fx:id="availableBooks_clearID" layoutX="25.0" layoutY="497.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="90.0" styleClass="clearBtn" stylesheets="@style/QuanTriSachStyle.css" text="Clear" />
-                                    <Button fx:id="availableBooks_deleteID" layoutX="156.0" layoutY="498.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="90.0" styleClass="deleteBtn" stylesheets="@style/QuanTriSachStyle.css" text="Delete" />
+                                    <Button fx:id="availableBooks_addBtn" layoutX="25.0" layoutY="468.0" mnemonicParsing="false" onMouseClicked="#insertBook" prefHeight="30.0" prefWidth="90.0" styleClass="addBtn" stylesheets="@style/QuanTriSachStyle.css" text="Add" />
+                                    <Button fx:id="availableBooks_updateID" layoutX="156.0" layoutY="469.0" mnemonicParsing="false" onMouseClicked="#updateBook" prefHeight="30.0" prefWidth="90.0" styleClass="updateBtn" stylesheets="@style/QuanTriSachStyle.css" text="Update" />
+                                    <Button fx:id="availableBooks_clearID" layoutX="25.0" layoutY="508.0" mnemonicParsing="false" onMouseClicked="#clear" prefHeight="30.0" prefWidth="90.0" styleClass="clearBtn" stylesheets="@style/QuanTriSachStyle.css" text="Clear" />
+                                    <Button fx:id="availableBooks_deleteID" layoutX="156.0" layoutY="509.0" mnemonicParsing="false" onMouseClicked="#deleteBook" prefHeight="30.0" prefWidth="90.0" styleClass="deleteBtn" stylesheets="@style/QuanTriSachStyle.css" text="Delete" />
                                     <Label layoutX="7.0" layoutY="379.0" text="Category:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
@@ -152,7 +152,7 @@
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="availableBooks_location" layoutX="120.0" layoutY="410.0" styleClass="textField" stylesheets="@style/QuanTriSachStyle.css" />
+                                    <TextField fx:id="availableBooks_location" layoutX="120.0" layoutY="408.0" styleClass="textField" stylesheets="@style/QuanTriSachStyle.css" />
                                     <TextField fx:id="availableBooks_publishedYear" layoutX="118.0" layoutY="341.0" styleClass="textField" stylesheets="@style/QuanTriSachStyle.css" />
                                     <ComboBox fx:id="availableBooks_category" layoutX="117.0" layoutY="375.0" prefWidth="150.0" />
                                     <Label layoutX="8.0" layoutY="199.0" text="Title: ">
@@ -161,6 +161,12 @@
                                        </font>
                                     </Label>
                                     <TextField fx:id="availableBooks_title" layoutX="118.0" layoutY="195.0" styleClass="textField" stylesheets="@style/QuanTriSachStyle.css" />
+                                    <Label layoutX="7.0" layoutY="443.0" text="Quantity: ">
+                                       <font>
+                                          <Font name="Arial" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="availableBooks_quantity" layoutX="120.0" layoutY="441.0" styleClass="textField" stylesheets="@style/QuanTriSachStyle.css" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane fx:id="availableBooks_form" layoutX="296.0" layoutY="-7.0" prefHeight="548.0" prefWidth="581.0" stylesheets="@style/QuanTriSachStyle.css">
