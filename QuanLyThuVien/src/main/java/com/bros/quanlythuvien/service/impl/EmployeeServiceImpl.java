@@ -26,7 +26,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import com.bros.quanlythuvien.repository.LoanslipRepository;
 import com.bros.quanlythuvien.repository.impl.LoanslipRepositoryImpl;
-
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.util.Callback;
 
 /**
  *
@@ -77,27 +81,36 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         tbReader.getColumns().addAll(colRId, colFName, colId, colIssuedDate, colExpiredDate);
     }
-    
+
     @Override
     public void loadLoanslipColumn(TableView<LoanSlipModel> returnLoanslipTB) {
-        TableColumn colId = new TableColumn("Id");
+        TableColumn colId = new TableColumn("LoanSlipId");
         colId.setCellValueFactory(new PropertyValueFactory("id"));
-        TableColumn colRId = new TableColumn("ReaderID");
+        TableColumn colRId = new TableColumn("ReaderId");
         colRId.setCellValueFactory(new PropertyValueFactory("customerID"));
-        TableColumn colBId = new TableColumn("BookID");
+        TableColumn colBId = new TableColumn("BookId");
         colBId.setCellValueFactory(new PropertyValueFactory("bookID"));
         TableColumn colBName = new TableColumn("Book Name");
         colBName.setCellValueFactory(new PropertyValueFactory("bookName"));
-         TableColumn colBAuthor = new TableColumn("Book Author");
+        TableColumn colBAuthor = new TableColumn("Book Author");
         colBAuthor.setCellValueFactory(new PropertyValueFactory("bookAuthor"));
         TableColumn colBorrowedDate = new TableColumn("BorrowedDate");
         colBorrowedDate.setCellValueFactory(new PropertyValueFactory("borrowedDate"));
-           TableColumn colExpiredDate = new TableColumn("ExpirationDate");
+        TableColumn colExpiredDate = new TableColumn("ExpirationDate");
         colExpiredDate.setCellValueFactory(new PropertyValueFactory("expirationDate"));
-            TableColumn colQuantity = new TableColumn("Quantity");
+        TableColumn colQuantity = new TableColumn("Quantity");
         colQuantity.setCellValueFactory(new PropertyValueFactory("quantity"));
 
-        returnLoanslipTB.getColumns().addAll(colId,colRId,colBId, colBName, colBAuthor, colBorrowedDate, colExpiredDate,colQuantity);
+        TableColumn colReturn = new TableColumn("Return");
+        colReturn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LoanSlipModel, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<LoanSlipModel, String> p) {
+                String returnStatus = p.getValue().getIsReturned() == 1 ? "Đã trả" : "Chưa trả";
+                return new SimpleStringProperty(returnStatus);
+            }
+        });
+
+        returnLoanslipTB.getColumns().addAll(colId, colRId, colBId, colBName, colBAuthor, colBorrowedDate, colExpiredDate, colQuantity, colReturn);
     }
 
     @Override
@@ -116,27 +129,55 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         tbReader.setItems(FXCollections.observableList(readerBorrowCardList));
     }
-    
-        LoanslipConverter loanslipConverter = new LoanslipConverter();
 
-    
+    LoanslipConverter loanslipConverter = new LoanslipConverter();
+
     @Override
-    public List<LoanSlipModel> loadLoanslipInfo(){
+    public List<LoanSlipModel> loadLoanslipInfo() {
         loanslipRepository.findAll(null);
-        
-         List<LoanSlipEntity> loanslipList = loanslipRepository.findAll(null);
+
+        List<LoanSlipEntity> loanslipList = loanslipRepository.findAll(null);
         List<LoanSlipModel> resultsLoanslipModel = new ArrayList<>();
         for (LoanSlipEntity entity : loanslipList) {
             resultsLoanslipModel.add(loanslipConverter.entityToModel(entity, LoanSlipModel.class));
         }
         return resultsLoanslipModel;
     }
-    
-     @Override
+
+    @Override
     public LoanSlipModel findById(Integer id) {
         LoanSlipEntity loanSlipEntity = loanslipRepository.findById(id);
-        if(loanSlipEntity == null) return null;
+        if (loanSlipEntity == null) {
+            return null;
+        }
         return loanslipConverter.entityToModel(loanSlipEntity, LoanSlipModel.class);
+    }
+
+    @Override
+    public void updateBook(LoanSlipModel loanSlip) {
+
+        if (loanSlip.getIsReturned() == 1) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setHeaderText("ERROR");
+            alert.setContentText("Sách đã được trả!!");
+            alert.showAndWait();
+        } else {
+            boolean rs = loanslipRepository.updateBook(loanSlip);
+            if (rs) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success");
+                alert.setHeaderText("Success");
+                alert.setContentText("Trả sách thành công");
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ERROR");
+                alert.setHeaderText("ERROR");
+                alert.setContentText("Trả sách thất bại");
+                alert.showAndWait();
+            }
+        }
     }
 
 //    public void loadLSBookListInfo(ArrayList<BookModel> LSbookList, TableView<BookModel> LSTBBookList) {
@@ -199,5 +240,4 @@ public class EmployeeServiceImpl implements EmployeeService {
 //            }
 //        }
 //    }
-
 }

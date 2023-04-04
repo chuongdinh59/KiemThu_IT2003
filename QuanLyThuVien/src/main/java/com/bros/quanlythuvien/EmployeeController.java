@@ -50,6 +50,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -201,6 +202,9 @@ public class EmployeeController implements Initializable {
     private TableView<LoanSlipModel> returnLoanslipTB;
 
     @FXML
+    private TableView<LoanSlipModel> statusBookTB;
+
+    @FXML
     private TextField returnLoanslipTF;
 
     @FXML
@@ -316,11 +320,23 @@ public class EmployeeController implements Initializable {
         List<BookModel> searchBookList = bookService.findBooks(searchMap, page);
         this.tbBook.setItems(FXCollections.observableList(searchBookList));
     }
-    
+
     //hiển thị dữ liệu bảng loanslip trong trang return
-    private void loadLoanslipInfo() {
+    private void loadLoanslipInfo(TableView<LoanSlipModel> returnLoanslipTB) {
         List<LoanSlipModel> LoanslipList = employeeService.loadLoanslipInfo();
-        this.returnLoanslipTB.setItems(FXCollections.observableList(LoanslipList));
+        returnLoanslipTB.setItems(FXCollections.observableList(LoanslipList));
+    }
+
+    //xử lý trả sách trong phiếu mượn
+    @FXML
+    private void returnBookReturn() {
+        SelectionModel<LoanSlipModel> selectionModel = returnLoanslipTB.getSelectionModel();
+        LoanSlipModel selectedLoanSlip = selectionModel.getSelectedItem();
+        if (selectedLoanSlip != null) {
+            employeeService.updateBook(selectedLoanSlip);
+            loadLoanslipInfo(returnLoanslipTB);
+            returnLoanslipTB.refresh();
+        }
     }
 
     //xử lý nút findall trong bảng reader trang borrow
@@ -340,7 +356,13 @@ public class EmployeeController implements Initializable {
     public void loadAllBook() {
         loadBookInfo(null, null);
     }
-    
+
+    //xử lý nút findall trong bảng loanslip trang return
+    @FXML
+    public void loadAllLoanSlip() {
+        loadLoanslipInfo(returnLoanslipTB);
+    }
+
     //Xử lý nút tìm kiếm loadslip trong trang return
     @FXML
     public void loadLoanslipId() {
@@ -445,10 +467,10 @@ public class EmployeeController implements Initializable {
             alert.showAndWait();
         }
     }
-    
-    //xử lý thêm cột bảng loanslip trang return
+
+    //xử lý thêm cột bảng loanslip trong trang return
     @FXML
-    private void loadLoanslipColumn(TableView<LoanSlipModel> returnLoanslipTB){
+    private void loadLoanslipColumn(TableView<LoanSlipModel> returnLoanslipTB) {
         employeeService.loadLoanslipColumn(returnLoanslipTB);
     }
 
@@ -853,6 +875,8 @@ public class EmployeeController implements Initializable {
     @FXML
     public void switchForm(ActionEvent event) {
         if (event.getSource() == borrowBook_Btn) {
+            loadReaderInfo(null, tbReader);
+            loadBookInfo(null, null);
             borrowBook_viewForm.setVisible(true);
             searchBook_viewForm.setVisible(false);
             status_viewForm.setVisible(false);
@@ -867,6 +891,7 @@ public class EmployeeController implements Initializable {
             returnBook_viewForm.setVisible(false);
         }
         if (event.getSource() == status_Btn) {
+            loadLoanslipInfo(statusBookTB);
             borrowBook_viewForm.setVisible(false);
             searchBook_viewForm.setVisible(false);
             status_viewForm.setVisible(true);
@@ -881,6 +906,8 @@ public class EmployeeController implements Initializable {
             returnBook_viewForm.setVisible(false);
         }
         if (event.getSource() == returnBook_Btn) {
+            loadReaderInfo(null, returnReaderTB);
+            loadLoanslipInfo(returnLoanslipTB);
             borrowBook_viewForm.setVisible(false);
             searchBook_viewForm.setVisible(false);
             status_viewForm.setVisible(false);
@@ -921,14 +948,12 @@ public class EmployeeController implements Initializable {
         loadLSBookListColumn();
         loadReaderColumn(tbReader);
         loadReaderColumn(returnReaderTB);
-        loadReaderInfo(null, tbReader);
-        loadReaderInfo(null, returnReaderTB);
         loadBookColumn(tbBook);
-        loadBookInfo(null, null);
         loadCate();
         loadSearchBookColumn(tb_SearchBook);
         loadSearchBookInfo(null, null);
         loadLoanslipColumn(returnLoanslipTB);
-        loadLoanslipInfo();
+        loadLoanslipColumn(statusBookTB);
+
     }
 }

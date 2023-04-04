@@ -5,6 +5,7 @@
 package com.bros.quanlythuvien.repository;
 
 import com.bros.quanlythuvien.entity.LoanSlipEntity;
+import com.bros.quanlythuvien.model.LoanSlipModel;
 import java.util.List;
 
 /**
@@ -14,4 +15,5 @@ import java.util.List;
 public interface LoanslipRepository extends CommonRepository<LoanSlipEntity> {
      public List<LoanSlipEntity> findAll(Integer page);
      public LoanSlipEntity findReaderById(Integer loanslipId);
+      public boolean updateBook(LoanSlipModel loanSlip);
 }

@@ -26,5 +26,8 @@ public interface EmployeeService {
     public void loadLoanslipColumn(TableView<LoanSlipModel> returnLoanslipTB);
 
     public List<LoanSlipModel> loadLoanslipInfo();
+
     public LoanSlipModel findById(Integer id);
+
+    public void updateBook(LoanSlipModel loanSlip);
 }
