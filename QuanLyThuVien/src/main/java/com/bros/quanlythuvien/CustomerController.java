@@ -9,8 +9,10 @@ import com.bros.quanlythuvien.model.CategoryModel;
 import com.bros.quanlythuvien.model.SearchBookModel;
 import com.bros.quanlythuvien.service.BookService;
 import com.bros.quanlythuvien.service.CategoryService;
+import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
 import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
+import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import com.bros.quanlythuvien.utils.ValidateUtils;
 import java.io.IOException;
@@ -18,6 +20,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -121,6 +124,21 @@ public class CustomerController implements Initializable {
     private Label username;
 
     @FXML
+    private Button Cart_Btn;
+
+    @FXML
+    private Button submitCart_Btn;
+
+    @FXML
+    private TableView<BookModel> tb_Cart;
+
+    @FXML
+    private AnchorPane cart_viewForm;
+
+    @FXML
+    private Button clear_Btn;
+
+    @FXML
     public void minimize() {
         Stage stage = (Stage) mainForm.getScene().getWindow();
         stage.setIconified(true);
@@ -131,67 +149,53 @@ public class CustomerController implements Initializable {
         System.exit(0);
     }
     private BookService bookService;
+    private ReaderService readerService = new ReaderServiceImpl();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         bookService = new BookServiceImpl();
-        loadRSearchBookColumn();
+        loadRSearchBookColumn(TBRSearchBook, bookListCart);
         // Hàm này lỗi chỗ converter --> fix khỏi đóng conn hơi kì :v
         loadRSearchBookInfo(null, null);
         loadSearchCategory();
+        loadCartColumn(tb_Cart, bookListCart);
     }
 
     private PreparedStatement statement;
     private ResultSet result;
     private Map<Integer, String> categoriesMap = new HashMap<>();
+    List<BookModel> bookListCart = new ArrayList<>();
+
+    @FXML
+    private void clearCart() {
+        bookListCart.clear();
+        tb_Cart.refresh();
+    }
+
+    @FXML
+    private void loadCartColumn(TableView<BookModel> tb_Cart, List<BookModel> bookListCart) {
+        readerService.loadCartColumn(tb_Cart, bookListCart);
+    }
+
+    @FXML
+    public void loadInfoCart(List<BookModel> bookListCart, TableView<BookModel> tb_Cart, Integer page) {
+        readerService.loadInfoCart(bookListCart, tb_Cart, page);
+    }
 
     @FXML
     private void loadSearchCategory() {
-        Connection connect = getConnection();
-        RsearchBook_category.setPromptText("Chọn thể loại");
-         RsearchBook_category.getItems().add(0, "Chọn thể loại");
-         categoriesMap.clear();
-        try {
-            String sql = "select * from category;";
-            statement = connect.prepareStatement(sql);
-            result = statement.executeQuery();
-            while (result.next()) {
-//                RsearchBook_category.getItems().add(result.getString("value"));
-//                RsearchBook_category.setUserData(id);
-                Integer id = result.getInt("id");
-                String value = result.getString("value");
-                categoriesMap.put(id, value);
-            }
-            RsearchBook_category.getItems().addAll(categoriesMap.values());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        readerService.loadCate(RsearchBook_category, categoriesMap);
     }
 
     @FXML
-    private void loadRSearchBookColumn() {
-        TableColumn colId = new TableColumn("BookID");
-        colId.setCellValueFactory(new PropertyValueFactory("id"));
-        TableColumn colName = new TableColumn("Title");
-        colName.setCellValueFactory(new PropertyValueFactory("title"));
-        TableColumn colAuthor = new TableColumn("Author");
-        colAuthor.setCellValueFactory(new PropertyValueFactory("author"));
-        TableColumn colDescription = new TableColumn("Description");
-        colDescription.setCellValueFactory(new PropertyValueFactory("description"));
-        TableColumn colPublishedYear = new TableColumn("Published Year");
-        colPublishedYear.setCellValueFactory(new PropertyValueFactory("publicationYear"));
-        TableColumn colPublishedPlace = new TableColumn("Published Place");
-        colPublishedPlace.setCellValueFactory(new PropertyValueFactory("publicationPlace"));
-        TableColumn colCategory = new TableColumn("Category");
-        colCategory.setCellValueFactory(new PropertyValueFactory("categoryValue"));
-        TableColumn colLocation = new TableColumn("Location");
-        colLocation.setCellValueFactory(new PropertyValueFactory("location"));
-
-        this.TBRSearchBook.getColumns().addAll(colId, colName, colAuthor, colDescription, colPublishedYear, colPublishedPlace, colCategory, colLocation);
+    private void loadRSearchBookColumn(TableView<BookModel> TBRSearchBook, List<BookModel> bookListCart
+    ) {
+        readerService.loadSearchBookColumn(TBRSearchBook, bookListCart);
     }
 
     @FXML
-    private void loadRSearchBookInfo(Map<String, Object> searchMap, Integer page) {
+    private void loadRSearchBookInfo(Map<String, Object> searchMap, Integer page
+    ) {
         List<BookModel> searchBookList = bookService.findBooks(searchMap, page);
         this.TBRSearchBook.setItems(FXCollections.observableList(searchBookList));
     }
@@ -209,19 +213,31 @@ public class CustomerController implements Initializable {
             }
         }
         String strPublish = RsearchBook_publish.getText();
-        Map<String,Object> searchMap = bookService.getSearchMap(strTitle,strAuthor, cateID, strPublish);
+        Map<String, Object> searchMap = bookService.getSearchMap(strTitle, strAuthor, cateID, strPublish);
         loadRSearchBookInfo(searchMap, null);
     }
 
     @FXML
-    public void switchForm(ActionEvent event) {
+    public void switchForm(ActionEvent event
+    ) {
         if (event.getSource() == information_Btn) {
             information_viewForm.setVisible(true);
             searchBook_viewForm.setVisible(false);
+            cart_viewForm.setVisible(false);
+
         }
         if (event.getSource() == searchBook_Btn) {
             information_viewForm.setVisible(false);
             searchBook_viewForm.setVisible(true);
+            cart_viewForm.setVisible(false);
+
+        }
+        if (event.getSource() == Cart_Btn) {
+            cart_viewForm.setVisible(true);
+            information_viewForm.setVisible(false);
+            searchBook_viewForm.setVisible(false);
+            loadInfoCart(bookListCart, tb_Cart, null);
+
         }
     }
 

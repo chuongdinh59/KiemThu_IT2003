@@ -4,11 +4,17 @@
  */
 package com.bros.quanlythuvien.repository.impl;
 
-
 import com.bros.quanlythuvien.entity.ReaderEntity;
 import com.bros.quanlythuvien.repository.ReaderRepository;
+import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import javafx.scene.control.ComboBox;
 
 /**
  *
@@ -16,32 +22,69 @@ import java.util.List;
  */
 public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> implements ReaderRepository {
 
+    private PreparedStatement statement;
+    private ResultSet result;
+
     @Override
-    public ReaderEntity findReaderById(Integer readerId ) {
+    public ReaderEntity findReaderById(Integer readerId) {
         ReaderEntity r = super.findById(readerId);
         return r;
     }
-    
+
     @Override
-     public List<ReaderEntity> findAll(Integer page){
-         List<ReaderEntity> r = super.findAll();
-         return r;
-     }
-
-    public static void main(String[] args) {
-        ReaderRepositoryImpl readerRepository = new ReaderRepositoryImpl();
-        List<ReaderEntity> readerList = readerRepository.findAll();
-//        ReaderEntity reader = readerRepository.findReaderById(1, null);
-
-        for (ReaderEntity reader : readerList) {
-            System.out.println("Reader ID: " + reader.getId());
-            System.out.println("Reader Name: " + reader.getFullName());
-            System.out.println("Reader Address: " + reader.getGender());
-            System.out.println("Reader Email: " + reader.getDateOfBirth());
-            System.out.println("Reader Email: " + reader.getReaderType());
-
-        }
-
+    public List<ReaderEntity> findAll(Integer page) {
+        List<ReaderEntity> r = super.findAll();
+        return r;
     }
 
+    @Override
+    public void loadCate(ComboBox<String> RsearchBook_category, Map<Integer, String> categoriesMap) {
+        Connection connect = getConnection();
+        RsearchBook_category.setPromptText("Chọn thể loại");
+        RsearchBook_category.getItems().add(0, "Chọn thể loại");
+        categoriesMap.clear();
+        try {
+            String sql = "select * from category;";
+            statement = connect.prepareStatement(sql);
+            result = statement.executeQuery();
+            while (result.next()) {
+                Integer id = result.getInt("id");
+                String value = result.getString("value");
+                categoriesMap.put(id, value);
+            }
+            RsearchBook_category.getItems().addAll(categoriesMap.values());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) {
+                    result.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+//    public static void main(String[] args) {
+//        ReaderRepositoryImpl readerRepository = new ReaderRepositoryImpl();
+//        List<ReaderEntity> readerList = readerRepository.findAll();
+////        ReaderEntity reader = readerRepository.findReaderById(1, null);
+//
+//        for (ReaderEntity reader : readerList) {
+//            System.out.println("Reader ID: " + reader.getId());
+//            System.out.println("Reader Name: " + reader.getFullName());
+//            System.out.println("Reader Address: " + reader.getGender());
+//            System.out.println("Reader Email: " + reader.getDateOfBirth());
+//            System.out.println("Reader Email: " + reader.getReaderType());
+//
+//        }
+//
+//    }
 }
