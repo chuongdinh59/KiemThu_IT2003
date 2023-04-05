@@ -220,6 +220,12 @@ public class EmployeeController implements Initializable {
     private Button returnSearchReaderBtn;
 
     @FXML
+    private TextField statusBookTF;
+
+    @FXML
+    private TextField statusReaderTF;
+
+    @FXML
     private int LScheckReader = 0;
 
     @FXML
@@ -339,6 +345,18 @@ public class EmployeeController implements Initializable {
         }
     }
 
+    //Xử lý giao sách trong phiếu mượn trang return
+    @FXML
+    private void returnBookGive() {
+        SelectionModel<LoanSlipModel> selectionModel = returnLoanslipTB.getSelectionModel();
+        LoanSlipModel selectedLoanSlip = selectionModel.getSelectedItem();
+        if (selectedLoanSlip != null) {
+            readerService.updateBookGive(selectedLoanSlip);
+            loadLoanslipInfo(returnLoanslipTB);
+            returnLoanslipTB.refresh();
+        }
+    }
+
     //xử lý nút findall trong bảng reader trang borrow
     @FXML
     public void loadAllReader() {
@@ -361,6 +379,51 @@ public class EmployeeController implements Initializable {
     @FXML
     public void loadAllLoanSlip() {
         loadLoanslipInfo(returnLoanslipTB);
+    }
+
+    //xử lý nút tìm kiếm reader trang status
+    @FXML
+    private void loadStatusReader() {
+        List<LoanSlipModel> loanSlipList = new ArrayList<>();
+        if ("".equals(statusReaderTF.getText())) {
+            loadLoanslipInfo(statusBookTB);
+
+        } else {
+            try {
+                Integer id = Integer.valueOf(statusReaderTF.getText());
+                loanSlipList = employeeService.findByCId(id);
+                this.statusBookTB.setItems(FXCollections.observableList(loanSlipList));
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText("Error");
+                alert.setContentText("Bạn cần phải nhập số");
+                alert.showAndWait();
+            }
+        }
+    }
+
+    //xử lý nút tìm kiếm book trang status
+    @FXML
+    private void loadStatusBook() {
+        List<LoanSlipModel> loanSlipList = new ArrayList<>();
+        if ("".equals(statusBookTF.getText())) {
+            loadLoanslipInfo(statusBookTB);
+
+        } else {
+            try {
+                Integer id = Integer.valueOf(statusBookTF.getText());
+                loanSlipList = employeeService.findByBId(id);
+                this.statusBookTB.setItems(FXCollections.observableList(loanSlipList));
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText("Error");
+                alert.setContentText("Bạn cần phải nhập số");
+                alert.showAndWait();
+            }
+        }
+
     }
 
     //Xử lý nút tìm kiếm loadslip trong trang return
@@ -521,12 +584,8 @@ public class EmployeeController implements Initializable {
     // xử lý nút kiểm tra reader bên trang Loanslip
     @FXML
     public void checkReaderID() {
-//        ReaderService readerService = new ReaderServiceImpl();
+
         String sid = LSCustomerID.getText();
-        int fail = 0;
-
-        Connection connect = getConnection();
-
         if ("".equals(sid)) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Informatin");
@@ -536,85 +595,14 @@ public class EmployeeController implements Initializable {
             LScheckReader = 0;
         } else {
             try {
-
                 Integer id = Integer.valueOf(sid);
-
-                try {
-                    String sql = "select ExpiryDate from borrowcards where ReaderID =?;";
-                    statement = connect.prepareStatement(sql);
-                    statement.setInt(1, id);
-                    result = statement.executeQuery();
-                    if (result.next()) {
-
-                        LocalDate expiryDate = result.getDate("ExpiryDate").toLocalDate(); // Lấy giá trị ExpiryDate từ ResultSet
-
-                        LocalDate currentDate = LocalDate.now(); // Lấy ngày hiện tại
-
-                        if (expiryDate.isBefore(currentDate)) {
-                            // Nếu ExpiryDate đã hết hạn, thực hiện hành động tương ứng ở đây
-                            Alert alert = new Alert(AlertType.ERROR);
-                            alert.setTitle("ERROR");
-                            alert.setHeaderText("ERROR");
-                            alert.setContentText("Thẻ thư viện đã hết hạn");
-                            alert.showAndWait();
-                        } else {
-                            // Nếu ExpiryDate còn hạn, thực hiện hành động tương ứng ở đây
-                            try {
-                                String sql2 = "select CustomerID,isReturned, SUM(Quantity) as totalQuantity  from loanslip where CustomerID=? group by CustomerID,isReturned ;";
-                                statement = connect.prepareStatement(sql2);
-                                statement.setInt(1, id);
-                                result = statement.executeQuery();
-                                while (result.next()) {
-                                    Integer isReturn = result.getInt("isReturned");
-                                    if (isReturn == 0) {
-                                        fail++;
-                                        Alert alert = new Alert(AlertType.ERROR);
-                                        alert.setTitle("ERROR");
-                                        alert.setHeaderText("ERROR");
-                                        alert.setContentText("Người dùng chưa trả sách");
-                                        alert.showAndWait();
-                                    }
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            int LSpassReader = 0;
-                            if (fail == 0) {
-                                List<ReaderModel> readerList = readerService.findAll();
-                                for (ReaderModel reader : readerList) {
-                                    if (Objects.equals(reader.getId(), id)) {
-                                        LSpassReader++;
-                                    }
-                                }
-
-                                if (LSpassReader > 0) {
-                                    Alert alert = new Alert(AlertType.INFORMATION);
-                                    alert.setTitle("Success");
-                                    alert.setHeaderText("Success");
-                                    alert.setContentText("Người dùng có tồn tại");
-                                    alert.showAndWait();
-                                    LScheckReader = 1;
-                                } else {
-
-                                    Alert alert = new Alert(AlertType.ERROR);
-                                    alert.setTitle("Error");
-                                    alert.setHeaderText("Error");
-                                    alert.setContentText("Người dùng không tồn tại");
-                                    alert.showAndWait();
-                                    LScheckReader = 0;
-                                }
-                            }
-
-                        }
-
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                int check = readerService.checkReader(id);
+                if (check == 0) {
+                    LScheckReader = 0;
+                } else {
+                    LScheckReader = 1;
                 }
 
-//                        Connection connect = getConnection();
             } catch (NumberFormatException e) {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Error");
@@ -624,6 +612,7 @@ public class EmployeeController implements Initializable {
                 LScheckReader = 0;
             }
         }
+
     }
 
     //xử lý nút kiểm tra book bên trang Loanslip
@@ -828,7 +817,7 @@ public class EmployeeController implements Initializable {
             Connection connect = getConnection();
             for (BookModel book : LSbookList) {
                 try {
-                    String sql = "INSERT INTO librarymanagement.loanslip (CustomerID, BookID, BookName, BookAuthor, BorrowedDate, ExpirationDate,Quantity,isReturned) VALUES (?, ?, ?, ?, ?, ?,?,0);";
+                    String sql = "INSERT INTO librarymanagement.loanslip (CustomerID, BookID, BookName, BookAuthor, BorrowedDate, ExpirationDate,Quantity,isReturned,isOnline) VALUES (?, ?, ?, ?, ?, ?,?,0,1);";
                     statement = connect.prepareStatement(sql);
                     statement.setString(1, LSCustomerID.getText());
                     statement.setInt(2, book.getId());

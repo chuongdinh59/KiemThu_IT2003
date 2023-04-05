@@ -250,8 +250,8 @@
                                     <Font name="Arial" size="17.0" />
                                  </font>
                               </Label>
-                              <TextField layoutX="164.0" layoutY="54.0" prefHeight="25.0" prefWidth="180.0" styleClass="textField" />
-                              <Button layoutX="354.0" layoutY="51.0" mnemonicParsing="false" prefHeight="2.0" prefWidth="85.0" styleClass="updateBtn" text="Search">
+                              <TextField fx:id="statusReaderTF" layoutX="164.0" layoutY="54.0" prefHeight="25.0" prefWidth="180.0" styleClass="textField" />
+                              <Button layoutX="354.0" layoutY="51.0" mnemonicParsing="false" onMouseClicked="#loadStatusReader" prefHeight="2.0" prefWidth="85.0" styleClass="updateBtn" text="Search">
                                  <graphic>
                                     <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="1.5em" />
                                  </graphic>
@@ -264,8 +264,8 @@
                                     <Font name="Arial" size="17.0" />
                                  </font>
                               </Label>
-                              <TextField layoutX="588.0" layoutY="54.0" prefHeight="25.0" prefWidth="180.0" styleClass="textField" />
-                              <Button layoutX="779.0" layoutY="51.0" mnemonicParsing="false" prefHeight="2.0" prefWidth="85.0" styleClass="updateBtn" text="Search">
+                              <TextField fx:id="statusBookTF" layoutX="588.0" layoutY="54.0" prefHeight="25.0" prefWidth="180.0" styleClass="textField" />
+                              <Button layoutX="779.0" layoutY="51.0" mnemonicParsing="false" onMouseClicked="#loadStatusBook" prefHeight="2.0" prefWidth="85.0" styleClass="updateBtn" text="Search">
                                  <graphic>
                                     <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="1.5em" />
                                  </graphic>
@@ -436,7 +436,7 @@
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                        </columnResizePolicy>
                                     </TableView>
-                                    <Button layoutX="799.0" layoutY="255.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="80.0" styleClass="deleteBtn" text="Done">
+                                    <Button layoutX="791.0" layoutY="255.0" mnemonicParsing="false" onMouseClicked="#returnBookGive" prefHeight="26.0" prefWidth="88.0" styleClass="deleteBtn" text="Give Book">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>

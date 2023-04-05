@@ -30,4 +30,8 @@ public interface EmployeeService {
     public LoanSlipModel findById(Integer id);
 
     public void updateBook(LoanSlipModel loanSlip);
+    
+    public void checkOnlineLoanSlip();
+    public List<LoanSlipModel> findByBId(Integer id) ;
+    public List<LoanSlipModel> findByCId(Integer id);
 }

@@ -5,11 +5,11 @@
 package com.bros.quanlythuvien.service;
 
 import com.bros.quanlythuvien.model.BookModel;
+import com.bros.quanlythuvien.model.LoanSlipModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import java.util.List;
 import java.util.Map;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableView;
 
 /**
@@ -22,13 +22,23 @@ public interface ReaderService {
 
     public List<ReaderModel> findAll();
 
-    public void loadSearchBookColumn(TableView<BookModel> TBRSearchBook,List<BookModel> bookListCart);
-    
+    public void loadSearchBookColumn(TableView<BookModel> TBRSearchBook, List<BookModel> bookListCart);
+
     public void loadCate(ComboBox<String> RsearchBook_category, Map<Integer, String> categoriesMap);
-    
-    public void loadCartColumn(TableView<BookModel> tb_Cart,List<BookModel> bookListCart);
-    
+
+    public void loadCartColumn(TableView<BookModel> tb_Cart, List<BookModel> bookListCart);
+
     public void loadInfoCart(List<BookModel> bookListCart, TableView<BookModel> tb_Cart, Integer page);
-    
+
+    public int checkReader(Integer id);
+
+    public void creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online);
+
+    public void loadReaderColumn(TableView<ReaderModel> infoCustomerTB);
+
+    public List<LoanSlipModel> findByCId(Integer id);
+
+    public void updateBookGive(LoanSlipModel loanSlip);
+
 //    public class DeleteButtonTableCell<S> extends TableCell<S, Boolean> ;
 }

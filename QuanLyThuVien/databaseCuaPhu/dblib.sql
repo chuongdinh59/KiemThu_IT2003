@@ -31,6 +31,7 @@ CREATE TABLE `account` (
   `full_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
+  `ReaderID` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -41,7 +42,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'admin','123','Admin','admin@gmail.com','Admin'),(2,'employee','123','Employee','employee@gmail.com','Employee'),(3,'client','123','Dinh Chuong','chu@gmail.com','Customer');
+INSERT INTO `account` VALUES (1,'admin','123','Admin','admin@gmail.com','Admin',NULL),(2,'employee','123','Employee','employee@gmail.com','Employee',NULL),(3,'client','123','Dinh Chuong','chu@gmail.com','Customer',3);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -92,10 +93,11 @@ CREATE TABLE `books` (
   `Location` varchar(255) DEFAULT NULL,
   `CategoryID` int DEFAULT NULL,
   `CreateAt` datetime DEFAULT CURRENT_TIMESTAMP,
+  `Quantity` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `CategoryID` (`CategoryID`),
   CONSTRAINT `books_ibfk_1` FOREIGN KEY (`CategoryID`) REFERENCES `category` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,7 +106,7 @@ CREATE TABLE `books` (
 
 LOCK TABLES `books` WRITE;
 /*!40000 ALTER TABLE `books` DISABLE KEYS */;
-INSERT INTO `books` VALUES (1,'Sách A','Tác giả A','Mô Tả A',NULL,'A','A',1,'2023-03-14 19:03:42'),(2,'Sách B ','Tác giả B','Mô tả B',NULL,'B','B',2,'2023-03-14 19:04:46');
+INSERT INTO `books` VALUES (1,'Sách A','Tác giả A','Mô Tả A',2020,'A','A',1,'2023-03-14 19:03:42',100),(2,'Sách B ','Tác giả B','Mô tả B',2021,'B','B',2,'2023-03-14 19:04:46',200),(3,'Sách C','Tác giả C','Mô tả C',2022,'C','C',1,'2023-04-03 19:02:28',459),(6,'sách d','tác giả d','mô tả d',2023,'d','d',1,'2023-04-03 21:53:02',328);
 /*!40000 ALTER TABLE `books` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,7 +125,7 @@ CREATE TABLE `borrowcards` (
   PRIMARY KEY (`id`),
   KEY `ReaderID` (`ReaderID`),
   CONSTRAINT `borrowcards_ibfk_1` FOREIGN KEY (`ReaderID`) REFERENCES `readers` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,7 +134,7 @@ CREATE TABLE `borrowcards` (
 
 LOCK TABLES `borrowcards` WRITE;
 /*!40000 ALTER TABLE `borrowcards` DISABLE KEYS */;
-INSERT INTO `borrowcards` VALUES (1,2,'2022-11-12','2023-01-02'),(2,1,'2021-08-09','2022-03-04');
+INSERT INTO `borrowcards` VALUES (1,2,'2022-11-12','2023-01-02'),(2,1,'2021-08-09','2024-03-04'),(3,3,'2023-03-20','2023-06-23');
 /*!40000 ALTER TABLE `borrowcards` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,6 +192,38 @@ LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
 INSERT INTO `category` VALUES (1,'1','Truyện '),(2,'2','Sách');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `loanslip`
+--
+
+DROP TABLE IF EXISTS `loanslip`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `loanslip` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `CustomerID` int DEFAULT NULL,
+  `BookID` int DEFAULT NULL,
+  `BookName` varchar(45) DEFAULT NULL,
+  `BookAuthor` varchar(45) DEFAULT NULL,
+  `BorrowedDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `ExpirationDate` datetime DEFAULT NULL,
+  `Quantity` int DEFAULT NULL,
+  `isReturned` tinyint(1) DEFAULT '0',
+  `isOnline` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `loanslip`
+--
+
+LOCK TABLES `loanslip` WRITE;
+/*!40000 ALTER TABLE `loanslip` DISABLE KEYS */;
+INSERT INTO `loanslip` VALUES (4,2,1,'Sách A','Tác giả A','2023-03-28 00:00:00','2023-04-05 00:00:00',1,1,1),(6,2,2,'Sách B ','Tác giả B','2023-03-28 00:00:00','2023-04-05 00:00:00',3,1,1),(7,1,1,'Sách A','Tác giả A','2023-03-29 00:00:00','2023-04-05 00:00:00',2,1,1),(8,1,2,'Sách B ','Tác giả B','2023-03-29 00:00:00','2023-04-28 00:00:00',4,0,1),(9,3,1,'Sách A','Tác giả A','2023-03-29 00:00:00','2023-04-28 00:00:00',2,0,1),(10,3,3,'Sách C','Tác giả C','2023-04-05 00:00:00','2023-05-05 00:00:00',3,0,1),(11,3,6,'sách d','tác giả d','2023-04-05 00:00:00','2023-05-05 00:00:00',2,0,1);
+/*!40000 ALTER TABLE `loanslip` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -256,4 +290,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-03-23 23:42:46
+-- Dump completed on 2023-04-05 16:31:25

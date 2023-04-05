@@ -6,17 +6,22 @@ package com.bros.quanlythuvien;
 
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.CategoryModel;
+import com.bros.quanlythuvien.model.LoanSlipModel;
+import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.model.SearchBookModel;
 import com.bros.quanlythuvien.service.BookService;
 import com.bros.quanlythuvien.service.CategoryService;
+import com.bros.quanlythuvien.service.EmployeeService;
 import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
 import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
+import com.bros.quanlythuvien.service.impl.EmployeeServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import com.bros.quanlythuvien.utils.ValidateUtils;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,6 +45,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -139,6 +145,12 @@ public class CustomerController implements Initializable {
     private Button clear_Btn;
 
     @FXML
+    private TableView<ReaderModel> infoCustomerTB;
+
+    @FXML
+    private TableView<LoanSlipModel> infoLoanSlipTB;
+
+    @FXML
     public void minimize() {
         Stage stage = (Stage) mainForm.getScene().getWindow();
         stage.setIconified(true);
@@ -150,21 +162,100 @@ public class CustomerController implements Initializable {
     }
     private BookService bookService;
     private ReaderService readerService = new ReaderServiceImpl();
+    private EmployeeService employeeService = new EmployeeServiceImpl();
+
+    private int LScheckReader = 0;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         bookService = new BookServiceImpl();
+        setReaderId(readerId);
         loadRSearchBookColumn(TBRSearchBook, bookListCart);
         // Hàm này lỗi chỗ converter --> fix khỏi đóng conn hơi kì :v
         loadRSearchBookInfo(null, null);
         loadSearchCategory();
         loadCartColumn(tb_Cart, bookListCart);
+//        readerId = (int) this.root.getUserData();
+        loadReaderColumn(infoCustomerTB);
+        loadLoanslipColumn(infoLoanSlipTB);
+
     }
 
-    private PreparedStatement statement;
-    private ResultSet result;
     private Map<Integer, String> categoriesMap = new HashMap<>();
     List<BookModel> bookListCart = new ArrayList<>();
+
+    private Integer readerId; // Thuộc tính readerId
+
+    @FXML
+    public void setReaderId(Integer id) {
+        this.readerId = id;
+    }
+
+    @FXML
+    public void checkReader() {
+        int check = readerService.checkReader(readerId);
+        if (check == 0) {
+            LScheckReader = 0;
+        } else {
+            LScheckReader = 1;
+        }
+
+    }
+
+    private int totalQuantity = 0;
+
+    @FXML
+    public void createOnlineBook() {
+        if (LScheckReader == 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.setContentText("Vui lòng nhấn nút kiểm tra trước");
+            alert.showAndWait();
+        } else {
+            for (BookModel book : bookListCart) {
+                totalQuantity += book.getQuantity();
+            }
+            if (totalQuantity <= 5) {
+                String strReaderId = Integer.toString(readerId);
+                readerService.creatLoanSlip(bookListCart, LScheckReader, strReaderId, 0);
+                clearCart();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Error");
+                alert.setContentText("Không thể mượn quá 5 cuốn sách");
+                alert.showAndWait();
+            }
+        }
+        totalQuantity = 0;
+    }
+
+    @FXML
+    private void loadReaderColumn(TableView<ReaderModel> infoCustomerTB) {
+        readerService.loadReaderColumn(infoCustomerTB);
+    }
+
+    @FXML
+    private void loadReaderInfo() {
+        ReaderModel reader = readerService.findById(readerId);
+        List<ReaderModel> readerList = new ArrayList<>();
+        readerList.add(reader);
+        this.infoCustomerTB.setItems(FXCollections.observableList(readerList));
+    }
+
+    @FXML
+    private void loadLoanslipColumn(TableView<LoanSlipModel> infoLoanSlipTB) {
+        employeeService.loadLoanslipColumn(infoLoanSlipTB);
+    }
+
+    @FXML
+    private void loadLoanSlipInfo() {
+//        List<LoanSlipModel> loanSlipList = new Array<>();
+        List<LoanSlipModel> loanSlipList = new ArrayList<>();
+        loanSlipList = readerService.findByCId(readerId);
+        this.infoLoanSlipTB.setItems(FXCollections.observableList(loanSlipList));
+    }
 
     @FXML
     private void clearCart() {
@@ -221,6 +312,8 @@ public class CustomerController implements Initializable {
     public void switchForm(ActionEvent event
     ) {
         if (event.getSource() == information_Btn) {
+            loadReaderInfo();
+            loadLoanSlipInfo();
             information_viewForm.setVisible(true);
             searchBook_viewForm.setVisible(false);
             cart_viewForm.setVisible(false);

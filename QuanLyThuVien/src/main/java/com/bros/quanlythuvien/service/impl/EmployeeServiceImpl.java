@@ -15,17 +15,14 @@ import com.bros.quanlythuvien.service.EmployeeService;
 import com.bros.quanlythuvien.service.ReaderService;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import com.bros.quanlythuvien.repository.LoanslipRepository;
+import com.bros.quanlythuvien.repository.ReaderRepository;
 import com.bros.quanlythuvien.repository.impl.LoanslipRepositoryImpl;
+import com.bros.quanlythuvien.repository.impl.ReaderRepositoryImpl;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Alert;
@@ -79,7 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         TableColumn colExpiredDate = new TableColumn("ExpiredDate");
         colExpiredDate.setCellValueFactory(new PropertyValueFactory("expiredDate"));
 
-        tbReader.getColumns().addAll(colRId, colFName, colId, colIssuedDate, colExpiredDate);
+        tbReader.getColumns().addAll(colId, colRId, colFName, colIssuedDate, colExpiredDate);
     }
 
     @Override
@@ -110,7 +107,16 @@ public class EmployeeServiceImpl implements EmployeeService {
             }
         });
 
-        returnLoanslipTB.getColumns().addAll(colId, colRId, colBId, colBName, colBAuthor, colBorrowedDate, colExpiredDate, colQuantity, colReturn);
+        TableColumn colOnline = new TableColumn("Online");
+        colOnline.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LoanSlipModel, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<LoanSlipModel, String> p) {
+                String returnStatus = p.getValue().getIsOnline() == 1 ? "Đã lấy sách" : "Chưa lấy sách";
+                return new SimpleStringProperty(returnStatus);
+            }
+        });
+
+        returnLoanslipTB.getColumns().addAll(colId, colRId, colBId, colBName, colBAuthor, colBorrowedDate, colExpiredDate, colQuantity, colReturn, colOnline);
     }
 
     @Override
@@ -178,6 +184,33 @@ public class EmployeeServiceImpl implements EmployeeService {
                 alert.showAndWait();
             }
         }
+    }
+
+    @Override
+    public void checkOnlineLoanSlip() {
+        loanslipRepository.checkOnlineLoanSlip();
+    }
+
+    @Override
+    public List<LoanSlipModel> findByCId(Integer id) {
+        List<LoanSlipEntity> loanslipList = loanslipRepository.findByCId(id);
+
+        List<LoanSlipModel> resultsLoanslipModel = new ArrayList<>();
+        for (LoanSlipEntity entity : loanslipList) {
+            resultsLoanslipModel.add(loanslipConverter.entityToModel(entity, LoanSlipModel.class));
+        }
+        return resultsLoanslipModel;
+    }
+    
+    @Override
+    public List<LoanSlipModel> findByBId(Integer id) {
+        List<LoanSlipEntity> loanslipList = loanslipRepository.findByBId(id);
+
+        List<LoanSlipModel> resultsLoanslipModel = new ArrayList<>();
+        for (LoanSlipEntity entity : loanslipList) {
+            resultsLoanslipModel.add(loanslipConverter.entityToModel(entity, LoanSlipModel.class));
+        }
+        return resultsLoanslipModel;
     }
 
 //    public void loadLSBookListInfo(ArrayList<BookModel> LSbookList, TableView<BookModel> LSTBBookList) {

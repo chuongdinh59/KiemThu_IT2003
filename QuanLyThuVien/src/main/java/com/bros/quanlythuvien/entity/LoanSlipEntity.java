@@ -17,7 +17,10 @@ import java.util.Date;
 @Table(name = "loanslip")
 public class LoanSlipEntity {
 
-    public LoanSlipEntity(Integer id, Integer customerID, Integer bookID, String bookName, String bookAuthor, Date borrowedDate, Date expirationDate, Integer quantity, Integer isReturned) {
+    public LoanSlipEntity() {
+    }
+
+    public LoanSlipEntity(Integer id, Integer customerID, Integer bookID, String bookName, String bookAuthor, Date borrowedDate, Date expirationDate, Integer quantity, Integer isReturned, Integer isOnline) {
         this.id = id;
         this.customerID = customerID;
         this.bookID = bookID;
@@ -27,10 +30,10 @@ public class LoanSlipEntity {
         this.expirationDate = expirationDate;
         this.quantity = quantity;
         this.isReturned = isReturned;
+        this.isOnline = isOnline;
     }
 
-    public LoanSlipEntity() {
-    }
+   
 
     public Integer getId() {
         return id;
@@ -121,4 +124,14 @@ public class LoanSlipEntity {
     private Integer quantity;
     @Column(name = "isReturned")
     private Integer isReturned;
+    @Column(name = "isOnline")
+    private Integer isOnline;
+
+    public Integer getIsOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(Integer isOnline) {
+        this.isOnline = isOnline;
+    }
 }

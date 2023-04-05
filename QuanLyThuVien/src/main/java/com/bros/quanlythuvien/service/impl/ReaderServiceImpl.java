@@ -5,11 +5,16 @@
 package com.bros.quanlythuvien.service.impl;
 
 import com.bros.quanlythuvien.EmployeeController;
+import com.bros.quanlythuvien.converter.LoanslipConverter;
 import com.bros.quanlythuvien.converter.ReaderConverter;
+import com.bros.quanlythuvien.entity.LoanSlipEntity;
 import com.bros.quanlythuvien.entity.ReaderEntity;
 import com.bros.quanlythuvien.model.BookModel;
+import com.bros.quanlythuvien.model.LoanSlipModel;
 import com.bros.quanlythuvien.model.ReaderModel;
+import com.bros.quanlythuvien.repository.LoanslipRepository;
 import com.bros.quanlythuvien.repository.ReaderRepository;
+import com.bros.quanlythuvien.repository.impl.LoanslipRepositoryImpl;
 import com.bros.quanlythuvien.repository.impl.ReaderRepositoryImpl;
 import com.bros.quanlythuvien.service.BookService;
 import com.bros.quanlythuvien.service.ReaderService;
@@ -20,6 +25,7 @@ import java.util.Map;
 import java.util.Objects;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
@@ -35,7 +41,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class ReaderServiceImpl implements ReaderService {
 
     ReaderRepository readerRepository = new ReaderRepositoryImpl();
+    LoanslipRepository loanSlipRepository = new LoanslipRepositoryImpl();
     ReaderConverter readerConverter = new ReaderConverter();
+    LoanslipConverter loanslipConverter = new LoanslipConverter();
 
     @Override
     public ReaderModel findById(Integer id) {
@@ -51,6 +59,20 @@ public class ReaderServiceImpl implements ReaderService {
             resultsBorrowCardModel.add(readerConverter.entityToModel(entity, ReaderModel.class));
         }
         return resultsBorrowCardModel;
+    }
+
+    @Override
+    public void loadReaderColumn(TableView<ReaderModel> infoCustomerTB) {
+        TableColumn colId = new TableColumn("ReaderId");
+        colId.setCellValueFactory(new PropertyValueFactory("id"));
+        TableColumn colName = new TableColumn("Fullname");
+        colName.setCellValueFactory(new PropertyValueFactory("fullname"));
+        TableColumn colGender = new TableColumn("Gender");
+        colGender.setCellValueFactory(new PropertyValueFactory("gender"));
+        TableColumn colDateOfBirth = new TableColumn("BirthDay");
+        colDateOfBirth.setCellValueFactory(new PropertyValueFactory("dateOfBirth"));
+
+        infoCustomerTB.getColumns().addAll(colId, colName, colGender, colDateOfBirth);
     }
 
     @Override
@@ -90,17 +112,17 @@ public class ReaderServiceImpl implements ReaderService {
                             if (Objects.equals(b.getId(), book.getId())) {
                                 b.setQuantity(b.getQuantity() + 1);
                                 rs = true;
-                                
+
                             }
                         }
                         if (rs == false) {
                             book.setQuantity(1);
                             bookListCart.add(book);
-                                                    System.out.println(" NAHN ROI NE1");
+                            System.out.println(" NAHN ROI NE1");
 
                         }
                         System.out.println(" NAHN ROI NE");
-                        
+
                     });
                     setGraphic(addButton);
                     setText(null);
@@ -110,6 +132,27 @@ public class ReaderServiceImpl implements ReaderService {
 
         TBRSearchBook.getColumns().addAll(colId, colName, colAuthor, colDescription, colPublishedYear, colPublishedPlace, colCategory, colLocation, buyColumn);
     }
+//    
+//    public void loadLoanSlipColumn(TableView<LoanSlipModel> infoLoanSlipTB){
+//         TableColumn colId = new TableColumn("LoanSlipId");
+//        colId.setCellValueFactory(new PropertyValueFactory("id"));
+//         TableColumn colBookID = new TableColumn("BookID");
+//        colBookID.setCellValueFactory(new PropertyValueFactory("bookID"));
+//        TableColumn colName = new TableColumn("Title");
+//        colName.setCellValueFactory(new PropertyValueFactory("bookName"));
+//        TableColumn colAuthor = new TableColumn("Author");
+//        colAuthor.setCellValueFactory(new PropertyValueFactory("bookAuthor"));
+//        TableColumn colBorrowedDate = new TableColumn("Borrowed Date");
+//        colBorrowedDate.setCellValueFactory(new PropertyValueFactory("borrowedDate"));
+//        TableColumn colExpirationDate = new TableColumn("Expiration Date ");
+//        colExpirationDate.setCellValueFactory(new PropertyValueFactory("expirationDate"));
+//        TableColumn colPublishedPlace = new TableColumn("Published Place");
+//        colPublishedPlace.setCellValueFactory(new PropertyValueFactory("quantity"));
+//        TableColumn colCategory = new TableColumn("Category");
+//        colCategory.setCellValueFactory(new PropertyValueFactory("categoryValue"));
+//        TableColumn colQuantity = new TableColumn("Quantity");
+//        colQuantity.setCellValueFactory(new PropertyValueFactory("quantity"));
+//    }
 
     @Override
     public void loadCartColumn(TableView<BookModel> tb_Cart, List<BookModel> bookListCart) {
@@ -140,6 +183,7 @@ public class ReaderServiceImpl implements ReaderService {
                     tb_Cart.refresh();
                 });
             }
+
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -164,6 +208,92 @@ public class ReaderServiceImpl implements ReaderService {
         readerRepository.loadCate(RsearchBook_category, categoriesMap);
     }
 
- 
+    @Override
+    public int checkReader(Integer id) {
+        switch (readerRepository.checkReader(id)) {
+            case 0: {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ERROR");
+                alert.setHeaderText("ERROR");
+                alert.setContentText("Thẻ thư viện đã hết hạn");
+                alert.showAndWait();
+                return 0;
+            }
+            case 1:
+                List<ReaderModel> readerList = findAll();
+                for (ReaderModel reader : readerList) {
+                    if (Objects.equals(reader.getId(), id)) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Success");
+                        alert.setHeaderText("Success");
+                        alert.setContentText("Người dùng hợp lệ");
+                        alert.showAndWait();
+                    }
+                }
+                return 1;
+            case 2: {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Error");
+                alert.setContentText("Người dùng không tồn tại");
+                alert.showAndWait();
+                return 0;
+            }
+            case 3: {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ERROR");
+                alert.setHeaderText("ERROR");
+                alert.setContentText("Người dùng chưa trả sách");
+                alert.showAndWait();
+                return 0;
+            }
+            default:
+                break;
+        }
+        return 0;
+    }
+
+    @Override
+    public List<LoanSlipModel> findByCId(Integer id) {
+        List<LoanSlipEntity> loanslipList = loanSlipRepository.findByCId(id);
+
+        List<LoanSlipModel> resultsLoanslipModel = new ArrayList<>();
+        for (LoanSlipEntity entity : loanslipList) {
+            resultsLoanslipModel.add(loanslipConverter.entityToModel(entity, LoanSlipModel.class));
+        }
+        return resultsLoanslipModel;
+    }
+
+    @Override
+    public void creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online) {
+        loanSlipRepository.creatLoanSlip(LSbookList, LScheckReader, LSCustomerID, online);
+    }
     
+    @Override
+    public void updateBookGive(LoanSlipModel loanSlip) {
+
+        if (loanSlip.getIsOnline()== 1) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setHeaderText("ERROR");
+            alert.setContentText("Sách đã được lấy!!");
+            alert.showAndWait();
+        } else {
+            boolean rs = loanSlipRepository.updateBookGive(loanSlip);
+            if (rs) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success");
+                alert.setHeaderText("Success");
+                alert.setContentText("Trao sách thành công");
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ERROR");
+                alert.setHeaderText("ERROR");
+                alert.setContentText("Trao sách thất bại");
+                alert.showAndWait();
+            }
+        }
+    }
+
 }

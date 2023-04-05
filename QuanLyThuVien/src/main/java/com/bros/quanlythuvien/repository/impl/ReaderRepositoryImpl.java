@@ -5,15 +5,19 @@
 package com.bros.quanlythuvien.repository.impl;
 
 import com.bros.quanlythuvien.entity.ReaderEntity;
+import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.repository.ReaderRepository;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 
 /**
@@ -70,6 +74,64 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public int checkReader(Integer id) {
+        Connection connect = getConnection();
+        int fail = 0;
+        try {
+            String sql = "select ExpiryDate from borrowcards where ReaderID =?;";
+            statement = connect.prepareStatement(sql);
+            statement.setInt(1, id);
+            result = statement.executeQuery();
+            if (result.next()) {
+
+                LocalDate expiryDate = result.getDate("ExpiryDate").toLocalDate(); // Lấy giá trị ExpiryDate từ ResultSet
+
+                LocalDate currentDate = LocalDate.now(); // Lấy ngày hiện tại
+
+                if (expiryDate.isBefore(currentDate)) {
+                    return 0;
+                } else {
+                    // Nếu ExpiryDate còn hạn, thực hiện hành động tương ứng ở đây
+                    try {
+                        String sql2 = "select CustomerID,isReturned, SUM(Quantity) as totalQuantity  from loanslip where CustomerID=? group by CustomerID,isReturned ;";
+                        statement = connect.prepareStatement(sql2);
+                        statement.setInt(1, id);
+                        result = statement.executeQuery();
+                        while (result.next()) {
+                            Integer isReturn = result.getInt("isReturned");
+                            if (isReturn == 0) {
+                                return 3;
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                        return 1;
+                }
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) {
+                    result.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return 2;
     }
 
 //    public static void main(String[] args) {

@@ -20,4 +20,6 @@ public interface ReaderRepository extends CommonRepository<ReaderEntity> {
     public List<ReaderEntity> findAll(Integer page);
 
     public void loadCate(ComboBox<String> RsearchBook_category, Map<Integer, String> categoriesMap);
+
+    public int checkReader(Integer id);
 }

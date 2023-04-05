@@ -84,10 +84,7 @@ public class LoanSlipModel {
         this.isReturned = isReturned;
     }
 
-    public LoanSlipModel() {
-    }
-
-    public LoanSlipModel(Integer id, Integer customerID, Integer bookID, String bookName, String bookAuthor, String borrowedDate, String expirationDate, Integer quantity, Integer isReturned) {
+    public LoanSlipModel(Integer id, Integer customerID, Integer bookID, String bookName, String bookAuthor, String borrowedDate, String expirationDate, Integer quantity, Integer isReturned, Integer isOnline) {
         this.id = id;
         this.customerID = customerID;
         this.bookID = bookID;
@@ -97,6 +94,10 @@ public class LoanSlipModel {
         this.expirationDate = expirationDate;
         this.quantity = quantity;
         this.isReturned = isReturned;
+        this.isOnline = isOnline;
+    }
+
+    public LoanSlipModel() {
     }
     private Integer id;
     private Integer customerID;
@@ -107,4 +108,13 @@ public class LoanSlipModel {
     private String expirationDate;
     private Integer quantity;
     private Integer isReturned;
+    private Integer isOnline;
+
+    public Integer getIsOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(Integer isOnline) {
+        this.isOnline = isOnline;
+    }
 }
