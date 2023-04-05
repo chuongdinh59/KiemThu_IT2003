@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author ADMIN
  */
-public interface LoanslipRepository extends CommonRepository<LoanSlipEntity> {
+public interface LoanSlipRepository extends CommonRepository<LoanSlipEntity> {
 
     public List<LoanSlipEntity> findAll(Integer page);
 
@@ -26,6 +26,13 @@ public interface LoanslipRepository extends CommonRepository<LoanSlipEntity> {
     public List<LoanSlipEntity> findByCId(Integer id);
 
     public boolean updateBookGive(LoanSlipModel loanSlip);
+
     public void checkOnlineLoanSlip();
+
     public List<LoanSlipEntity> findByBId(Integer id);
+
+    public void insertQuantity(Integer quantity, Integer id);
+
+    public void deleteQuantity(Integer quantity, Integer id);
+     public boolean checkQuantity(Integer quantity, Integer id);
 }

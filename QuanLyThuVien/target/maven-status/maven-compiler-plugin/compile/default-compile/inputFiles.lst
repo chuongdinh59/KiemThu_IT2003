@@ -26,6 +26,7 @@ C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuV
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\ReaderEntity.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\LoanSlipModel.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\BookModel.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\LoanSlipService.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\CustomerController.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\BorrowCardRepositoryImpl.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\impl\ReaderServiceImpl.java
@@ -37,7 +38,7 @@ C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuV
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\QueryBuilderUtils.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\CommonRepositoryImpl.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\ReaderModel.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\LoanslipRepository.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\LoanSlipRepository.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\mapper\ResultSetMapper.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\QuanTriSachController.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\BookService.java
@@ -48,9 +49,10 @@ C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuV
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\BorrowDetailsEntity.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\BookReservationModel.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\BookRepository.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\LoanslipRepositoryImpl.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\LoanSlipRepositoryImpl.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\ReaderService.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\enums\RoleEnums.java
+C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\impl\LoanSlipServiceImpl.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\BookReservationEntity.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\EmployeeController.java
 C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\ConnectionUtils.java

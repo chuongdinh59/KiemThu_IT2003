@@ -5,7 +5,6 @@
 package com.bros.quanlythuvien.service;
 
 import com.bros.quanlythuvien.model.BookModel;
-import com.bros.quanlythuvien.model.LoanSlipModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import java.util.List;
 import java.util.Map;
@@ -32,13 +31,7 @@ public interface ReaderService {
 
     public int checkReader(Integer id);
 
-    public void creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online);
 
     public void loadReaderColumn(TableView<ReaderModel> infoCustomerTB);
 
-    public List<LoanSlipModel> findByCId(Integer id);
-
-    public void updateBookGive(LoanSlipModel loanSlip);
-
-//    public class DeleteButtonTableCell<S> extends TableCell<S, Boolean> ;
 }

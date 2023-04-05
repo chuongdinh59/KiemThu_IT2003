@@ -4,16 +4,13 @@
  */
 package com.bros.quanlythuvien;
 
-import com.bros.quanlythuvien.service.EmployeeService;
-import com.bros.quanlythuvien.service.impl.BookServiceImpl;
-import com.bros.quanlythuvien.service.impl.EmployeeServiceImpl;
+import com.bros.quanlythuvien.service.LoanSlipService;
+import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
-import com.cloudinary.strategies.StrategyLoader;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -86,11 +83,11 @@ public class LoginController implements Initializable{
     ObservableList<String> list = FXCollections.observableArrayList("Admin", "Employee", "Customer");
     private PreparedStatement statement;
     private ResultSet result;
-    private EmployeeService employeeService = new EmployeeServiceImpl();
+    private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        employeeService.checkOnlineLoanSlip();
+        loanSlipService.checkOnlineLoanSlip();
     }
 
     @FXML

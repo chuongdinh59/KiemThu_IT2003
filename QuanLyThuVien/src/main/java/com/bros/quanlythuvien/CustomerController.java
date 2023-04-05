@@ -12,10 +12,12 @@ import com.bros.quanlythuvien.model.SearchBookModel;
 import com.bros.quanlythuvien.service.BookService;
 import com.bros.quanlythuvien.service.CategoryService;
 import com.bros.quanlythuvien.service.EmployeeService;
+import com.bros.quanlythuvien.service.LoanSlipService;
 import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
 import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
 import com.bros.quanlythuvien.service.impl.EmployeeServiceImpl;
+import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import com.bros.quanlythuvien.utils.ValidateUtils;
@@ -163,6 +165,7 @@ public class CustomerController implements Initializable {
     private BookService bookService;
     private ReaderService readerService = new ReaderServiceImpl();
     private EmployeeService employeeService = new EmployeeServiceImpl();
+    private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
 
     private int LScheckReader = 0;
 
@@ -218,7 +221,7 @@ public class CustomerController implements Initializable {
             }
             if (totalQuantity <= 5) {
                 String strReaderId = Integer.toString(readerId);
-                readerService.creatLoanSlip(bookListCart, LScheckReader, strReaderId, 0);
+                loanSlipService.creatLoanSlip(bookListCart, LScheckReader, strReaderId, 0);
                 clearCart();
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -246,14 +249,14 @@ public class CustomerController implements Initializable {
 
     @FXML
     private void loadLoanslipColumn(TableView<LoanSlipModel> infoLoanSlipTB) {
-        employeeService.loadLoanslipColumn(infoLoanSlipTB);
+        loanSlipService.loadLoanslipColumn(infoLoanSlipTB);
     }
 
     @FXML
     private void loadLoanSlipInfo() {
 //        List<LoanSlipModel> loanSlipList = new Array<>();
         List<LoanSlipModel> loanSlipList = new ArrayList<>();
-        loanSlipList = readerService.findByCId(readerId);
+        loanSlipList = loanSlipService.findByCId(readerId);
         this.infoLoanSlipTB.setItems(FXCollections.observableList(loanSlipList));
     }
 

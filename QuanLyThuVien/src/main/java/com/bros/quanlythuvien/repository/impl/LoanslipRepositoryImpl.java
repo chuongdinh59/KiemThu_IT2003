@@ -7,7 +7,6 @@ package com.bros.quanlythuvien.repository.impl;
 import com.bros.quanlythuvien.entity.LoanSlipEntity;
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.LoanSlipModel;
-import com.bros.quanlythuvien.repository.LoanslipRepository;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,15 +20,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
+import com.bros.quanlythuvien.repository.LoanSlipRepository;
 
 /**
  *
  * @author ADMIN
  */
-public class LoanslipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity> implements LoanslipRepository {
+public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity> implements LoanSlipRepository {
 
     private PreparedStatement statement;
     private ResultSet result;
@@ -78,21 +76,24 @@ public class LoanslipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ParseException ex) {
-            Logger.getLogger(LoanslipRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoanSlipRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         try {
-            String sql = "UPDATE loanslip SET isReturned = '1', ExpirationDate = ? WHERE (id = ?);";
-            statement = connect.prepareStatement(sql);
-            // Sử dụng java.util.Date
-            LocalDate today = LocalDate.now();
-            java.sql.Date sqlDate = java.sql.Date.valueOf(today);
-            statement.setDate(1, sqlDate);
+//            String sql = "UPDATE loanslip SET isReturned = '1', ExpirationDate = ? WHERE (id = ?);";
+            String sql = "UPDATE loanslip SET isReturned = '1' WHERE (id = ?);";
 
-            statement.setInt(2, loanSlip.getId());
+            statement = connect.prepareStatement(sql);
+//            // Sử dụng java.util.Date
+//            LocalDate today = LocalDate.now();
+//            java.sql.Date sqlDate = java.sql.Date.valueOf(today);
+//            statement.setDate(1, sqlDate);
+
+            statement.setInt(1, loanSlip.getId());
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
+                insertQuantity(loanSlip.getQuantity(), loanSlip.getBookID());
                 return true;
             }
         } catch (SQLException e) {
@@ -254,17 +255,15 @@ public class LoanslipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
                     statement.setString(4, book.getAuthor());
                     LocalDate borrowDate = LocalDate.now();
                     java.sql.Date sqlBorrowDate = java.sql.Date.valueOf(borrowDate);
-//                    java.sql.Date borrowDate = java.sql.Date.valueOf();
                     statement.setDate(5, sqlBorrowDate);
                     LocalDate expirationDate = borrowDate.plusDays(30);
-//                    java.sql.Date expirationDate = java.sql.Date.valueOf();
                     java.sql.Date sqlExpirationDate = java.sql.Date.valueOf(expirationDate);
                     statement.setDate(6, sqlExpirationDate);
                     statement.setInt(7, book.getQuantity());
                     statement.setInt(8, online);
                     int rowsInserted = statement.executeUpdate();
-                    if (rowsInserted > 0) {
-//                        countQuantity = 0;
+                    if (rowsInserted > 0 && checkQuantity(book.getQuantity(), book.getId())) {
+                        deleteQuantity(book.getQuantity(), book.getId());
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Informatin");
                         alert.setHeaderText("Success");
@@ -305,6 +304,104 @@ public class LoanslipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     }
 
     @Override
+    public void insertQuantity(Integer quantity, Integer id) {
+        Connection connect = getConnection();
+        try {
+            String sql = "UPDATE books SET Quantity = Quantity + ? WHERE (id = ?);";
+            statement = connect.prepareStatement(sql);
+            statement.setInt(1, quantity);
+            statement.setInt(2, id);
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) {
+                    result.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void deleteQuantity(Integer quantity, Integer id) {
+        Connection connect = getConnection();
+        try {
+            String sql = "UPDATE books SET Quantity = Quantity - ? WHERE (id = ?);";
+            statement = connect.prepareStatement(sql);
+            statement.setInt(1, quantity);
+            statement.setInt(2, id);
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) {
+                    result.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public boolean checkQuantity(Integer quantity, Integer id) {
+        Connection connect = getConnection();
+        try {
+            String sql = "SELECT * FROM librarymanagement.books WHERE id = ?;";
+            statement = connect.prepareStatement(sql);
+            statement.setInt(1, id);
+
+            result = statement.executeQuery();
+            if (result.next()) {
+                Integer quantityBook = result.getInt("Quantity");
+                if (quantityBook < quantity) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) {
+                    result.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    @Override
     public void checkOnlineLoanSlip() {
         Connection connect = getConnection();
         try {
@@ -317,12 +414,6 @@ public class LoanslipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
                 PreparedStatement pstmt = connect.prepareStatement(deleteSql);
                 pstmt.setInt(1, id);
                 pstmt.executeUpdate();
-//                Alert alert = new Alert(Alert.AlertType.ERROR);
-//                alert.setTitle("Error");
-//                alert.setHeaderText("Error");
-//                alert.setContentText("da delete duoc r ne");
-//                alert.showAndWait();
-
             }
         } catch (SQLException e) {
             e.printStackTrace();

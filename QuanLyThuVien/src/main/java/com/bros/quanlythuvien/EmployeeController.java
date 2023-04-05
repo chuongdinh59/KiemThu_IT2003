@@ -15,11 +15,13 @@ import com.bros.quanlythuvien.service.BookService;
 import com.bros.quanlythuvien.service.BorrowCardService;
 import com.bros.quanlythuvien.service.CategoryService;
 import com.bros.quanlythuvien.service.EmployeeService;
+import com.bros.quanlythuvien.service.LoanSlipService;
 import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
 import com.bros.quanlythuvien.service.impl.BorrowCardServiceImpl;
 import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
 import com.bros.quanlythuvien.service.impl.EmployeeServiceImpl;
+import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import java.io.IOException;
@@ -241,10 +243,9 @@ public class EmployeeController implements Initializable {
     private Map<Integer, String> categoriesMap = new HashMap<>();
     private ReaderService readerService;
     private EmployeeService employeeService = new EmployeeServiceImpl();
-    private BookModel bookModel;
     private PreparedStatement statement;
-    private ResultSet result;
     private BorrowCardService borrowCardService;
+    private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
 
 //    @FXML
 //    public ArrayList<BookModel> LSbookList = new ArrayList();
@@ -329,7 +330,7 @@ public class EmployeeController implements Initializable {
 
     //hiển thị dữ liệu bảng loanslip trong trang return
     private void loadLoanslipInfo(TableView<LoanSlipModel> returnLoanslipTB) {
-        List<LoanSlipModel> LoanslipList = employeeService.loadLoanslipInfo();
+        List<LoanSlipModel> LoanslipList = loanSlipService.loadLoanslipInfo();
         returnLoanslipTB.setItems(FXCollections.observableList(LoanslipList));
     }
 
@@ -339,7 +340,7 @@ public class EmployeeController implements Initializable {
         SelectionModel<LoanSlipModel> selectionModel = returnLoanslipTB.getSelectionModel();
         LoanSlipModel selectedLoanSlip = selectionModel.getSelectedItem();
         if (selectedLoanSlip != null) {
-            employeeService.updateBook(selectedLoanSlip);
+            loanSlipService.updateBook(selectedLoanSlip);
             loadLoanslipInfo(returnLoanslipTB);
             returnLoanslipTB.refresh();
         }
@@ -351,7 +352,7 @@ public class EmployeeController implements Initializable {
         SelectionModel<LoanSlipModel> selectionModel = returnLoanslipTB.getSelectionModel();
         LoanSlipModel selectedLoanSlip = selectionModel.getSelectedItem();
         if (selectedLoanSlip != null) {
-            readerService.updateBookGive(selectedLoanSlip);
+            loanSlipService.updateBookGive(selectedLoanSlip);
             loadLoanslipInfo(returnLoanslipTB);
             returnLoanslipTB.refresh();
         }
@@ -391,7 +392,7 @@ public class EmployeeController implements Initializable {
         } else {
             try {
                 Integer id = Integer.valueOf(statusReaderTF.getText());
-                loanSlipList = employeeService.findByCId(id);
+                loanSlipList = loanSlipService.findByCId(id);
                 this.statusBookTB.setItems(FXCollections.observableList(loanSlipList));
             } catch (NumberFormatException e) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -413,7 +414,7 @@ public class EmployeeController implements Initializable {
         } else {
             try {
                 Integer id = Integer.valueOf(statusBookTF.getText());
-                loanSlipList = employeeService.findByBId(id);
+                loanSlipList = loanSlipService.findByBId(id);
                 this.statusBookTB.setItems(FXCollections.observableList(loanSlipList));
             } catch (NumberFormatException e) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -434,7 +435,7 @@ public class EmployeeController implements Initializable {
         if (!"".equals(strId)) {
             try {
                 Integer id = Integer.valueOf(strId);
-                LoanSlipModel loanSlip = employeeService.findById(id);
+                LoanSlipModel loanSlip = loanSlipService.findById(id);
                 if (loanSlip != null) {
                     List<LoanSlipModel> loanSlipList = new ArrayList<>();
                     loanSlipList.add(loanSlip);
@@ -534,7 +535,7 @@ public class EmployeeController implements Initializable {
     //xử lý thêm cột bảng loanslip trong trang return
     @FXML
     private void loadLoanslipColumn(TableView<LoanSlipModel> returnLoanslipTB) {
-        employeeService.loadLoanslipColumn(returnLoanslipTB);
+        loanSlipService.loadLoanslipColumn(returnLoanslipTB);
     }
 
     // xử lý nút tìm kiếm book trong trang borrow
@@ -812,48 +813,8 @@ public class EmployeeController implements Initializable {
     //xử lý nút tạo phiếu mượn
     @FXML
     public void creatLoanSlip() {
-
-        if (LScheckReader == 1 && !LSbookList.isEmpty()) {
-            Connection connect = getConnection();
-            for (BookModel book : LSbookList) {
-                try {
-                    String sql = "INSERT INTO librarymanagement.loanslip (CustomerID, BookID, BookName, BookAuthor, BorrowedDate, ExpirationDate,Quantity,isReturned,isOnline) VALUES (?, ?, ?, ?, ?, ?,?,0,1);";
-                    statement = connect.prepareStatement(sql);
-                    statement.setString(1, LSCustomerID.getText());
-                    statement.setInt(2, book.getId());
-                    statement.setString(3, book.getTitle());
-                    statement.setString(4, book.getAuthor());
-                    java.sql.Date borrowDate = java.sql.Date.valueOf(LSBorrowDate.getText());
-                    statement.setDate(5, borrowDate);
-                    java.sql.Date expirationDate = java.sql.Date.valueOf(LSExpirationDate.getText());
-                    statement.setDate(6, expirationDate);
-                    statement.setInt(7, book.getQuantity());
-                    int rowsInserted = statement.executeUpdate();
-                    if (rowsInserted > 0) {
-                        countQuantity = 0;
-                        Alert alert = new Alert(AlertType.INFORMATION);
-                        alert.setTitle("Informatin");
-                        alert.setHeaderText("Success");
-                        alert.setContentText("Thêm thành công");
-                        alert.showAndWait();
-                    } else {
-                        Alert alert = new Alert(AlertType.ERROR);
-                        alert.setTitle("ERROR");
-                        alert.setHeaderText("ERROR");
-                        alert.setContentText("Thêm thất bại");
-                        alert.showAndWait();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error");
-            alert.setContentText("Khách hàng không tồn tại hoặc bạn chưa thêm sách để tạo phiếu mượn");
-            alert.showAndWait();
-        }
+        String strId = LSCustomerID.getText();
+        loanSlipService.creatLoanSlip(LSbookList, LScheckReader, strId, 1);
     }
 
     @FXML

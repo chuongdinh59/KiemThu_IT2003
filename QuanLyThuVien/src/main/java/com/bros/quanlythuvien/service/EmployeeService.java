@@ -6,9 +6,6 @@ package com.bros.quanlythuvien.service;
 
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.BorrowCardModel;
-import com.bros.quanlythuvien.model.LoanSlipModel;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.scene.control.TableView;
 
 /**
@@ -22,16 +19,4 @@ public interface EmployeeService {
     public void loadReaderColumn(TableView<BorrowCardModel> tbReader);
 
     public void loadReaderInfo(Integer id, TableView<BorrowCardModel> tbReader);
-
-    public void loadLoanslipColumn(TableView<LoanSlipModel> returnLoanslipTB);
-
-    public List<LoanSlipModel> loadLoanslipInfo();
-
-    public LoanSlipModel findById(Integer id);
-
-    public void updateBook(LoanSlipModel loanSlip);
-    
-    public void checkOnlineLoanSlip();
-    public List<LoanSlipModel> findByBId(Integer id) ;
-    public List<LoanSlipModel> findByCId(Integer id);
 }
