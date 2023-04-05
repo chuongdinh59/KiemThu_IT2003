@@ -29,9 +29,6 @@ import com.bros.quanlythuvien.repository.LoanSlipRepository;
  */
 public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity> implements LoanSlipRepository {
 
-    private PreparedStatement statement;
-    private ResultSet result;
-
     @Override
     public List<LoanSlipEntity> findAll(Integer page) {
         List<LoanSlipEntity> r = super.findAll();
@@ -47,6 +44,8 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     @Override
     public boolean updateBook(LoanSlipModel loanSlip) {
         Connection connect = getConnection();
+        PreparedStatement statement = null;
+        ResultSet result = null;
         if (loanSlip == null) {
             return false;
         }
@@ -120,6 +119,8 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     @Override
     public boolean updateBookGive(LoanSlipModel loanSlip) {
         Connection connect = getConnection();
+        PreparedStatement statement = null;
+        ResultSet result = null;
         if (loanSlip == null) {
             return false;
         }
@@ -157,6 +158,8 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     @Override
     public List<LoanSlipEntity> findByCId(Integer id) {
         Connection connect = getConnection();
+        PreparedStatement statement = null;
+        ResultSet result = null;
         List<LoanSlipEntity> loanSlipList = new ArrayList<>();
         try {
             String sql = "SELECT * FROM loanslip WHERE CustomerID = ?";
@@ -200,6 +203,8 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     @Override
     public List<LoanSlipEntity> findByBId(Integer id) {
         Connection connect = getConnection();
+        PreparedStatement statement = null;
+        ResultSet result = null;
         List<LoanSlipEntity> loanSlipList = new ArrayList<>();
         try {
             String sql = "SELECT * FROM loanslip WHERE BookID = ?";
@@ -245,6 +250,8 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
 
         if (LScheckReader == 1 && !LSbookList.isEmpty()) {
             Connection connect = getConnection();
+            PreparedStatement statement = null;
+            ResultSet result = null;
             for (BookModel book : LSbookList) {
                 try {
                     String sql = "INSERT INTO librarymanagement.loanslip (CustomerID, BookID, BookName, BookAuthor, BorrowedDate, ExpirationDate,Quantity,isReturned,isOnline) VALUES (?, ?, ?, ?, ?, ?,?,0,?);";
@@ -306,6 +313,8 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     @Override
     public void insertQuantity(Integer quantity, Integer id) {
         Connection connect = getConnection();
+        PreparedStatement statement = null;
+        ResultSet result = null;
         try {
             String sql = "UPDATE books SET Quantity = Quantity + ? WHERE (id = ?);";
             statement = connect.prepareStatement(sql);
@@ -336,6 +345,8 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     @Override
     public void deleteQuantity(Integer quantity, Integer id) {
         Connection connect = getConnection();
+        PreparedStatement statement = null;
+        ResultSet result = null;
         try {
             String sql = "UPDATE books SET Quantity = Quantity - ? WHERE (id = ?);";
             statement = connect.prepareStatement(sql);
@@ -366,6 +377,8 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     @Override
     public boolean checkQuantity(Integer quantity, Integer id) {
         Connection connect = getConnection();
+        PreparedStatement statement = null;
+        ResultSet result = null;
         try {
             String sql = "SELECT * FROM librarymanagement.books WHERE id = ?;";
             statement = connect.prepareStatement(sql);
@@ -404,12 +417,15 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     @Override
     public void checkOnlineLoanSlip() {
         Connection connect = getConnection();
+        PreparedStatement statement = null;
+        ResultSet result = null;
         try {
             String sql = "SELECT * FROM loanslip WHERE isOnline = 0 AND DATEDIFF(NOW(), BorrowedDate) >= 2;";
             statement = connect.prepareStatement(sql);
             result = statement.executeQuery();
             while (result.next()) {
                 int id = result.getInt("id");
+                insertQuantity(result.getInt("Quantity"), result.getInt("BookID"));
                 String deleteSql = "DELETE FROM loanslip WHERE id = ?";
                 PreparedStatement pstmt = connect.prepareStatement(deleteSql);
                 pstmt.setInt(1, id);
