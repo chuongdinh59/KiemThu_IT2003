@@ -8,8 +8,10 @@ import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import java.util.List;
 import java.util.Map;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
 /**
  *
@@ -31,7 +33,10 @@ public interface ReaderService {
 
     public int checkReader(Integer id);
 
-
     public void loadReaderColumn(TableView<ReaderModel> infoCustomerTB);
+
+    public Map<String, Object> login(TextField username, TextField password, Button loginBtn);
+    
+     public int register(TextField register_username, TextField register_password, TextField register_fullname, TextField register_email);
 
 }

@@ -17,6 +17,8 @@ import com.bros.quanlythuvien.repository.impl.LoanSlipRepositoryImpl;
 import com.bros.quanlythuvien.repository.impl.ReaderRepositoryImpl;
 import com.bros.quanlythuvien.service.BookService;
 import com.bros.quanlythuvien.service.ReaderService;
+import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +34,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import com.bros.quanlythuvien.repository.LoanSlipRepository;
 
 /**
  *
@@ -229,4 +230,16 @@ public class ReaderServiceImpl implements ReaderService {
         }
         return 0;
     }
+
+    @Override
+    public Map<String, Object> login(TextField username, TextField password, Button loginBtn) {
+        Map<String, Object> resultMap = readerRepository.login(username, password, loginBtn);
+        return resultMap;
+    }
+    
+    @Override
+     public int register(TextField register_username, TextField register_password, TextField register_fullname, TextField register_email){
+         int rs = readerRepository.register(register_username, register_password, register_fullname, register_email);
+         return rs;
+     }
 }

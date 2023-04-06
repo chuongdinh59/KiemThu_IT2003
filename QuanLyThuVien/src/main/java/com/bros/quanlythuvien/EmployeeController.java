@@ -241,9 +241,8 @@ public class EmployeeController implements Initializable {
 
     private BookService bookService;
     private Map<Integer, String> categoriesMap = new HashMap<>();
-    private ReaderService readerService;
+    private ReaderService readerService = new ReaderServiceImpl();
     private EmployeeService employeeService = new EmployeeServiceImpl();
-    private PreparedStatement statement;
     private BorrowCardService borrowCardService;
     private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
 
