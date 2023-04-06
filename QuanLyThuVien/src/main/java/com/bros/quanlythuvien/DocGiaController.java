@@ -2,8 +2,8 @@ package com.bros.quanlythuvien;
 
 
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
+//import com.cloudinary.Cloudinary;
+//import com.cloudinary.utils.ObjectUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -56,31 +56,31 @@ public class DocGiaController {
     private Button Submit;
     
     
-    private Cloudinary cloudinary;
-    public void initialize() {
-            cloudinary = new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", "dgqhgtpal",
-                "api_key", "529593322851467",
-                "api_secret", "SiN6khl_NrU7bpgawwi0g-R10uo"
-        ));
-     }
-    public void handleClick () {
-        initialize();
-        FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Select Image File");
-            File file = fileChooser.showOpenDialog(new Stage());
-
-            if (file != null) {
-                try {
-                    // Upload the image file to Cloudinary
-                    Map uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
-                    // Get the URL of the uploaded image and display it in the ImageView
-                    String imageUrl = (String) uploadResult.get("url");
-                    System.out.print(imageUrl);
-                    imgImageView.setImage(new Image(imageUrl));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-    }
+//    private Cloudinary cloudinary;
+//    public void initialize() {
+//            cloudinary = new Cloudinary(ObjectUtils.asMap(
+//                "cloud_name", "dgqhgtpal",
+//                "api_key", "529593322851467",
+//                "api_secret", "SiN6khl_NrU7bpgawwi0g-R10uo"
+//        ));
+//     }
+//    public void handleClick () {
+//        initialize();
+//        FileChooser fileChooser = new FileChooser();
+//            fileChooser.setTitle("Select Image File");
+//            File file = fileChooser.showOpenDialog(new Stage());
+//
+//            if (file != null) {
+//                try {
+//                    // Upload the image file to Cloudinary
+//                    Map uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
+//                    // Get the URL of the uploaded image and display it in the ImageView
+//                    String imageUrl = (String) uploadResult.get("url");
+//                    System.out.print(imageUrl);
+//                    imgImageView.setImage(new Image(imageUrl));
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//    }
 }

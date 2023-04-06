@@ -4,12 +4,13 @@
  */
 package com.bros.quanlythuvien;
 
+import com.bros.quanlythuvien.service.LoanSlipService;
+import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,7 +33,7 @@ import javafx.stage.Stage;
  *
  * @author ADMIN
  */
-public class LoginController {
+public class LoginController implements Initializable{
 
     @FXML
     private Button BacktoLoginBtn;
@@ -82,6 +83,12 @@ public class LoginController {
     ObservableList<String> list = FXCollections.observableArrayList("Admin", "Employee", "Customer");
     private PreparedStatement statement;
     private ResultSet result;
+    private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        loanSlipService.checkOnlineLoanSlip();
+    }
 
     @FXML
     public void close() {
@@ -130,11 +137,18 @@ public class LoginController {
                     stage.setTitle("Employee");
                     stage.show();
                 } else if (accountType.equals("Customer")) {
+                    // Lưu trữ readerId vào biến
+                    int readerId = result.getInt("ReaderID");
                     // Chuyển hướng đến trang khách hàng
                     loginBtn.getScene().getWindow().hide();
-                    Parent root = FXMLLoader.load(getClass().getResource("CustomerUI.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("CustomerUI.fxml"));
+                    Parent root = loader.load();
                     Scene scene = new Scene(root);
                     Stage stage = new Stage();
+                    // Truyền readerId cho trang CustomerUI
+                    CustomerController customerController = loader.getController();
+                    customerController.setReaderId(readerId);
+
                     stage.setScene(scene);
                     stage.setTitle("Customer");
                     stage.show();
@@ -189,8 +203,8 @@ public class LoginController {
             insertStatement.setString(2, register_password.getText());
             insertStatement.setString(3, register_fullname.getText());
             insertStatement.setString(4, register_email.getText());
-            int result = insertStatement.executeUpdate();
-            if (result > 0) {
+            int result1 = insertStatement.executeUpdate();
+            if (result1 > 0) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Register");
                 alert.setHeaderText("Successful");

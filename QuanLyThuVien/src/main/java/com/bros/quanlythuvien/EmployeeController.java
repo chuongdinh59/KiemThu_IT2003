@@ -7,16 +7,21 @@ package com.bros.quanlythuvien;
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.BorrowCardModel;
 import com.bros.quanlythuvien.model.CategoryModel;
+import com.bros.quanlythuvien.model.LoanSlipModel;
 import com.bros.quanlythuvien.model.ReaderBorrowCardModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.model.SearchBookModel;
 import com.bros.quanlythuvien.service.BookService;
 import com.bros.quanlythuvien.service.BorrowCardService;
 import com.bros.quanlythuvien.service.CategoryService;
+import com.bros.quanlythuvien.service.EmployeeService;
+import com.bros.quanlythuvien.service.LoanSlipService;
 import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
 import com.bros.quanlythuvien.service.impl.BorrowCardServiceImpl;
 import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
+import com.bros.quanlythuvien.service.impl.EmployeeServiceImpl;
+import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import java.io.IOException;
@@ -44,8 +49,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -95,13 +102,13 @@ public class EmployeeController implements Initializable {
     private TextField searchBook_author;
 
     @FXML
-    private TextField searchBook_category;
+    private ComboBox<String> searchBook_category;
 
     @FXML
     private TextField searchBook_name;
 
     @FXML
-    private DatePicker searchBook_publishedDate;
+    private TextField searchBook_publishedYear;
 
     @FXML
     private AnchorPane searchBook_viewForm;
@@ -183,8 +190,63 @@ public class EmployeeController implements Initializable {
 
     @FXML
     private Button exitBookListBtn;
-    
-    BookService bookService;
+
+    @FXML
+    private TableView<BookModel> tb_SearchBook;
+
+    @FXML
+    private Button returnFindallLoanslipBtn;
+
+    @FXML
+    private Button returnFindallReaderBtn;
+
+    @FXML
+    private TableView<LoanSlipModel> returnLoanslipTB;
+
+    @FXML
+    private TableView<LoanSlipModel> statusBookTB;
+
+    @FXML
+    private TextField returnLoanslipTF;
+
+    @FXML
+    private TableView<BorrowCardModel> returnReaderTB;
+
+    @FXML
+    private TextField returnReaderTF;
+
+    @FXML
+    private Button returnSearchLoanslipBtn;
+
+    @FXML
+    private Button returnSearchReaderBtn;
+
+    @FXML
+    private TextField statusBookTF;
+
+    @FXML
+    private TextField statusReaderTF;
+
+    @FXML
+    private int LScheckReader = 0;
+
+    @FXML
+    private int LScheckBook = 0;
+
+    @FXML
+    private ArrayList<BookModel> LSbookList = new ArrayList<>();
+
+    @FXML
+    private Integer countQuantity = 0;
+
+    private BookService bookService;
+    private Map<Integer, String> categoriesMap = new HashMap<>();
+    private ReaderService readerService;
+    private EmployeeService employeeService = new EmployeeServiceImpl();
+    private PreparedStatement statement;
+    private BorrowCardService borrowCardService;
+    private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
+
 //    @FXML
 //    public ArrayList<BookModel> LSbookList = new ArrayList();
     @FXML
@@ -198,89 +260,220 @@ public class EmployeeController implements Initializable {
         System.exit(0);
     }
 
+    // hiển thị dữ liệu ô thể loại trang tìm kiếm
     @FXML
-    private void loadReaderColumn() {
-        TableColumn colRId  = new TableColumn("ReaderId");
-        colRId.setCellValueFactory(new PropertyValueFactory("readerID"));
-        TableColumn colId = new TableColumn("BorrowCardID");
-        colId.setCellValueFactory(new PropertyValueFactory("id"));
-        TableColumn colFName = new TableColumn("FullName");
-        colFName.setCellValueFactory(new PropertyValueFactory("fullName"));
-        TableColumn colIssuedDate = new TableColumn("IssuedDate");
-        colIssuedDate.setCellValueFactory(new PropertyValueFactory("issuedDate"));
-        TableColumn colExpiredDate = new TableColumn("ExpiredDate");
-        colExpiredDate.setCellValueFactory(new PropertyValueFactory("expiredDate"));
-
-        this.tbReader.getColumns().addAll(colRId, colFName, colId, colIssuedDate, colExpiredDate);
+    public void loadCate() {
+        readerService.loadCate(searchBook_category, categoriesMap);
     }
 
+    // hiển thị cột của bảng trang tìm kiếm
     @FXML
-    private void loadBookColumn() {
-        TableColumn colId = new TableColumn("BookID");
-        colId.setCellValueFactory(new PropertyValueFactory("id"));
-        TableColumn colName = new TableColumn("Title");
-        colName.setCellValueFactory(new PropertyValueFactory("title"));
-        TableColumn colAuthor = new TableColumn("Author");
-        colAuthor.setCellValueFactory(new PropertyValueFactory("author"));
-        TableColumn colPubDate = new TableColumn("Published Year");
-        colPubDate.setCellValueFactory(new PropertyValueFactory("publicationYear"));
-        TableColumn colcate = new TableColumn("Category");
-        colcate.setCellValueFactory(new PropertyValueFactory("categoryValue"));
-        TableColumn colquantity = new TableColumn("Quantity");
-        colquantity.setCellValueFactory(new PropertyValueFactory("quantity"));
+    public void loadSearchBookColumn(TableView<BookModel> tb_SearchBook) {
+        employeeService.loadBookColumn(tb_SearchBook);
 
-        this.tbBook.getColumns().addAll(colId, colName, colAuthor, colPubDate, colcate, colquantity);
     }
-    
-    
-    // T sửa thành nếu có id thì tìm theo id nếu không có id tìm tất cả,
-    // thấy khúc này sai ý m thì kêu t fix
-    private ReaderService readerService ;
-    private BorrowCardService borrowCardService;
+
+    // hiển thị dữ liệu trong bảng trang tìm kiếm
     @FXML
-    private void loadReaderInfo(Integer id) {
-        List<BorrowCardModel> readerBorrowCardList = new ArrayList<>();
-        if (id != null) {
-            BorrowCardModel borrowCard = borrowCardService.findBorrowCardByRID(id);
-            ReaderModel reader = readerService.findById(borrowCard.getReaderID());
-            borrowCard.setFullName(reader.getFullname());
-            readerBorrowCardList.add(borrowCard);
-        } else  {
-            List<BorrowCardModel> borrowCardModels = borrowCardService.findAll();
-            for ( BorrowCardModel b:  borrowCardModels){
-                readerBorrowCardList.add(b);
+    private void loadSearchBookInfo(Map<String, Object> searchMap, Integer page
+    ) {
+        List<BookModel> searchBookList = bookService.findBooks(searchMap, page);
+        this.tb_SearchBook.setItems(FXCollections.observableList(searchBookList));
+    }
+
+    // xử lý nút tìm kiếm trang search
+    @FXML
+    private void loadRSearch() {
+        String strTitle = searchBook_name.getText();
+        String strAuthor = searchBook_author.getText();
+        String selectedCategory = searchBook_category.getValue();
+        Integer cateID = null;
+        for (Map.Entry<Integer, String> entry : categoriesMap.entrySet()) {
+            if (entry.getValue().equals(selectedCategory)) {
+                cateID = entry.getKey();
+                break;
             }
         }
-        this.tbReader.setItems(FXCollections.observableList(readerBorrowCardList));
-
+        String strPublish = searchBook_publishedYear.getText();
+        Map<String, Object> searchMap = bookService.getSearchMap(strTitle, strAuthor, cateID, strPublish);
+        loadSearchBookInfo(searchMap, null);
     }
-    private PreparedStatement statement;
-    private ResultSet result;
+
+    //hiển thị cột trong bảng reader trong trang borrow
+    @FXML
+    private void loadReaderColumn(TableView<BorrowCardModel> tbReader) {
+        employeeService.loadReaderColumn(tbReader);
+    }
+
+    //hiển thị cột bảng book trong trang borrow
+    @FXML
+    private void loadBookColumn(TableView<BookModel> tbBook) {
+        employeeService.loadBookColumn(tbBook);
+    }
+
+    // T sửa thành nếu có id thì tìm theo id nếu không có id tìm tất cả,
+    // thấy khúc này sai ý m thì kêu t fix
+    //***
+    //***
+    //***
+    // hiển thị dữ liệu bảng reader trong trang borrow
+    @FXML
+    private void loadReaderInfo(Integer id, TableView<BorrowCardModel> tbReader) {
+        employeeService.loadReaderInfo(id, tbReader);
+    }
+
+    //hiển thị dữ liệu bảng book trong trang borrow
     private void loadBookInfo(Map<String, Object> searchMap, Integer page) {
         List<BookModel> searchBookList = bookService.findBooks(searchMap, page);
         this.tbBook.setItems(FXCollections.observableList(searchBookList));
     }
 
-    @FXML
-    public void loadAllReader() {
-        loadReaderInfo(null);
+    //hiển thị dữ liệu bảng loanslip trong trang return
+    private void loadLoanslipInfo(TableView<LoanSlipModel> returnLoanslipTB) {
+        List<LoanSlipModel> LoanslipList = loanSlipService.loadLoanslipInfo();
+        returnLoanslipTB.setItems(FXCollections.observableList(LoanslipList));
     }
 
+    //xử lý trả sách trong phiếu mượn
+    @FXML
+    private void returnBookReturn() {
+        SelectionModel<LoanSlipModel> selectionModel = returnLoanslipTB.getSelectionModel();
+        LoanSlipModel selectedLoanSlip = selectionModel.getSelectedItem();
+        if (selectedLoanSlip != null) {
+            loanSlipService.updateBook(selectedLoanSlip);
+            loadLoanslipInfo(returnLoanslipTB);
+            returnLoanslipTB.refresh();
+        }
+    }
+
+    //Xử lý giao sách trong phiếu mượn trang return
+    @FXML
+    private void returnBookGive() {
+        SelectionModel<LoanSlipModel> selectionModel = returnLoanslipTB.getSelectionModel();
+        LoanSlipModel selectedLoanSlip = selectionModel.getSelectedItem();
+        if (selectedLoanSlip != null) {
+            loanSlipService.updateBookGive(selectedLoanSlip);
+            loadLoanslipInfo(returnLoanslipTB);
+            returnLoanslipTB.refresh();
+        }
+    }
+
+    //xử lý nút findall trong bảng reader trang borrow
+    @FXML
+    public void loadAllReader() {
+        loadReaderInfo(null, tbReader);
+    }
+
+    //xử lý nút findall trong bảng reader trang return
+    @FXML
+    public void loadAllReturnReader() {
+        loadReaderInfo(null, returnReaderTB);
+    }
+
+    //xử lý nút findall trong bảng book trang borrow
     @FXML
     public void loadAllBook() {
         loadBookInfo(null, null);
     }
 
+    //xử lý nút findall trong bảng loanslip trang return
+    @FXML
+    public void loadAllLoanSlip() {
+        loadLoanslipInfo(returnLoanslipTB);
+    }
+
+    //xử lý nút tìm kiếm reader trang status
+    @FXML
+    private void loadStatusReader() {
+        List<LoanSlipModel> loanSlipList = new ArrayList<>();
+        if ("".equals(statusReaderTF.getText())) {
+            loadLoanslipInfo(statusBookTB);
+
+        } else {
+            try {
+                Integer id = Integer.valueOf(statusReaderTF.getText());
+                loanSlipList = loanSlipService.findByCId(id);
+                this.statusBookTB.setItems(FXCollections.observableList(loanSlipList));
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText("Error");
+                alert.setContentText("Bạn cần phải nhập số");
+                alert.showAndWait();
+            }
+        }
+    }
+
+    //xử lý nút tìm kiếm book trang status
+    @FXML
+    private void loadStatusBook() {
+        List<LoanSlipModel> loanSlipList = new ArrayList<>();
+        if ("".equals(statusBookTF.getText())) {
+            loadLoanslipInfo(statusBookTB);
+
+        } else {
+            try {
+                Integer id = Integer.valueOf(statusBookTF.getText());
+                loanSlipList = loanSlipService.findByBId(id);
+                this.statusBookTB.setItems(FXCollections.observableList(loanSlipList));
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText("Error");
+                alert.setContentText("Bạn cần phải nhập số");
+                alert.showAndWait();
+            }
+        }
+
+    }
+
+    //Xử lý nút tìm kiếm loadslip trong trang return
+    @FXML
+    public void loadLoanslipId() {
+        String strId = returnLoanslipTF.getText();
+        System.out.print(strId);
+        if (!"".equals(strId)) {
+            try {
+                Integer id = Integer.valueOf(strId);
+                LoanSlipModel loanSlip = loanSlipService.findById(id);
+                if (loanSlip != null) {
+                    List<LoanSlipModel> loanSlipList = new ArrayList<>();
+                    loanSlipList.add(loanSlip);
+                    this.returnLoanslipTB.setItems(FXCollections.observableList(loanSlipList));
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Lỗi");
+                    alert.setHeaderText("Error");
+                    alert.setContentText("Không tìm thấy phiếu mượn");
+                    alert.showAndWait();
+                }
+
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText("Error");
+                alert.setContentText("Bạn cần phải nhập số");
+                alert.showAndWait();
+            }
+        } else if ("".equals(strId)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText("Error");
+            alert.setContentText("Bạn chưa nhập id");
+            alert.showAndWait();
+        }
+    }
+
+    // xử lý nút tìm kiếm reader trang borrow
     @FXML
     public void loadReaderId() {
         String strId = TFReaderId.getText();
         if (!"".equals(strId)) {
             try {
                 Integer id = Integer.valueOf(strId);
-                BorrowCardService borrowCardService = new BorrowCardServiceImpl();
                 BorrowCardModel borrowCard = borrowCardService.findBorrowCardByRID(id);
                 if (borrowCard != null) {
-                    loadReaderInfo(id);
+                    loadReaderInfo(id, tbReader);
                 } else if (borrowCard == null) {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Lỗi");
@@ -303,9 +496,49 @@ public class EmployeeController implements Initializable {
             alert.setContentText("Bạn chưa nhập id");
             alert.showAndWait();
         }
-
     }
 
+    // xử lý nút tìm kiếm reader trang return
+    @FXML
+    public void loadReturnReaderId() {
+        String strId = returnReaderTF.getText();
+        if (!"".equals(strId)) {
+            try {
+                Integer id = Integer.valueOf(strId);
+                BorrowCardModel borrowCard = borrowCardService.findBorrowCardByRID(id);
+                if (borrowCard != null) {
+                    loadReaderInfo(id, returnReaderTB);
+                } else if (borrowCard == null) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Lỗi");
+                    alert.setHeaderText("Error");
+                    alert.setContentText("Không tìm thấy khách hàng");
+                    alert.showAndWait();
+                }
+
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText("Error");
+                alert.setContentText("Bạn cần phải nhập số");
+                alert.showAndWait();
+            }
+        } else if ("".equals(strId)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText("Error");
+            alert.setContentText("Bạn chưa nhập id");
+            alert.showAndWait();
+        }
+    }
+
+    //xử lý thêm cột bảng loanslip trong trang return
+    @FXML
+    private void loadLoanslipColumn(TableView<LoanSlipModel> returnLoanslipTB) {
+        loanSlipService.loadLoanslipColumn(returnLoanslipTB);
+    }
+
+    // xử lý nút tìm kiếm book trong trang borrow
     @FXML
     public void loadBookId() {
         String strId = TFBookId.getText();
@@ -313,8 +546,6 @@ public class EmployeeController implements Initializable {
         if (!"".equals(strId)) {
             try {
                 Integer id = Integer.valueOf(strId);
-                BookService bookService = new BookServiceImpl();
-
                 Map<String, Object> g = new HashMap<>();
                 g.put("id", id);
 
@@ -323,7 +554,7 @@ public class EmployeeController implements Initializable {
                 for (BookModel book : bookList) {
 
                     if (book != null) {
-//                        loadBookInfo(id);
+                        loadBookInfo(g, null);
                         pass++;
                     }
                 }
@@ -351,20 +582,11 @@ public class EmployeeController implements Initializable {
         }
     }
 
-    @FXML
-    private int LScheckReader = 0;
-
-    @FXML
-    private int LScheckBook = 0;
-
+    // xử lý nút kiểm tra reader bên trang Loanslip
     @FXML
     public void checkReaderID() {
-        ReaderService readerService = new ReaderServiceImpl();
+
         String sid = LSCustomerID.getText();
-        int fail = 0;
-
-        Connection connect = getConnection();
-
         if ("".equals(sid)) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Informatin");
@@ -374,85 +596,14 @@ public class EmployeeController implements Initializable {
             LScheckReader = 0;
         } else {
             try {
-
                 Integer id = Integer.valueOf(sid);
-
-                try {
-                    String sql = "select ExpiryDate from borrowcards where ReaderID =?;";
-                    statement = connect.prepareStatement(sql);
-                    statement.setInt(1, id);
-                    result = statement.executeQuery();
-                    if (result.next()) {
-
-                        LocalDate expiryDate = result.getDate("ExpiryDate").toLocalDate(); // Lấy giá trị ExpiryDate từ ResultSet
-
-                        LocalDate currentDate = LocalDate.now(); // Lấy ngày hiện tại
-
-                        if (expiryDate.isBefore(currentDate)) {
-                            // Nếu ExpiryDate đã hết hạn, thực hiện hành động tương ứng ở đây
-                            Alert alert = new Alert(AlertType.ERROR);
-                            alert.setTitle("ERROR");
-                            alert.setHeaderText("ERROR");
-                            alert.setContentText("Thẻ thư viện đã hết hạn");
-                            alert.showAndWait();
-                        } else {
-                            // Nếu ExpiryDate còn hạn, thực hiện hành động tương ứng ở đây
-                            try {
-                                String sql2 = "select CustomerID,isReturned, SUM(Quantity) as totalQuantity  from loanslip where CustomerID=? group by CustomerID,isReturned ;";
-                                statement = connect.prepareStatement(sql2);
-                                statement.setInt(1, id);
-                                result = statement.executeQuery();
-                                while (result.next()) {
-                                    Integer isReturn = result.getInt("isReturned");
-                                    if (isReturn == 0) {
-                                        fail++;
-                                        Alert alert = new Alert(AlertType.ERROR);
-                                        alert.setTitle("ERROR");
-                                        alert.setHeaderText("ERROR");
-                                        alert.setContentText("Người dùng chưa trả sách");
-                                        alert.showAndWait();
-                                    }
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            int LSpassReader = 0;
-                            if (fail == 0) {
-                                List<ReaderModel> readerList = readerService.findAll();
-                                for (ReaderModel reader : readerList) {
-                                    if (Objects.equals(reader.getId(), id)) {
-                                        LSpassReader++;
-                                    }
-                                }
-
-                                if (LSpassReader > 0) {
-                                    Alert alert = new Alert(AlertType.INFORMATION);
-                                    alert.setTitle("Success");
-                                    alert.setHeaderText("Success");
-                                    alert.setContentText("Người dùng có tồn tại");
-                                    alert.showAndWait();
-                                    LScheckReader = 1;
-                                } else {
-
-                                    Alert alert = new Alert(AlertType.ERROR);
-                                    alert.setTitle("Error");
-                                    alert.setHeaderText("Error");
-                                    alert.setContentText("Người dùng không tồn tại");
-                                    alert.showAndWait();
-                                    LScheckReader = 0;
-                                }
-                            }
-
-                        }
-
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                int check = readerService.checkReader(id);
+                if (check == 0) {
+                    LScheckReader = 0;
+                } else {
+                    LScheckReader = 1;
                 }
 
-//                        Connection connect = getConnection();
             } catch (NumberFormatException e) {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Error");
@@ -462,8 +613,10 @@ public class EmployeeController implements Initializable {
                 LScheckReader = 0;
             }
         }
+
     }
 
+    //xử lý nút kiểm tra book bên trang Loanslip
     @FXML
     public void loadLSBook() {
         BookService bookService = new BookServiceImpl();
@@ -517,12 +670,7 @@ public class EmployeeController implements Initializable {
         }
     }
 
-    @FXML
-    private ArrayList<BookModel> LSbookList = new ArrayList<>();
-
-    @FXML
-    private Integer countQuantity = 0;
-
+    //xử lý nút thêm vào danh sách phiếu mượn trong trang Loanslip
     @FXML
     public void LSCreateBookList() {
 
@@ -585,6 +733,7 @@ public class EmployeeController implements Initializable {
         LScheckBook = 0;
     }
 
+    //xử lý nút xóa trong trang loanslip
     public class DeleteButtonTableCell<S> extends TableCell<S, Boolean> {
 
         private final Button deleteButton;
@@ -619,19 +768,20 @@ public class EmployeeController implements Initializable {
         }
     }
 
+    // xử lý cột trong trang loanslip
     @FXML
     public void loadLSBookListColumn() {
         TableColumn<BookModel, Integer> bookIdColumn = new TableColumn<>("Book ID");
-        bookIdColumn.setCellValueFactory(new PropertyValueFactory<BookModel, Integer>("id"));
+        bookIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
 
         TableColumn<BookModel, String> nameColumn = new TableColumn<>("Name");
-        nameColumn.setCellValueFactory(new PropertyValueFactory<BookModel, String>("title"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
 
         TableColumn<BookModel, String> authorColumn = new TableColumn<>("Author");
-        authorColumn.setCellValueFactory(new PropertyValueFactory<BookModel, String>("author"));
+        authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
 
         TableColumn<BookModel, Integer> quantityColumn = new TableColumn<>("Quantity");
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<BookModel, Integer>("quantity"));
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
         TableColumn<BookModel, Boolean> deleteColumn = new TableColumn<>("Delete");
         deleteColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(true));
@@ -640,6 +790,7 @@ public class EmployeeController implements Initializable {
         LSTBBookList.getColumns().addAll(bookIdColumn, nameColumn, authorColumn, quantityColumn, deleteColumn);
     }
 
+    // xử lý nút mở trang danh sách phiếu mượn trong trang Loanslip
     @FXML
     public void loadLSBookListInfo() {
         ObservableList<BookModel> bookObservableList = FXCollections.observableArrayList();
@@ -647,6 +798,7 @@ public class EmployeeController implements Initializable {
         LSTBBookList.setItems(bookObservableList);
     }
 
+    //xử lý gán cứng ngày mượn trong trang loanslip
     @FXML
     public void loadLSDate() {
         LocalDate currentDate = LocalDate.now();
@@ -658,50 +810,11 @@ public class EmployeeController implements Initializable {
         LSExpirationDate.setText(returnDateString);
     }
 
+    //xử lý nút tạo phiếu mượn
     @FXML
     public void creatLoanSlip() {
-
-        if (LScheckReader == 1 && !LSbookList.isEmpty()) {
-            Connection connect = getConnection();
-            for (BookModel book : LSbookList) {
-                try {
-                    String sql = "INSERT INTO librarymanagement.loanslip (CustomerID, BookID, BookName, BookAuthor, BorrowedDate, ExpirationDate,Quantity,isReturned) VALUES (?, ?, ?, ?, ?, ?,?,0);";
-                    statement = connect.prepareStatement(sql);
-                    statement.setString(1, LSCustomerID.getText());
-                    statement.setInt(2, book.getId());
-                    statement.setString(3, book.getTitle());
-                    statement.setString(4, book.getAuthor());
-                    java.sql.Date borrowDate = java.sql.Date.valueOf(LSBorrowDate.getText());
-                    statement.setDate(5, borrowDate);
-                    java.sql.Date expirationDate = java.sql.Date.valueOf(LSExpirationDate.getText());
-                    statement.setDate(6, expirationDate);
-                    statement.setInt(7, book.getQuantity());
-                    int rowsInserted = statement.executeUpdate();
-                    if (rowsInserted > 0) {
-                        countQuantity = 0;
-                        Alert alert = new Alert(AlertType.INFORMATION);
-                        alert.setTitle("Informatin");
-                        alert.setHeaderText("Success");
-                        alert.setContentText("Thêm thành công");
-                        alert.showAndWait();
-                    } else {
-                        Alert alert = new Alert(AlertType.ERROR);
-                        alert.setTitle("ERROR");
-                        alert.setHeaderText("ERROR");
-                        alert.setContentText("Thêm thất bại");
-                        alert.showAndWait();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error");
-            alert.setContentText("Khách hàng không tồn tại hoặc bạn chưa thêm sách để tạo phiếu mượn");
-            alert.showAndWait();
-        }
+        String strId = LSCustomerID.getText();
+        loanSlipService.creatLoanSlip(LSbookList, LScheckReader, strId, 1);
     }
 
     @FXML
@@ -712,6 +825,8 @@ public class EmployeeController implements Initializable {
     @FXML
     public void switchForm(ActionEvent event) {
         if (event.getSource() == borrowBook_Btn) {
+            loadReaderInfo(null, tbReader);
+            loadBookInfo(null, null);
             borrowBook_viewForm.setVisible(true);
             searchBook_viewForm.setVisible(false);
             status_viewForm.setVisible(false);
@@ -726,6 +841,7 @@ public class EmployeeController implements Initializable {
             returnBook_viewForm.setVisible(false);
         }
         if (event.getSource() == status_Btn) {
+            loadLoanslipInfo(statusBookTB);
             borrowBook_viewForm.setVisible(false);
             searchBook_viewForm.setVisible(false);
             status_viewForm.setVisible(true);
@@ -740,13 +856,15 @@ public class EmployeeController implements Initializable {
             returnBook_viewForm.setVisible(false);
         }
         if (event.getSource() == returnBook_Btn) {
+            loadReaderInfo(null, returnReaderTB);
+            loadLoanslipInfo(returnLoanslipTB);
             borrowBook_viewForm.setVisible(false);
             searchBook_viewForm.setVisible(false);
             status_viewForm.setVisible(false);
             loanslip_viewForm.setVisible(false);
             returnBook_viewForm.setVisible(true);
         }
-        if (event.getSource() == loanslip_exitBtn) {    
+        if (event.getSource() == loanslip_exitBtn) {
             borrowBook_viewForm.setVisible(true);
             loanslip_viewForm.setVisible(false);
         }
@@ -776,12 +894,16 @@ public class EmployeeController implements Initializable {
         bookService = new BookServiceImpl();
         readerService = new ReaderServiceImpl();
         borrowCardService = new BorrowCardServiceImpl();
-        loadReaderColumn();
-        loadReaderInfo(null);
-        loadBookColumn();
-        loadBookInfo(null, null);
         loadLSDate();
         loadLSBookListColumn();
+        loadReaderColumn(tbReader);
+        loadReaderColumn(returnReaderTB);
+        loadBookColumn(tbBook);
+        loadCate();
+        loadSearchBookColumn(tb_SearchBook);
+        loadSearchBookInfo(null, null);
+        loadLoanslipColumn(returnLoanslipTB);
+        loadLoanslipColumn(statusBookTB);
 
     }
 }

@@ -6,18 +6,28 @@ package com.bros.quanlythuvien;
 
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.CategoryModel;
+import com.bros.quanlythuvien.model.LoanSlipModel;
+import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.model.SearchBookModel;
 import com.bros.quanlythuvien.service.BookService;
 import com.bros.quanlythuvien.service.CategoryService;
+import com.bros.quanlythuvien.service.EmployeeService;
+import com.bros.quanlythuvien.service.LoanSlipService;
+import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
 import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
+import com.bros.quanlythuvien.service.impl.EmployeeServiceImpl;
+import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
+import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import com.bros.quanlythuvien.utils.ValidateUtils;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +47,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -121,6 +132,27 @@ public class CustomerController implements Initializable {
     private Label username;
 
     @FXML
+    private Button Cart_Btn;
+
+    @FXML
+    private Button submitCart_Btn;
+
+    @FXML
+    private TableView<BookModel> tb_Cart;
+
+    @FXML
+    private AnchorPane cart_viewForm;
+
+    @FXML
+    private Button clear_Btn;
+
+    @FXML
+    private TableView<ReaderModel> infoCustomerTB;
+
+    @FXML
+    private TableView<LoanSlipModel> infoLoanSlipTB;
+
+    @FXML
     public void minimize() {
         Stage stage = (Stage) mainForm.getScene().getWindow();
         stage.setIconified(true);
@@ -131,67 +163,133 @@ public class CustomerController implements Initializable {
         System.exit(0);
     }
     private BookService bookService;
+    private ReaderService readerService = new ReaderServiceImpl();
+    private EmployeeService employeeService = new EmployeeServiceImpl();
+    private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
+
+    private int LScheckReader = 0;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         bookService = new BookServiceImpl();
-        loadRSearchBookColumn();
+        setReaderId(readerId);
+        loadRSearchBookColumn(TBRSearchBook, bookListCart);
         // Hàm này lỗi chỗ converter --> fix khỏi đóng conn hơi kì :v
         loadRSearchBookInfo(null, null);
         loadSearchCategory();
+        loadCartColumn(tb_Cart, bookListCart);
+//        readerId = (int) this.root.getUserData();
+        loadReaderColumn(infoCustomerTB);
+        loadLoanslipColumn(infoLoanSlipTB);
+
     }
 
-    private PreparedStatement statement;
-    private ResultSet result;
     private Map<Integer, String> categoriesMap = new HashMap<>();
+    List<BookModel> bookListCart = new ArrayList<>();
+
+    private Integer readerId; // Thuộc tính readerId
+
+    @FXML
+    public void setReaderId(Integer id) {
+        this.readerId = id;
+    }
+
+    @FXML
+    public void checkReader() {
+        int check = readerService.checkReader(readerId);
+        if (check == 0) {
+            LScheckReader = 0;
+        } else {
+            LScheckReader = 1;
+        }
+
+    }
+
+    private int totalQuantity = 0;
+
+    @FXML
+    public void createOnlineBook() {
+        if (LScheckReader == 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.setContentText("Vui lòng nhấn nút kiểm tra trước");
+            alert.showAndWait();
+        } else {
+            for (BookModel book : bookListCart) {
+                totalQuantity += book.getQuantity();
+            }
+            if (totalQuantity <= 5) {
+                String strReaderId = Integer.toString(readerId);
+                loanSlipService.creatLoanSlip(bookListCart, LScheckReader, strReaderId, 0);
+                clearCart();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Error");
+                alert.setContentText("Không thể mượn quá 5 cuốn sách");
+                alert.showAndWait();
+            }
+        }
+        totalQuantity = 0;
+    }
+
+    @FXML
+    private void loadReaderColumn(TableView<ReaderModel> infoCustomerTB) {
+        readerService.loadReaderColumn(infoCustomerTB);
+    }
+
+    @FXML
+    private void loadReaderInfo() {
+        ReaderModel reader = readerService.findById(readerId);
+        List<ReaderModel> readerList = new ArrayList<>();
+        readerList.add(reader);
+        this.infoCustomerTB.setItems(FXCollections.observableList(readerList));
+    }
+
+    @FXML
+    private void loadLoanslipColumn(TableView<LoanSlipModel> infoLoanSlipTB) {
+        loanSlipService.loadLoanslipColumn(infoLoanSlipTB);
+    }
+
+    @FXML
+    private void loadLoanSlipInfo() {
+//        List<LoanSlipModel> loanSlipList = new Array<>();
+        List<LoanSlipModel> loanSlipList = new ArrayList<>();
+        loanSlipList = loanSlipService.findByCId(readerId);
+        this.infoLoanSlipTB.setItems(FXCollections.observableList(loanSlipList));
+    }
+
+    @FXML
+    private void clearCart() {
+        bookListCart.clear();
+        tb_Cart.refresh();
+    }
+
+    @FXML
+    private void loadCartColumn(TableView<BookModel> tb_Cart, List<BookModel> bookListCart) {
+        readerService.loadCartColumn(tb_Cart, bookListCart);
+    }
+
+    @FXML
+    public void loadInfoCart(List<BookModel> bookListCart, TableView<BookModel> tb_Cart, Integer page) {
+        readerService.loadInfoCart(bookListCart, tb_Cart, page);
+    }
 
     @FXML
     private void loadSearchCategory() {
-        Connection connect = getConnection();
-        RsearchBook_category.setPromptText("Chọn thể loại");
-         RsearchBook_category.getItems().add(0, "Chọn thể loại");
-         categoriesMap.clear();
-        try {
-            String sql = "select * from category;";
-            statement = connect.prepareStatement(sql);
-            result = statement.executeQuery();
-            while (result.next()) {
-//                RsearchBook_category.getItems().add(result.getString("value"));
-//                RsearchBook_category.setUserData(id);
-                Integer id = result.getInt("id");
-                String value = result.getString("value");
-                categoriesMap.put(id, value);
-            }
-            RsearchBook_category.getItems().addAll(categoriesMap.values());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        readerService.loadCate(RsearchBook_category, categoriesMap);
     }
 
     @FXML
-    private void loadRSearchBookColumn() {
-        TableColumn colId = new TableColumn("BookID");
-        colId.setCellValueFactory(new PropertyValueFactory("id"));
-        TableColumn colName = new TableColumn("Title");
-        colName.setCellValueFactory(new PropertyValueFactory("title"));
-        TableColumn colAuthor = new TableColumn("Author");
-        colAuthor.setCellValueFactory(new PropertyValueFactory("author"));
-        TableColumn colDescription = new TableColumn("Description");
-        colDescription.setCellValueFactory(new PropertyValueFactory("description"));
-        TableColumn colPublishedYear = new TableColumn("Published Year");
-        colPublishedYear.setCellValueFactory(new PropertyValueFactory("publicationYear"));
-        TableColumn colPublishedPlace = new TableColumn("Published Place");
-        colPublishedPlace.setCellValueFactory(new PropertyValueFactory("publicationPlace"));
-        TableColumn colCategory = new TableColumn("Category");
-        colCategory.setCellValueFactory(new PropertyValueFactory("categoryValue"));
-        TableColumn colLocation = new TableColumn("Location");
-        colLocation.setCellValueFactory(new PropertyValueFactory("location"));
-
-        this.TBRSearchBook.getColumns().addAll(colId, colName, colAuthor, colDescription, colPublishedYear, colPublishedPlace, colCategory, colLocation);
+    private void loadRSearchBookColumn(TableView<BookModel> TBRSearchBook, List<BookModel> bookListCart
+    ) {
+        readerService.loadSearchBookColumn(TBRSearchBook, bookListCart);
     }
 
     @FXML
-    private void loadRSearchBookInfo(Map<String, Object> searchMap, Integer page) {
+    private void loadRSearchBookInfo(Map<String, Object> searchMap, Integer page
+    ) {
         List<BookModel> searchBookList = bookService.findBooks(searchMap, page);
         this.TBRSearchBook.setItems(FXCollections.observableList(searchBookList));
     }
@@ -209,19 +307,33 @@ public class CustomerController implements Initializable {
             }
         }
         String strPublish = RsearchBook_publish.getText();
-        Map<String,Object> searchMap = bookService.getSearchMap(strTitle,strAuthor, cateID, strPublish);
+        Map<String, Object> searchMap = bookService.getSearchMap(strTitle, strAuthor, cateID, strPublish);
         loadRSearchBookInfo(searchMap, null);
     }
 
     @FXML
-    public void switchForm(ActionEvent event) {
+    public void switchForm(ActionEvent event
+    ) {
         if (event.getSource() == information_Btn) {
+            loadReaderInfo();
+            loadLoanSlipInfo();
             information_viewForm.setVisible(true);
             searchBook_viewForm.setVisible(false);
+            cart_viewForm.setVisible(false);
+
         }
         if (event.getSource() == searchBook_Btn) {
             information_viewForm.setVisible(false);
             searchBook_viewForm.setVisible(true);
+            cart_viewForm.setVisible(false);
+
+        }
+        if (event.getSource() == Cart_Btn) {
+            cart_viewForm.setVisible(true);
+            information_viewForm.setVisible(false);
+            searchBook_viewForm.setVisible(false);
+            loadInfoCart(bookListCart, tb_Cart, null);
+
         }
     }
 

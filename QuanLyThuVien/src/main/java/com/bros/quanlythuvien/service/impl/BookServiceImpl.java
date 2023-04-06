@@ -80,7 +80,15 @@ public class BookServiceImpl implements BookService {
             searchMap.put("CategoryID", cateID);
         }
         if (ValidateUtils.isValid(strPublish)) {
-            searchMap.put("PublicationYear", Integer.valueOf(strPublish));
+            try {
+                searchMap.put("PublicationYear", Integer.valueOf(strPublish));
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ERROR");
+                alert.setHeaderText("ERROR");
+                alert.setContentText("Vui lòng nhập số");
+                alert.showAndWait();
+            }
         }
         return searchMap;
     }
