@@ -6,7 +6,6 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
@@ -138,7 +137,7 @@
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="availableBooks_addBtn" layoutX="25.0" layoutY="468.0" mnemonicParsing="false" onMouseClicked="#insertBook" prefHeight="30.0" prefWidth="90.0" styleClass="addBtn" stylesheets="@style/QuanTriSachStyle.css" text="Add" />
+                                    <Button fx:id="availableBooks_addBtn" layoutX="25.0" layoutY="468.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="30.0" prefWidth="90.0" styleClass="addBtn" stylesheets="@style/QuanTriSachStyle.css" text="Add" />
                                     <Button fx:id="availableBooks_updateID" layoutX="156.0" layoutY="469.0" mnemonicParsing="false" onMouseClicked="#updateBook" prefHeight="30.0" prefWidth="90.0" styleClass="updateBtn" stylesheets="@style/QuanTriSachStyle.css" text="Update" />
                                     <Button fx:id="availableBooks_clearID" layoutX="25.0" layoutY="508.0" mnemonicParsing="false" onMouseClicked="#clear" prefHeight="30.0" prefWidth="90.0" styleClass="clearBtn" stylesheets="@style/QuanTriSachStyle.css" text="Clear" />
                                     <Button fx:id="availableBooks_deleteID" layoutX="156.0" layoutY="509.0" mnemonicParsing="false" onMouseClicked="#deleteBook" prefHeight="30.0" prefWidth="90.0" styleClass="deleteBtn" stylesheets="@style/QuanTriSachStyle.css" text="Delete" />
@@ -255,22 +254,81 @@
                                     <String fx:value="shadow" />
                                  </styleClass>
                                  <children>
-                                    <TableView layoutX="9.0" layoutY="8.0" prefHeight="535.0" prefWidth="563.0" styleClass="my-tableview" stylesheets="@style/CustomerStyle.css">
-                                      <columns>
-                                        <TableColumn fx:id="customer_col_customerID" prefWidth="80.800048828125" text="Customer ID" />
-                                        <TableColumn fx:id="customer_col_name" minWidth="0.0" prefWidth="56.0" text="Name" />
-                                          <TableColumn fx:id="customer_col_gender" minWidth="0.0" prefWidth="40.0" text="Gender" />
-                                          <TableColumn fx:id="customer_col_birthDay" prefWidth="58.400054931640625" text="BirthDay" />
-                                          <TableColumn fx:id="customer_col_email" prefWidth="49.60003662109375" text="Email" />
-                                          <TableColumn fx:id="customer_col_address" minWidth="0.0" prefWidth="111.199951171875" text="Address" />
-                                          <TableColumn fx:id="customer_col_number" prefWidth="288.800048828125" text="Number" />
-                                      </columns>
+                                    <TableView fx:id="tbReader" layoutX="9.0" layoutY="8.0" prefHeight="535.0" prefWidth="563.0" styleClass="my-tableview" stylesheets="@style/CustomerStyle.css">
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                        </columnResizePolicy>
                                     </TableView>
                                  </children>
                               </AnchorPane>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="add_viewForm" layoutX="377.0" layoutY="7.0" prefHeight="546.0" prefWidth="283.0" stylesheets="@style/QuanTriSachStyle.css" visible="false">
+                           <styleClass>
+                              <String fx:value="whiteBg" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                           <children>
+                              <AnchorPane layoutX="86.0" layoutY="14.0" prefHeight="137.0" prefWidth="112.0" stylesheets="@style/QuanTriSachStyle.css">
+                                 <styleClass>
+                                    <String fx:value="whiteBg" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                                 <children>
+                                    <ImageView fx:id="availableBooks_importView1" fitHeight="137.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" />
+                                    <Button fx:id="availableBooks_importBtn1" layoutY="112.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="112.0" styleClass="addBtn" stylesheets="@style/QuanTriSachStyle.css" text="Import" />
+                                 </children>
+                              </AnchorPane>
+                              <Label layoutX="7.0" layoutY="227.0" text="Author:">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="addBook_author" layoutX="118.0" layoutY="220.0" styleClass="textField" stylesheets="@style/QuanTriSachStyle.css" />
+                              <Label layoutX="7.0" layoutY="262.0" text="Description:">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="addBook_description" layoutX="118.0" layoutY="260.0" styleClass="textField" stylesheets="@style/QuanTriSachStyle.css" />
+                              <Label layoutX="7.0" layoutY="302.0" text="Published Place:">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="addBook_publishedPlace" layoutX="120.0" layoutY="298.0" styleClass="textField" stylesheets="@style/QuanTriSachStyle.css" />
+                              <Label layoutX="7.0" layoutY="341.0" text="Published Year:">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="addBook_addBtn" layoutX="172.0" layoutY="501.0" mnemonicParsing="false" onMouseClicked="#insertBook" prefHeight="30.0" prefWidth="90.0" styleClass="addBtn" stylesheets="@style/QuanTriSachStyle.css" text="Add" />
+                              <Button fx:id="addBook_exitBtn" layoutX="22.0" layoutY="501.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="30.0" prefWidth="90.0" styleClass="deleteBtn" stylesheets="@style/QuanTriSachStyle.css" text="Exit" />
+                              <Label layoutX="7.0" layoutY="378.0" text="Category:">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="7.0" layoutY="417.0" text="Location: ">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="addBook_location" layoutX="120.0" layoutY="412.0" styleClass="textField" stylesheets="@style/QuanTriSachStyle.css" />
+                              <TextField fx:id="addBook_publishedYear" layoutX="118.0" layoutY="337.0" styleClass="textField" stylesheets="@style/QuanTriSachStyle.css" />
+                              <ComboBox fx:id="addBook_category" layoutX="117.0" layoutY="374.0" prefWidth="150.0" />
+                              <Label layoutX="8.0" layoutY="183.0" text="Title: ">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="addBook_title" layoutX="118.0" layoutY="179.0" styleClass="textField" stylesheets="@style/QuanTriSachStyle.css" />
+                              <Label layoutX="7.0" layoutY="454.0" text="Quantity: ">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="addBook_quantity" layoutX="120.0" layoutY="452.0" styleClass="textField" stylesheets="@style/QuanTriSachStyle.css" />
                            </children>
                         </AnchorPane>
                      </children>

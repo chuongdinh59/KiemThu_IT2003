@@ -5,30 +5,18 @@
 package com.bros.quanlythuvien;
 
 import com.bros.quanlythuvien.model.BookModel;
-import com.bros.quanlythuvien.model.BorrowCardModel;
-import com.bros.quanlythuvien.model.CategoryModel;
-import com.bros.quanlythuvien.model.ReaderBorrowCardModel;
 import com.bros.quanlythuvien.model.ReaderModel;
-import com.bros.quanlythuvien.model.SearchBookModel;
 import com.bros.quanlythuvien.service.BookService;
-import com.bros.quanlythuvien.service.BorrowCardService;
 import com.bros.quanlythuvien.service.CategoryService;
 import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
-import com.bros.quanlythuvien.service.impl.BorrowCardServiceImpl;
 import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
-import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -39,10 +27,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -129,10 +115,49 @@ public class QuanTriSachController implements Initializable {
     private TableView<BookModel> tbBook;
 
     @FXML
+    private TableView<ReaderModel> tbReader;
+
+    @FXML
     private TextField availableBooks_quantity;
+
+    @FXML
+    private Button addBook_addBtn;
+
+    @FXML
+    private TextField addBook_author;
+
+    @FXML
+    private ComboBox<String> addBook_category;
+
+    @FXML
+    private TextField addBook_description;
+
+    @FXML
+    private Button addBook_exitBtn;
+
+    @FXML
+    private TextField addBook_location;
+
+    @FXML
+    private TextField addBook_publishedPlace;
+
+    @FXML
+    private TextField addBook_publishedYear;
+
+    @FXML
+    private TextField addBook_quantity;
+
+    @FXML
+    private TextField addBook_title;
+
+    @FXML
+    private AnchorPane add_viewForm;
 
     BookService bookService;
     CategoryService categoryService;
+    private Map<Integer, String> categoriesMap = new HashMap<>();
+    private ReaderService readerService = new ReaderServiceImpl();
+
     @FXML
     public void minimize() {
         Stage stage = (Stage) mainForm.getScene().getWindow();
@@ -151,8 +176,17 @@ public class QuanTriSachController implements Initializable {
             customer_viewForm.setVisible(false);
         }
         if (event.getSource() == customer_btn) {
+            loadReaderInfo();
             availableBooks_viewForm.setVisible(false);
             customer_viewForm.setVisible(true);
+        }
+        if (event.getSource() == availableBooks_addBtn) {
+            availableBooks_viewForm.setVisible(false);
+            add_viewForm.setVisible(true);
+        }
+        if (event.getSource() == addBook_exitBtn) {
+            availableBooks_viewForm.setVisible(true);
+            add_viewForm.setVisible(false);
         }
     }
 
@@ -171,9 +205,11 @@ public class QuanTriSachController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.bookService = new BookServiceImpl();
         this.categoryService = new CategoryServiceImpl();
+        loadReaderColumn();
         loadBookColumn();
         loadBookInfo(null, null);
-        loadCate();
+        loadCateAvailable();
+        loadCateAdd();
         clear();
     }
 
@@ -231,29 +267,29 @@ public class QuanTriSachController implements Initializable {
         availableBooks_quantity.setText("");
     }
 
-    private Map<Integer, String> categoriesMap = new HashMap<>();
-
+    //hiển thị cột trong bảng reader
     @FXML
-    private void loadCate() {
-        availableBooks_category.setPromptText("Chọn thể loại");
-        availableBooks_category.getItems().add(0, "Chọn thể loại");
-        categoriesMap.clear();
-        
-        try {
-            List<CategoryModel> categories = categoryService.findAll();
-            for ( CategoryModel c: categories){
-                categoriesMap.put(c.getCategoryID(), c.getValue());
-            }
-            availableBooks_category.getItems().addAll(categoriesMap.values());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void loadReaderColumn() {
+        readerService.loadReaderColumn(tbReader);
     }
 
-//    @FXML
-//    private BookModel bookAdmin = bookService.getBook(availableBooks_bookID, availableBooks_title,
-//            availableBooks_author, availableBooks_description, availableBooks_publishedPlace,
-//            availableBooks_publishedYear, availableBooks_category, availableBooks_location, availableBooks_quantity, categoriesMap);
+    //hiển thị dữ liệu bảng reader
+    @FXML
+    private void loadReaderInfo() {
+        List<ReaderModel> readerList = readerService.findAll();
+        this.tbReader.setItems(FXCollections.observableList(readerList));
+    }
+
+    @FXML
+    private void loadCateAvailable() {
+        categoryService.loadCate(availableBooks_category, categoriesMap);
+    }
+
+    @FXML
+    private void loadCateAdd() {
+        categoryService.loadCate(addBook_category, categoriesMap);
+    }
+
     @FXML
     private void updateBook() {
         BookModel book = bookService.getBook(availableBooks_bookID, availableBooks_title,
@@ -270,9 +306,9 @@ public class QuanTriSachController implements Initializable {
 
         availableBooks_bookID.setText("0");
 
-        BookModel book = bookService.getBook(availableBooks_bookID, availableBooks_title,
-                availableBooks_author, availableBooks_description, availableBooks_publishedPlace,
-                availableBooks_publishedYear, availableBooks_category, availableBooks_location, availableBooks_quantity, categoriesMap);
+        BookModel book = bookService.getBook(availableBooks_bookID, addBook_title,
+                addBook_author, addBook_description, addBook_publishedPlace,
+                addBook_publishedYear, addBook_category, addBook_location, addBook_quantity, categoriesMap);
         if (book != null) {
             bookService.inserBook(book);
         }

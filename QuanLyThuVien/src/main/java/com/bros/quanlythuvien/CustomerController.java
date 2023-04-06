@@ -5,37 +5,24 @@
 package com.bros.quanlythuvien;
 
 import com.bros.quanlythuvien.model.BookModel;
-import com.bros.quanlythuvien.model.CategoryModel;
 import com.bros.quanlythuvien.model.LoanSlipModel;
 import com.bros.quanlythuvien.model.ReaderModel;
-import com.bros.quanlythuvien.model.SearchBookModel;
 import com.bros.quanlythuvien.service.BookService;
-import com.bros.quanlythuvien.service.CategoryService;
 import com.bros.quanlythuvien.service.EmployeeService;
 import com.bros.quanlythuvien.service.LoanSlipService;
 import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
-import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
 import com.bros.quanlythuvien.service.impl.EmployeeServiceImpl;
 import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
-import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
-import com.bros.quanlythuvien.utils.ValidateUtils;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Array;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,11 +34,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.SelectionModel;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -164,7 +148,6 @@ public class CustomerController implements Initializable {
     }
     private BookService bookService;
     private ReaderService readerService = new ReaderServiceImpl();
-    private EmployeeService employeeService = new EmployeeServiceImpl();
     private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
 
     private int LScheckReader = 0;
@@ -178,7 +161,6 @@ public class CustomerController implements Initializable {
         loadRSearchBookInfo(null, null);
         loadSearchCategory();
         loadCartColumn(tb_Cart, bookListCart);
-//        readerId = (int) this.root.getUserData();
         loadReaderColumn(infoCustomerTB);
         loadLoanslipColumn(infoLoanSlipTB);
 
@@ -234,11 +216,13 @@ public class CustomerController implements Initializable {
         totalQuantity = 0;
     }
 
+    //hiển thị cột trong bảng reader
     @FXML
     private void loadReaderColumn(TableView<ReaderModel> infoCustomerTB) {
         readerService.loadReaderColumn(infoCustomerTB);
     }
 
+    //hiển thị dữ liệu bảng reader
     @FXML
     private void loadReaderInfo() {
         ReaderModel reader = readerService.findById(readerId);
@@ -254,7 +238,6 @@ public class CustomerController implements Initializable {
 
     @FXML
     private void loadLoanSlipInfo() {
-//        List<LoanSlipModel> loanSlipList = new Array<>();
         List<LoanSlipModel> loanSlipList = new ArrayList<>();
         loanSlipList = loanSlipService.findByCId(readerId);
         this.infoLoanSlipTB.setItems(FXCollections.observableList(loanSlipList));

@@ -249,57 +249,67 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     public void creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online) {
 
         if (LScheckReader == 1 && !LSbookList.isEmpty()) {
-            Connection connect = getConnection();
-            PreparedStatement statement = null;
-            ResultSet result = null;
+
             for (BookModel book : LSbookList) {
-                try {
-                    String sql = "INSERT INTO librarymanagement.loanslip (CustomerID, BookID, BookName, BookAuthor, BorrowedDate, ExpirationDate,Quantity,isReturned,isOnline) VALUES (?, ?, ?, ?, ?, ?,?,0,?);";
-                    statement = connect.prepareStatement(sql);
-                    statement.setString(1, LSCustomerID);
-                    statement.setInt(2, book.getId());
-                    statement.setString(3, book.getTitle());
-                    statement.setString(4, book.getAuthor());
-                    LocalDate borrowDate = LocalDate.now();
-                    java.sql.Date sqlBorrowDate = java.sql.Date.valueOf(borrowDate);
-                    statement.setDate(5, sqlBorrowDate);
-                    LocalDate expirationDate = borrowDate.plusDays(30);
-                    java.sql.Date sqlExpirationDate = java.sql.Date.valueOf(expirationDate);
-                    statement.setDate(6, sqlExpirationDate);
-                    statement.setInt(7, book.getQuantity());
-                    statement.setInt(8, online);
-                    int rowsInserted = statement.executeUpdate();
-                    if (rowsInserted > 0 && checkQuantity(book.getQuantity(), book.getId())) {
-                        deleteQuantity(book.getQuantity(), book.getId());
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Informatin");
-                        alert.setHeaderText("Success");
-                        alert.setContentText("Thêm thành công");
-                        alert.showAndWait();
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("ERROR");
-                        alert.setHeaderText("ERROR");
-                        alert.setContentText("Thêm thất bại");
-                        alert.showAndWait();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
+                if (checkQuantity(book.getQuantity(), book.getId())) {
+                    Connection connect = getConnection();
+                    PreparedStatement statement = null;
+                    ResultSet result = null;
                     try {
-                        if (result != null) {
-                            result.close();
+                        String sql = "INSERT INTO librarymanagement.loanslip (CustomerID, BookID, BookName, BookAuthor, BorrowedDate, ExpirationDate,Quantity,isReturned,isOnline) VALUES (?, ?, ?, ?, ?, ?,?,0,?);";
+                        statement = connect.prepareStatement(sql);
+                        statement.setString(1, LSCustomerID);
+                        statement.setInt(2, book.getId());
+                        statement.setString(3, book.getTitle());
+                        statement.setString(4, book.getAuthor());
+                        LocalDate borrowDate = LocalDate.now();
+                        java.sql.Date sqlBorrowDate = java.sql.Date.valueOf(borrowDate);
+                        statement.setDate(5, sqlBorrowDate);
+                        LocalDate expirationDate = borrowDate.plusDays(30);
+                        java.sql.Date sqlExpirationDate = java.sql.Date.valueOf(expirationDate);
+                        statement.setDate(6, sqlExpirationDate);
+                        statement.setInt(7, book.getQuantity());
+                        statement.setInt(8, online);
+                        int rowsInserted = statement.executeUpdate();
+                        if (rowsInserted > 0) {
+                            deleteQuantity(book.getQuantity(), book.getId());
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Informatin");
+                            alert.setHeaderText("Success");
+                            alert.setContentText("Thêm thành công");
+                            alert.showAndWait();
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("ERROR");
+                            alert.setHeaderText("ERROR");
+                            alert.setContentText("Thêm thất bại");
+                            alert.showAndWait();
                         }
-                        if (statement != null) {
-                            statement.close();
-                        }
-                        if (connect != null) {
-                            connect.close();
-                        }
-                    } catch (SQLException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
+                    } finally {
+                        try {
+                            if (result != null) {
+                                result.close();
+                            }
+                            if (statement != null) {
+                                statement.close();
+                            }
+                            if (connect != null) {
+                                connect.close();
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     }
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Error");
+                    alert.setContentText("Thư viện không đủ sách");
+                    alert.showAndWait();
                 }
+
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -311,7 +321,8 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     }
 
     @Override
-    public void insertQuantity(Integer quantity, Integer id) {
+    public void insertQuantity(Integer quantity, Integer id
+    ) {
         Connection connect = getConnection();
         PreparedStatement statement = null;
         ResultSet result = null;
@@ -343,7 +354,8 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     }
 
     @Override
-    public void deleteQuantity(Integer quantity, Integer id) {
+    public void deleteQuantity(Integer quantity, Integer id
+    ) {
         Connection connect = getConnection();
         PreparedStatement statement = null;
         ResultSet result = null;
@@ -375,7 +387,8 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     }
 
     @Override
-    public boolean checkQuantity(Integer quantity, Integer id) {
+    public boolean checkQuantity(Integer quantity, Integer id
+    ) {
         Connection connect = getConnection();
         PreparedStatement statement = null;
         ResultSet result = null;

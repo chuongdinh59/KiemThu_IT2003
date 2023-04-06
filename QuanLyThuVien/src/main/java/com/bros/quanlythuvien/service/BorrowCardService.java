@@ -15,4 +15,5 @@ import java.util.List;
 public interface BorrowCardService {
     public BorrowCardModel findBorrowCardByRID(int ReaderID);
     public List<BorrowCardModel> findAll();
+    public boolean createBorrowCard(Integer id);
 }

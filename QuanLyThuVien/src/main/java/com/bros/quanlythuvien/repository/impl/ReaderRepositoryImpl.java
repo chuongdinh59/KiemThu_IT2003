@@ -5,20 +5,20 @@
 package com.bros.quanlythuvien.repository.impl;
 
 import com.bros.quanlythuvien.entity.ReaderEntity;
-import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.repository.ReaderRepository;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 
 /**
  *
@@ -79,7 +79,6 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
     @Override
     public int checkReader(Integer id) {
         Connection connect = getConnection();
-        int fail = 0;
         try {
             String sql = "select ExpiryDate from borrowcards where ReaderID =?;";
             statement = connect.prepareStatement(sql);
@@ -109,7 +108,7 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                        return 1;
+                    return 1;
                 }
 
             }
@@ -132,6 +131,122 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
             }
         }
         return 2;
+    }
+
+    @Override
+    public Map<String, Object> login(TextField username, TextField password, Button loginBtn) {
+        Connection connect = getConnection();
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            String sql = "SELECT * FROM account WHERE user_name = ? and password = ?";
+            statement = connect.prepareStatement(sql);
+            statement.setString(1, username.getText());
+            statement.setString(2, password.getText());
+            result = statement.executeQuery();
+            if (result.next()) {
+                String accountType = result.getString("type");
+                // Lưu trữ readerId vào biến
+                Integer readerId = result.getInt("ReaderID");
+                if (accountType.equals("Admin")) {
+                    // Chuyển hướng đến trang quản trị viên
+                    loginBtn.getScene().getWindow().hide();
+                    resultMap.put("type", "Admin");
+                } else if (accountType.equals("Employee")) {
+                    // Chuyển hướng đến trang nhân viên
+                    loginBtn.getScene().getWindow().hide();
+                    resultMap.put("type", "Employee");
+                } else if (accountType.equals("Customer")) {
+                    loginBtn.getScene().getWindow().hide();
+                    resultMap.put("type", "Customer");
+                    resultMap.put("readerId", readerId);
+                }
+
+            } else {
+                resultMap.put("type", "Error");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) {
+                    result.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return resultMap;
+    }
+    
+    @Override
+    public int register(TextField register_username, TextField register_password, TextField register_fullname, TextField register_email) {
+        Connection connect = getConnection();
+        try {
+            // Kiểm tra các trường dữ liệu
+            if (register_username.getText().isEmpty() || register_password.getText().isEmpty()
+                    || register_fullname.getText().isEmpty() || register_email.getText().isEmpty()) {
+                return 1;
+            }
+
+            // Kiểm tra username hoặc email có bị trùng
+            String sql = "SELECT * FROM librarymanagement.account WHERE user_name = ? OR email = ?";
+            PreparedStatement checkStatement = connect.prepareStatement(sql);
+            checkStatement.setString(1, register_username.getText());
+            checkStatement.setString(2, register_email.getText());
+            ResultSet resultSet = checkStatement.executeQuery();
+            if (resultSet.next()) {
+                return 2;
+            }
+            //Tạo 1 reader
+            String insertReader = "INSERT INTO librarymanagement.readers (FullName) VALUES (?)";
+            PreparedStatement insertReaderStatement = connect.prepareStatement(insertReader, Statement.RETURN_GENERATED_KEYS);
+            insertReaderStatement.setString(1, register_fullname.getText());
+            int resultReader = insertReaderStatement.executeUpdate();
+            if (resultReader > 0) {
+                ResultSet generatedKeys = insertReaderStatement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int readerId = generatedKeys.getInt(1);
+                    String insertSql = "INSERT INTO librarymanagement.account (user_name, password, full_name, email, type,ReaderID) VALUES (?, ?, ?, ?, 'Customer',?)";
+                    PreparedStatement insertStatement = connect.prepareStatement(insertSql);
+                    insertStatement.setString(1, register_username.getText());
+                    insertStatement.setString(2, register_password.getText());
+                    insertStatement.setString(3, register_fullname.getText());
+                    insertStatement.setString(4, register_email.getText());
+                    insertStatement.setInt(5, readerId);
+                    int result1 = insertStatement.executeUpdate();
+                    if (result1 > 0) {
+                        return 3;
+                    } else {
+                        return 4;
+                    }
+                }
+            } else {
+                return 4;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) {
+                    result.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return 0;
     }
 
 //    public static void main(String[] args) {
