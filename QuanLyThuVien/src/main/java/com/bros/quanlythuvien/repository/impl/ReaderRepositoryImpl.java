@@ -4,9 +4,7 @@
  */
 package com.bros.quanlythuvien.repository.impl;
 
-import com.bros.quanlythuvien.CustomerController;
 import com.bros.quanlythuvien.entity.ReaderEntity;
-import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.repository.ReaderRepository;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import java.sql.Connection;
@@ -15,20 +13,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 /**
  *
@@ -193,7 +183,7 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
         }
         return resultMap;
     }
-
+    
     @Override
     public int register(TextField register_username, TextField register_password, TextField register_fullname, TextField register_email) {
         Connection connect = getConnection();
@@ -201,11 +191,6 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
             // Kiểm tra các trường dữ liệu
             if (register_username.getText().isEmpty() || register_password.getText().isEmpty()
                     || register_fullname.getText().isEmpty() || register_email.getText().isEmpty()) {
-//                Alert alert = new Alert(Alert.AlertType.WARNING);
-//                alert.setTitle("Lỗi đăng ký");
-//                alert.setHeaderText("Error");
-//                alert.setContentText("Bạn phải nhập đầy đủ thông tin để đăng ký");
-//                alert.showAndWait();
                 return 1;
             }
 
@@ -216,11 +201,6 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
             checkStatement.setString(2, register_email.getText());
             ResultSet resultSet = checkStatement.executeQuery();
             if (resultSet.next()) {
-//                Alert alert = new Alert(Alert.AlertType.WARNING);
-//                alert.setTitle("Lỗi đăng ký");
-//                alert.setHeaderText("Error");
-//                alert.setContentText("Tên đăng nhập hoặc email đã tồn tại");
-//                alert.showAndWait();
                 return 2;
             }
             //Tạo 1 reader
@@ -242,13 +222,6 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
                     int result1 = insertStatement.executeUpdate();
                     if (result1 > 0) {
                         return 3;
-//                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                        alert.setTitle("Register");
-//                        alert.setHeaderText("Successful");
-//                        alert.setContentText("Đăng ký thành công");
-//                        alert.showAndWait();
-//                        login_form.setVisible(true);
-//                        register_form.setVisible(false);
                     } else {
                         return 4;
                     }
@@ -256,25 +229,6 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
             } else {
                 return 4;
             }
-
-            // Nếu không có lỗi, thực hiện lệnh insert
-//            String insertSql = "INSERT INTO librarymanagement.account (user_name, password, full_name, email, type,ReaderID) VALUES (?, ?, ?, ?, 'Customer',?)";
-//            PreparedStatement insertStatement = connect.prepareStatement(insertSql);
-//            insertStatement.setString(1, register_username.getText());
-//            insertStatement.setString(2, register_password.getText());
-//            insertStatement.setString(3, register_fullname.getText());
-//            insertStatement.setString(4, register_email.getText());
-//            insertStatement.setInt(5, );
-//            int result1 = insertStatement.executeUpdate();
-//            if (result1 > 0) {
-//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                alert.setTitle("Register");
-//                alert.setHeaderText("Successful");
-//                alert.setContentText("Đăng ký thành công");
-//                alert.showAndWait();
-//                login_form.setVisible(true);
-//                register_form.setVisible(false);
-//            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

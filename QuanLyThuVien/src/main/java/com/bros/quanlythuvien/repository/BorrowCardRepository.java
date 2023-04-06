@@ -16,5 +16,6 @@ public interface BorrowCardRepository extends CommonRepository<BorrowCardEntity>
     BorrowCardEntity findBorrowCardByRID(int ReaderID);
 
     public List<BorrowCardEntity> findAll(Integer page);
+        public boolean createBorrowCard(Integer id);
 
 }

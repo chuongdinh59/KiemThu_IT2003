@@ -95,7 +95,7 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="information_viewForm" layoutX="14.0" layoutY="14.0" prefHeight="554.4" prefWidth="898.4" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="14.0">
+                        <AnchorPane fx:id="information_viewForm" layoutX="14.0" layoutY="14.0" prefHeight="554.4" prefWidth="898.4" visible="false" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="14.0">
                            <children>
                               <AnchorPane layoutX="-3.0" layoutY="-7.0" prefHeight="546.0" prefWidth="306.0" styleClass="whiteBg" stylesheets="@style/CustomerStyle.css">
                                  <children>
@@ -146,7 +146,7 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="searchBook_viewForm" layoutX="273.0" layoutY="134.0" prefHeight="554.4" prefWidth="898.4" stylesheets="@style/CustomerStyle.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="searchBook_viewForm" layoutX="273.0" layoutY="134.0" prefHeight="554.4" prefWidth="898.4" stylesheets="@style/CustomerStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="10.0" layoutY="166.0" prefHeight="381.0" prefWidth="880.0">
                                  <children>

@@ -8,20 +8,18 @@ import com.bros.quanlythuvien.converter.BookConverter;
 import com.bros.quanlythuvien.entity.BookEntity;
 import com.bros.quanlythuvien.entity.CategoryEntity;
 import com.bros.quanlythuvien.model.BookModel;
-import com.bros.quanlythuvien.model.CategoryModel;
-import com.bros.quanlythuvien.model.SearchBookModel;
 import com.bros.quanlythuvien.repository.BookRepository;
+import com.bros.quanlythuvien.repository.BorrowCardRepository;
 import com.bros.quanlythuvien.repository.CategoryRepository;
 import com.bros.quanlythuvien.repository.impl.BookRepositoryImpl;
+import com.bros.quanlythuvien.repository.impl.BorrowCardRepositoryImpl;
 import com.bros.quanlythuvien.repository.impl.CategoryRepositoryImpl;
 import com.bros.quanlythuvien.service.BookService;
-import com.bros.quanlythuvien.service.CategoryService;
 import com.bros.quanlythuvien.utils.ValidateUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -198,4 +196,6 @@ public class BookServiceImpl implements BookService {
             alert.showAndWait();
         }
     }
+
+    
 }

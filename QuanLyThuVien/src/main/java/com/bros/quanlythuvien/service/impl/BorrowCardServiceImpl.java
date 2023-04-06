@@ -41,6 +41,12 @@ public class BorrowCardServiceImpl implements BorrowCardService {
         }
         return resultsBorrowCardModel;
     }
+    
+    @Override
+    public boolean createBorrowCard(Integer id) {
+        boolean rs = borrowCardRepository.createBorrowCard(id);
+        return rs;
+    }
 
 
 }
