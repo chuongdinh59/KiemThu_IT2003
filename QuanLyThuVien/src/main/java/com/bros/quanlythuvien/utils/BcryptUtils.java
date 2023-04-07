@@ -4,6 +4,7 @@
  */
 package com.bros.quanlythuvien.utils;
 
+import javafx.application.Platform;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
@@ -28,19 +29,20 @@ public class BcryptUtils {
   // function to match a password
   public static boolean matchPassword(String password, String hashedPassword, String salt) {
     try {
-      String saltedPassword = password + salt;
-      return BCrypt.checkpw(saltedPassword, hashedPassword);
+        String saltedPassword = password + salt;
+        boolean result =  BCrypt.checkpw(saltedPassword, hashedPassword);
+        return result;
     } catch (Exception e) {
       e.printStackTrace();
     }
     return false;
   }
-    public static void main(String[] args) {
+  public static void main(String[] args) {
         String pass = "123";
-        String salt = "chuong"; // user name
+        String salt = "cho"; // user name
         String encryptPass = encryptPassword(pass, salt);
         System.err.println(encryptPass);
-        if (matchPassword(pass, encryptPass, salt)) {
+        if (matchPassword("123", "$2a$10$7trlebAU357Yt4lhVf2gGuhTkQkao4vfxfgb2ocdyc3JNJhQXQqne", salt)) {
             System.out.print("Mật khẩu khớp");
         }
     }

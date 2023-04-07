@@ -26,6 +26,7 @@ public interface ReaderRepository extends CommonRepository<ReaderEntity> {
     public int checkReader(Integer id);
 
     public Map<String, Object> login(TextField username, TextField password, Button loginBtn);
-    
+    public Map<String, Object> login(String username, String password);
+
      public int register(TextField register_username, TextField register_password, TextField register_fullname, TextField register_email);
 }

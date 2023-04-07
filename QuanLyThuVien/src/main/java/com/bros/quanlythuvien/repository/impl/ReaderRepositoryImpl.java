@@ -6,6 +6,7 @@ package com.bros.quanlythuvien.repository.impl;
 
 import com.bros.quanlythuvien.entity.ReaderEntity;
 import com.bros.quanlythuvien.repository.ReaderRepository;
+import com.bros.quanlythuvien.utils.BcryptUtils;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -135,31 +137,40 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
 
     @Override
     public Map<String, Object> login(TextField username, TextField password, Button loginBtn) {
+        String u = username.getText();
+        String p = password.getText();
         Connection connect = getConnection();
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            String sql = "SELECT * FROM account WHERE user_name = ? and password = ?";
+            String sql = "SELECT * FROM account WHERE user_name = ? ";
             statement = connect.prepareStatement(sql);
-            statement.setString(1, username.getText());
-            statement.setString(2, password.getText());
+            statement.setString(1, u);
+//            statement.setString(2, password.getText());
             result = statement.executeQuery();
             if (result.next()) {
-                String accountType = result.getString("type");
-                // Lưu trữ readerId vào biến
-                Integer readerId = result.getInt("ReaderID");
-                if (accountType.equals("Admin")) {
-                    // Chuyển hướng đến trang quản trị viên
-                    loginBtn.getScene().getWindow().hide();
-                    resultMap.put("type", "Admin");
-                } else if (accountType.equals("Employee")) {
-                    // Chuyển hướng đến trang nhân viên
-                    loginBtn.getScene().getWindow().hide();
-                    resultMap.put("type", "Employee");
-                } else if (accountType.equals("Customer")) {
-                    loginBtn.getScene().getWindow().hide();
-                    resultMap.put("type", "Customer");
-                    resultMap.put("readerId", readerId);
+                String hashedPassword = result.getString("password");
+                Boolean isLogin = BcryptUtils.matchPassword("123", hashedPassword, username.getText());
+                if (isLogin){
+                    String accountType = result.getString("type");
+                    // Lưu trữ readerId vào biến
+                    Integer readerId = result.getInt("ReaderID");
+                    if (accountType.equals("Admin")) {
+                        // Chuyển hướng đến trang quản trị viên
+                        loginBtn.getScene().getWindow().hide();
+                        resultMap.put("type", "Admin");
+                    } else if (accountType.equals("Employee")) {
+                        // Chuyển hướng đến trang nhân viên
+                        loginBtn.getScene().getWindow().hide();
+                        resultMap.put("type", "Employee");
+                    } else if (accountType.equals("Customer")) {
+                        loginBtn.getScene().getWindow().hide();
+                        resultMap.put("type", "Customer");
+                        resultMap.put("readerId", readerId);
+                    }
                 }
+                else {
+                resultMap.put("type", "Error");
+            }
 
             } else {
                 resultMap.put("type", "Error");
@@ -195,7 +206,7 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
             }
 
             // Kiểm tra username hoặc email có bị trùng
-            String sql = "SELECT * FROM librarymanagement.account WHERE user_name = ? OR email = ?";
+            String sql = "SELECT * FROM account WHERE user_name = ? OR email = ?";
             PreparedStatement checkStatement = connect.prepareStatement(sql);
             checkStatement.setString(1, register_username.getText());
             checkStatement.setString(2, register_email.getText());
@@ -204,7 +215,7 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
                 return 2;
             }
             //Tạo 1 reader
-            String insertReader = "INSERT INTO librarymanagement.readers (FullName) VALUES (?)";
+            String insertReader = "INSERT INTO readers (FullName) VALUES (?)";
             PreparedStatement insertReaderStatement = connect.prepareStatement(insertReader, Statement.RETURN_GENERATED_KEYS);
             insertReaderStatement.setString(1, register_fullname.getText());
             int resultReader = insertReaderStatement.executeUpdate();
@@ -212,10 +223,14 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
                 ResultSet generatedKeys = insertReaderStatement.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     int readerId = generatedKeys.getInt(1);
-                    String insertSql = "INSERT INTO librarymanagement.account (user_name, password, full_name, email, type,ReaderID) VALUES (?, ?, ?, ?, 'Customer',?)";
+                    String insertSql = "INSERT INTO account (user_name, password, full_name, email, type,ReaderID) VALUES (?, ?, ?, ?, 'Customer',?)";
                     PreparedStatement insertStatement = connect.prepareStatement(insertSql);
+                    String hashedPassword = BcryptUtils.encryptPassword(register_password.getText().trim(), register_username.getText().trim());
+                    
+                    System.out.print(hashedPassword);
+                    
                     insertStatement.setString(1, register_username.getText());
-                    insertStatement.setString(2, register_password.getText());
+                    insertStatement.setString(2, hashedPassword);
                     insertStatement.setString(3, register_fullname.getText());
                     insertStatement.setString(4, register_email.getText());
                     insertStatement.setInt(5, readerId);
@@ -249,19 +264,63 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
         return 0;
     }
 
-//    public static void main(String[] args) {
-//        ReaderRepositoryImpl readerRepository = new ReaderRepositoryImpl();
-//        List<ReaderEntity> readerList = readerRepository.findAll();
-////        ReaderEntity reader = readerRepository.findReaderById(1, null);
-//
-//        for (ReaderEntity reader : readerList) {
-//            System.out.println("Reader ID: " + reader.getId());
-//            System.out.println("Reader Name: " + reader.getFullName());
-//            System.out.println("Reader Address: " + reader.getGender());
-//            System.out.println("Reader Email: " + reader.getDateOfBirth());
-//            System.out.println("Reader Email: " + reader.getReaderType());
-//
-//        }
-//
-//    }
+
+    @Override
+    public Map<String, Object> login(String username, String password) {
+        Connection connect = getConnection();
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            String sql = "SELECT * FROM account WHERE user_name = ? ";
+            statement = connect.prepareStatement(sql);
+            statement.setString(1, username);
+            result = statement.executeQuery();
+            if (result.next()) {
+                String hashedPassword = result.getString("password");
+                Boolean isLogin = BcryptUtils.matchPassword(password, hashedPassword, username);
+                if (isLogin){
+                    String accountType = result.getString("type");
+                    // Lưu trữ readerId vào biến
+                    Integer readerId = result.getInt("ReaderID");
+                    if (accountType.equals("Admin")) {
+                        // Chuyển hướng đến trang quản trị viên
+//                        loginBtn.getScene().getWindow().hide();
+                        resultMap.put("type", "Admin");
+                    } else if (accountType.equals("Employee")) {
+                        // Chuyển hướng đến trang nhân viên
+//                        loginBtn.getScene().getWindow().hide();
+                        resultMap.put("type", "Employee");
+                    } else if (accountType.equals("Customer")) {
+//                        loginBtn.getScene().getWindow().hide();
+                        resultMap.put("type", "Customer");
+                        resultMap.put("readerId", readerId);
+                    }
+                }
+                else {
+                resultMap.put("type", "Error");
+            }
+
+            } else {
+                resultMap.put("type", "Error");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) {
+                    result.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return resultMap;
+    }
+    
+    
 }
