@@ -6,29 +6,21 @@ package com.bros.quanlythuvien;
 
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.BorrowCardModel;
-import com.bros.quanlythuvien.model.CategoryModel;
 import com.bros.quanlythuvien.model.LoanSlipModel;
-import com.bros.quanlythuvien.model.ReaderBorrowCardModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.model.SearchBookModel;
 import com.bros.quanlythuvien.service.BookService;
 import com.bros.quanlythuvien.service.BorrowCardService;
-import com.bros.quanlythuvien.service.CategoryService;
 import com.bros.quanlythuvien.service.EmployeeService;
 import com.bros.quanlythuvien.service.LoanSlipService;
 import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
 import com.bros.quanlythuvien.service.impl.BorrowCardServiceImpl;
-import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
 import com.bros.quanlythuvien.service.impl.EmployeeServiceImpl;
 import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
-import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -50,7 +42,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableCell;
@@ -60,7 +51,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 /**
  *

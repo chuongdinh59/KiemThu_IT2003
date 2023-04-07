@@ -5,6 +5,7 @@
 package com.bros.quanlythuvien.repository.impl;
 
 import com.bros.quanlythuvien.entity.ReaderEntity;
+import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.repository.ReaderRepository;
 import com.bros.quanlythuvien.utils.BcryptUtils;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
@@ -194,7 +195,7 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
         }
         return resultMap;
     }
-    
+
     @Override
     public int register(TextField register_username, TextField register_password, TextField register_fullname, TextField register_email) {
         Connection connect = getConnection();
@@ -264,51 +265,27 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
         return 0;
     }
 
-
     @Override
-    public Map<String, Object> login(String username, String password) {
+    public boolean updateReader(ReaderModel reader) {
         Connection connect = getConnection();
-        Map<String, Object> resultMap = new HashMap<>();
+        PreparedStatement statement = null;
         try {
-            String sql = "SELECT * FROM account WHERE user_name = ? ";
+            String sql = "UPDATE readers SET FullName = ? , Gender = ? ,DateOfBirth = ? WHERE id = ?;";
             statement = connect.prepareStatement(sql);
-            statement.setString(1, username);
-            result = statement.executeQuery();
-            if (result.next()) {
-                String hashedPassword = result.getString("password");
-                Boolean isLogin = BcryptUtils.matchPassword(password, hashedPassword, username);
-                if (isLogin){
-                    String accountType = result.getString("type");
-                    // Lưu trữ readerId vào biến
-                    Integer readerId = result.getInt("ReaderID");
-                    if (accountType.equals("Admin")) {
-                        // Chuyển hướng đến trang quản trị viên
-//                        loginBtn.getScene().getWindow().hide();
-                        resultMap.put("type", "Admin");
-                    } else if (accountType.equals("Employee")) {
-                        // Chuyển hướng đến trang nhân viên
-//                        loginBtn.getScene().getWindow().hide();
-                        resultMap.put("type", "Employee");
-                    } else if (accountType.equals("Customer")) {
-//                        loginBtn.getScene().getWindow().hide();
-                        resultMap.put("type", "Customer");
-                        resultMap.put("readerId", readerId);
-                    }
-                }
-                else {
-                resultMap.put("type", "Error");
-            }
+            statement.setString(1, reader.getFullname());
+            statement.setString(2, reader.getGender());
+            statement.setString(3, reader.getDateOfBirth());
+            statement.setInt(4, reader.getId());
 
-            } else {
-                resultMap.put("type", "Error");
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                return true;
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             try {
-                if (result != null) {
-                    result.close();
-                }
                 if (statement != null) {
                     statement.close();
                 }
@@ -319,8 +296,9 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
                 e.printStackTrace();
             }
         }
-        return resultMap;
+        return false;
     }
-    
-    
+
+    }
+
 }

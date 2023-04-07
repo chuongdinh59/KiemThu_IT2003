@@ -25,8 +25,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -153,6 +155,20 @@ public class QuanTriSachController implements Initializable {
     @FXML
     private AnchorPane add_viewForm;
 
+    @FXML
+    private TextField customer_name;
+
+    @FXML
+    private DatePicker customer_birthDay;
+
+    @FXML
+    private ComboBox<String> customer_gender;
+
+    @FXML
+    private Button customer_updateBtn;
+    @FXML
+    private TextField customer_id;
+
     BookService bookService;
     CategoryService categoryService;
     private Map<Integer, String> categoriesMap = new HashMap<>();
@@ -205,6 +221,7 @@ public class QuanTriSachController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.bookService = new BookServiceImpl();
         this.categoryService = new CategoryServiceImpl();
+        loadGender();
         loadReaderColumn();
         loadBookColumn();
         loadBookInfo(null, null);
@@ -328,6 +345,41 @@ public class QuanTriSachController implements Initializable {
         loadBookInfo(null, null);
         clear();
 
+    }
+
+    //Hiển thị combobox gender
+    @FXML
+    private void loadGender() {
+        readerService.loadGender(customer_gender);
+    }
+
+    //nhấn vào table reader xuất ra thông tin tương ứng
+    @FXML
+    private void InforReader() {
+        readerService.InforReaderAdmin(tbReader, customer_id, customer_name, customer_gender, customer_birthDay);
+    }
+
+    //Update thông tin reader
+    @FXML
+    private void updateReader() {
+        Integer id = Integer.valueOf(customer_id.getText());
+        ReaderModel reader = readerService.createReaderModel(id, customer_name, customer_gender, customer_birthDay);
+        boolean rs = readerService.updateReader(reader);
+        if (rs) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("INFORMATION");
+            alert.setHeaderText("INFORMATION");
+            alert.setContentText("Sửa đổi thành công");
+            alert.showAndWait();
+            loadReaderInfo();
+            tbReader.refresh();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.setContentText("Sửa đổi thất bại");
+            alert.showAndWait();
+        }
     }
 
 }
