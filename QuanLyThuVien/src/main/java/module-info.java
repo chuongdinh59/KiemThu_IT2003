@@ -9,6 +9,7 @@ module com.bros.quanlythuvien {
     requires javafx.fxml;
     requires javafx.base;
     requires javafx.graphics;
+    requires jbcrypt;
     opens com.bros.quanlythuvien to javafx.fxml;
     exports com.bros.quanlythuvien;
     exports com.bros.quanlythuvien.model;
