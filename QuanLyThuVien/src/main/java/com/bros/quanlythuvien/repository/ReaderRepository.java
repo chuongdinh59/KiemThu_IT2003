@@ -31,4 +31,5 @@ public interface ReaderRepository extends CommonRepository<ReaderEntity> {
     public int register(TextField register_username, TextField register_password, TextField register_fullname, TextField register_email);
 
     public boolean updateReader(ReaderModel reader);
+
 }
