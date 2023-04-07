@@ -4,31 +4,26 @@
  */
 package com.bros.quanlythuvien.service.impl;
 
-import com.bros.quanlythuvien.EmployeeController;
-import com.bros.quanlythuvien.converter.LoanslipConverter;
 import com.bros.quanlythuvien.converter.ReaderConverter;
-import com.bros.quanlythuvien.entity.LoanSlipEntity;
 import com.bros.quanlythuvien.entity.ReaderEntity;
 import com.bros.quanlythuvien.model.BookModel;
-import com.bros.quanlythuvien.model.LoanSlipModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.repository.ReaderRepository;
-import com.bros.quanlythuvien.repository.impl.LoanSlipRepositoryImpl;
 import com.bros.quanlythuvien.repository.impl.ReaderRepositoryImpl;
-import com.bros.quanlythuvien.service.BookService;
 import com.bros.quanlythuvien.service.ReaderService;
-import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
-import java.sql.Connection;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
+import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -236,10 +231,85 @@ public class ReaderServiceImpl implements ReaderService {
         Map<String, Object> resultMap = readerRepository.login(username, password, loginBtn);
         return resultMap;
     }
-    
+
     @Override
-     public int register(TextField register_username, TextField register_password, TextField register_fullname, TextField register_email){
-         int rs = readerRepository.register(register_username, register_password, register_fullname, register_email);
-         return rs;
-     }
+    public int register(TextField register_username, TextField register_password, TextField register_fullname, TextField register_email) {
+        int rs = readerRepository.register(register_username, register_password, register_fullname, register_email);
+        return rs;
+    }
+
+    @Override
+    @FXML
+    public void InforReader(TableView<ReaderModel> infoCustomerTB, TextField infomation_name, ComboBox<String> infomation_gender, DatePicker infomation_birthDay) {
+        ReaderModel rowData = infoCustomerTB.getSelectionModel().getSelectedItem();
+        if (rowData != null) {
+            infomation_name.setText(rowData.getFullname());
+//            String gender = rowData.getGender();
+            if (rowData.getGender() == null) {
+                infomation_gender.setPromptText("Chọn giới tính");
+            } else if (rowData.getGender().equals("Nam") || rowData.getGender().equals("Nữ")) {
+                infomation_gender.setValue(rowData.getGender());
+            } else {
+                infomation_gender.setPromptText("Chọn giới tính");
+            }
+            if (rowData.getDateOfBirth() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate birthDay = LocalDate.parse(rowData.getDateOfBirth(), formatter);
+                infomation_birthDay.setValue(birthDay);
+            }
+        }
+    }
+
+    @Override
+    @FXML
+    public void InforReaderAdmin(TableView<ReaderModel> tbReader, TextField customer_id, TextField customer_name, ComboBox<String> customer_gender, DatePicker customer_birthDay) {
+        ReaderModel rowData = tbReader.getSelectionModel().getSelectedItem();
+        if (rowData != null) {
+            customer_id.setText(rowData.getId().toString());
+            customer_name.setText(rowData.getFullname());
+//            String gender = rowData.getGender();
+            if (rowData.getGender() == null) {
+                customer_gender.setPromptText("Chọn giới tính");
+            } else if (rowData.getGender().equals("Nam") || rowData.getGender().equals("Nữ")) {
+                customer_gender.setValue(rowData.getGender());
+            } else {
+                customer_gender.setPromptText("Chọn giới tính");
+            }
+            if (rowData.getDateOfBirth() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate birthDay = LocalDate.parse(rowData.getDateOfBirth(), formatter);
+                customer_birthDay.setValue(birthDay);
+            }
+        }
+    }
+
+    @Override
+    public void loadGender(ComboBox<String> infomation_gender) {
+        infomation_gender.setPromptText("Chọn giới tính");
+        infomation_gender.getItems().addAll("Chọn giới tính", "Nam", "Nữ");
+    }
+
+    @Override
+    public boolean updateReader(ReaderModel reader) {
+        boolean rs = readerRepository.updateReader(reader);
+        return rs;
+    }
+
+    @Override
+    public ReaderModel createReaderModel(Integer readerId, TextField infomation_name, ComboBox<String> infomation_gender, DatePicker infomation_birthDay) {
+        ReaderModel reader = new ReaderModel();
+        reader.setId(readerId);
+        reader.setFullname(infomation_name.getText());
+        String gender = infomation_gender.getValue();
+        if ("Nam".equals(gender) || "Nữ".equals(gender)) {
+            reader.setGender(gender);
+        } else {
+            reader.setGender("");
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedBirthDay = infomation_birthDay.getValue().format(formatter);
+        reader.setDateOfBirth(formattedBirthDay);
+//        reader.setFullname(infomation_birthDay.toString());
+        return reader;
+    }
 }

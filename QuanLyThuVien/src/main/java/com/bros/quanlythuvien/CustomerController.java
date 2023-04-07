@@ -8,11 +8,9 @@ import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.LoanSlipModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.service.BookService;
-import com.bros.quanlythuvien.service.EmployeeService;
 import com.bros.quanlythuvien.service.LoanSlipService;
 import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
-import com.bros.quanlythuvien.service.impl.EmployeeServiceImpl;
 import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
 import java.io.IOException;
@@ -77,7 +75,7 @@ public class CustomerController implements Initializable {
     private TextField infomation_email;
 
     @FXML
-    private TextField infomation_gender;
+    private ComboBox<String> infomation_gender;
 
     @FXML
     private ImageView infomation_importView;
@@ -163,7 +161,7 @@ public class CustomerController implements Initializable {
         loadCartColumn(tb_Cart, bookListCart);
         loadReaderColumn(infoCustomerTB);
         loadLoanslipColumn(infoLoanSlipTB);
-
+        loadGender();
     }
 
     private Map<Integer, String> categoriesMap = new HashMap<>();
@@ -185,6 +183,40 @@ public class CustomerController implements Initializable {
             LScheckReader = 1;
         }
 
+    }
+
+    //Hiển thị combobox gender
+    @FXML
+    private void loadGender() {
+        readerService.loadGender(infomation_gender);
+    }
+
+    //nhấn vào table reader xuất ra thông tin tương ứng
+    @FXML
+    private void InforReader() {
+        readerService.InforReader(infoCustomerTB, infomation_name, infomation_gender, infomation_birthDay);
+    }
+
+    //Update thông tin reader
+    @FXML
+    private void updateReader() {
+        ReaderModel reader = readerService.createReaderModel(readerId, infomation_name, infomation_gender, infomation_birthDay);
+        boolean rs = readerService.updateReader(reader);
+        if (rs) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("INFORMATION");
+            alert.setHeaderText("INFORMATION");
+            alert.setContentText("Sửa đổi thành công");
+            alert.showAndWait();
+            loadReaderInfo();
+            infoCustomerTB.refresh();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.setContentText("Sửa đổi thất bại");
+            alert.showAndWait();
+        }
     }
 
     private int totalQuantity = 0;

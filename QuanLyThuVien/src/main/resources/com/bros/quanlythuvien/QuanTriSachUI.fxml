@@ -187,7 +187,7 @@
                         </AnchorPane>
                             <AnchorPane fx:id="customer_viewForm" layoutX="14.0" layoutY="14.0" prefHeight="554.4" prefWidth="898.4" visible="false" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="14.0">
                            <children>
-                              <AnchorPane layoutX="-3.0" layoutY="-7.0" prefHeight="546.0" prefWidth="283.0" stylesheets="@style/CustomerStyle.css">
+                              <AnchorPane layoutX="-3.0" layoutY="-7.0" prefHeight="518.0" prefWidth="287.0" stylesheets="@style/CustomerStyle.css">
                                  <styleClass>
                                     <String fx:value="whiteBg" />
                                     <String fx:value="shadow" />
@@ -203,49 +203,31 @@
                                           <Button fx:id="availableBooks_importBtn" layoutY="112.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="112.0" styleClass="addBtn" stylesheets="@style/CustomerStyle.css" text="Import" />
                                        </children>
                                     </AnchorPane>
-                                    <Label layoutX="68.0" layoutY="174.0" text="Name:">
+                                    <Label layoutX="64.0" layoutY="245.0" text="Name:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="customer_name" layoutX="118.0" layoutY="170.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
-                                    <Label layoutX="59.0" layoutY="219.0" text="Gender:">
+                                    <TextField fx:id="customer_name" layoutX="114.0" layoutY="241.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <Label layoutX="54.0" layoutY="303.0" text="Gender:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="customer_gender" layoutX="118.0" layoutY="214.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
-                                    <Label layoutX="52.0" layoutY="262.0" text="BirthDay:">
+                                    <Label layoutX="47.0" layoutY="360.0" text="BirthDay:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <Label layoutX="56.0" layoutY="307.0" text="Position:">
+                                    <Button fx:id="customer_updateBtn" layoutX="98.0" layoutY="434.0" mnemonicParsing="false" onMouseClicked="#updateReader" prefHeight="43.0" prefWidth="90.0" styleClass="updateBtn" stylesheets="@style/CustomerStyle.css" text="Update" />
+                                    <DatePicker fx:id="customer_birthDay" layoutX="111.0" layoutY="357.0" prefHeight="26.0" prefWidth="146.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <ComboBox fx:id="customer_gender" layoutX="111.0" layoutY="298.0" prefHeight="26.0" prefWidth="145.0" />
+                                    <Label layoutX="37.0" layoutY="191.0" text="Reader ID:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="customer_position" layoutX="118.0" layoutY="303.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
-                                    <Button fx:id="customer_updateBtn" layoutX="100.0" layoutY="488.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="90.0" styleClass="updateBtn" stylesheets="@style/CustomerStyle.css" text="Update" />
-                                    <Label layoutX="71.0" layoutY="347.0" text="Email:">
-                                       <font>
-                                          <Font name="Arial" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="customer_email" layoutX="118.0" layoutY="342.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
-                                    <Label layoutX="55.0" layoutY="390.0" text="Address:">
-                                       <font>
-                                          <Font name="Arial" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="customer_address" layoutX="118.0" layoutY="386.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
-                                    <Label layoutX="58.0" layoutY="435.0" text="Number:">
-                                       <font>
-                                          <Font name="Arial" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="customer_number" layoutX="118.0" layoutY="431.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
-                                    <DatePicker fx:id="customer_birthDay" layoutX="116.0" layoutY="259.0" prefHeight="26.0" prefWidth="146.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <TextField fx:id="customer_id" disable="true" layoutX="113.0" layoutY="187.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane fx:id="availableBooks_form" layoutX="296.0" layoutY="-7.0" prefHeight="548.0" prefWidth="581.0" stylesheets="@style/CustomerStyle.css">
@@ -254,7 +236,7 @@
                                     <String fx:value="shadow" />
                                  </styleClass>
                                  <children>
-                                    <TableView fx:id="tbReader" layoutX="9.0" layoutY="8.0" prefHeight="535.0" prefWidth="563.0" styleClass="my-tableview" stylesheets="@style/CustomerStyle.css">
+                                    <TableView fx:id="tbReader" layoutX="9.0" layoutY="8.0" onMouseClicked="#InforReader" prefHeight="535.0" prefWidth="563.0" styleClass="my-tableview" stylesheets="@style/CustomerStyle.css">
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                        </columnResizePolicy>

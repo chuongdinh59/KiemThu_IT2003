@@ -5,6 +5,7 @@
 package com.bros.quanlythuvien.repository.impl;
 
 import com.bros.quanlythuvien.entity.ReaderEntity;
+import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.repository.ReaderRepository;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import java.sql.Connection;
@@ -183,7 +184,7 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
         }
         return resultMap;
     }
-    
+
     @Override
     public int register(TextField register_username, TextField register_password, TextField register_fullname, TextField register_email) {
         Connection connect = getConnection();
@@ -195,7 +196,7 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
             }
 
             // Kiểm tra username hoặc email có bị trùng
-            String sql = "SELECT * FROM librarymanagement.account WHERE user_name = ? OR email = ?";
+            String sql = "SELECT * FROM account WHERE user_name = ? OR email = ?";
             PreparedStatement checkStatement = connect.prepareStatement(sql);
             checkStatement.setString(1, register_username.getText());
             checkStatement.setString(2, register_email.getText());
@@ -204,7 +205,7 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
                 return 2;
             }
             //Tạo 1 reader
-            String insertReader = "INSERT INTO librarymanagement.readers (FullName) VALUES (?)";
+            String insertReader = "INSERT INTO readers (FullName) VALUES (?)";
             PreparedStatement insertReaderStatement = connect.prepareStatement(insertReader, Statement.RETURN_GENERATED_KEYS);
             insertReaderStatement.setString(1, register_fullname.getText());
             int resultReader = insertReaderStatement.executeUpdate();
@@ -212,7 +213,7 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
                 ResultSet generatedKeys = insertReaderStatement.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     int readerId = generatedKeys.getInt(1);
-                    String insertSql = "INSERT INTO librarymanagement.account (user_name, password, full_name, email, type,ReaderID) VALUES (?, ?, ?, ?, 'Customer',?)";
+                    String insertSql = "INSERT INTO account (user_name, password, full_name, email, type,ReaderID) VALUES (?, ?, ?, ?, 'Customer',?)";
                     PreparedStatement insertStatement = connect.prepareStatement(insertSql);
                     insertStatement.setString(1, register_username.getText());
                     insertStatement.setString(2, register_password.getText());
@@ -247,6 +248,40 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
             }
         }
         return 0;
+    }
+
+    @Override
+    public boolean updateReader(ReaderModel reader) {
+        Connection connect = getConnection();
+        PreparedStatement statement = null;
+        try {
+            String sql = "UPDATE readers SET FullName = ? , Gender = ? ,DateOfBirth = ? WHERE id = ?;";
+            statement = connect.prepareStatement(sql);
+            statement.setString(1, reader.getFullname());
+            statement.setString(2, reader.getGender());
+            statement.setString(3, reader.getDateOfBirth());
+            statement.setInt(4, reader.getId());
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 
 //    public static void main(String[] args) {
