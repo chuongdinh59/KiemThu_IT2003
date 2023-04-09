@@ -7,6 +7,7 @@ package com.bros.quanlythuvien.repository.impl;
 import com.bros.quanlythuvien.entity.LoanSlipEntity;
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.LoanSlipModel;
+import com.bros.quanlythuvien.model.ReportModel;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -462,6 +463,68 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
             }
         }
 
+    }
+    
+    @Override
+    public  List<ReportModel> getReportBorrow(){
+        List<ReportModel> reports = new ArrayList<>();
+        try {
+            Connection conn = getConnection();
+            String sql = "SELECT YEAR(BorrowedDate) AS Year, CONCAT('Qúy ', QUARTER(BorrowedDate)) AS Quarter, "
+                    + "SUM(Quantity) AS NumReturnedBooks FROM loanslip GROUP BY YEAR(BorrowedDate), QUARTER(BorrowedDate)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            // Xử lý dữ liệu lấy được ở đây
+            while(rs.next()) {
+                ReportModel report = new ReportModel();
+                report.setYear(rs.getInt("Year"));
+                report.setQuarter(rs.getString("Quarter"));
+                report.setQuantity(rs.getInt("NumReturnedBooks"));
+                // Thêm đối tượng report vào danh sách hoặc làm gì đó khác với dữ liệu này tại đây
+                reports.add(report);
+            }
+
+            // Đóng kết nối, PreparedStatement và ResultSet
+            rs.close();
+            pstmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return reports;
+    }
+    
+    
+    @Override
+    public  List<ReportModel> getReportReturn() {
+        List<ReportModel> reports = new ArrayList<>();
+    try {
+        Connection conn = getConnection();
+        String sql = "SELECT YEAR(BorrowedDate) as Year, CONCAT('Qúy ', QUARTER(BorrowedDate)) AS Quarter, "
+                + "SUM(quantity) as NumReturnedBooks FROM loanslip WHERE isReturned = 1 "
+                + "GROUP BY YEAR(BorrowedDate), QUARTER(BorrowedDate)";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery();
+
+        // Xử lý dữ liệu lấy được ở đây
+        while(rs.next()) {
+            ReportModel report = new ReportModel();
+            report.setYear(rs.getInt("Year"));
+            report.setQuarter(rs.getString("Quarter"));
+            report.setQuantity(rs.getInt("NumReturnedBooks"));
+            // Thêm đối tượng report vào danh sách hoặc làm gì đó khác với dữ liệu này tại đây
+            reports.add(report);
+        }
+
+        // Đóng kết nối, PreparedStatement và ResultSet
+        rs.close();
+        pstmt.close();
+        conn.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return reports;
     }
 
 }

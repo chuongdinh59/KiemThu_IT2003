@@ -7,6 +7,7 @@ package com.bros.quanlythuvien.repository;
 import com.bros.quanlythuvien.entity.LoanSlipEntity;
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.LoanSlipModel;
+import com.bros.quanlythuvien.model.ReportModel;
 import java.util.List;
 
 /**
@@ -35,4 +36,6 @@ public interface LoanSlipRepository extends CommonRepository<LoanSlipEntity> {
 
     public void deleteQuantity(Integer quantity, Integer id);
      public boolean checkQuantity(Integer quantity, Integer id);
+       public  List<ReportModel> getReportBorrow();
+        public  List<ReportModel> getReportReturn() ;
 }

@@ -1,7 +1,6 @@
 com\bros\quanlythuvien\model\SearchBookModel.class
 com\bros\quanlythuvien\App.class
 com\bros\quanlythuvien\service\impl\EmployeeServiceImpl.class
-com\bros\quanlythuvien\service\impl\LoanSlipServiceImpl$2.class
 com\bros\quanlythuvien\entity\BorrowDetailsEntity.class
 com\bros\quanlythuvien\model\BorrowDetailsModel.class
 com\bros\quanlythuvien\entity\BookReservationEntity.class
@@ -20,7 +19,6 @@ com\bros\quanlythuvien\QuanTriSachController.class
 com\bros\quanlythuvien\service\impl\ReaderServiceImpl$2.class
 com\bros\quanlythuvien\mapper\ResultSetMapper.class
 com\bros\quanlythuvien\entity\CategoryEntity.class
-com\bros\quanlythuvien\repository\LoanSlipRepository.class
 com\bros\quanlythuvien\converter\BookConverter.class
 com\bros\quanlythuvien\service\BorrowCardService.class
 com\bros\quanlythuvien\service\impl\BookServiceImpl.class
@@ -52,7 +50,6 @@ com\bros\quanlythuvien\DocGiaController.class
 com\bros\quanlythuvien\repository\impl\BorrowCardRepositoryImpl.class
 com\bros\quanlythuvien\constant\DatabaseConstant.class
 com\bros\quanlythuvien\service\impl\ReaderServiceImpl.class
-com\bros\quanlythuvien\service\impl\LoanSlipServiceImpl.class
 com\bros\quanlythuvien\model\BookReservationModel.class
 com\bros\quanlythuvien\enums\GenderEnums.class
 com\bros\quanlythuvien\converter\CategoryConverter.class
@@ -68,7 +65,5 @@ com\bros\quanlythuvien\converter\BorrowCardConverter.class
 com\bros\quanlythuvien\annotation\Column.class
 com\bros\quanlythuvien\utils\QueryBuilderUtils.class
 com\bros\quanlythuvien\entity\ReaderEntity.class
-com\bros\quanlythuvien\repository\impl\LoanSlipRepositoryImpl.class
 com\bros\quanlythuvien\repository\impl\ReaderRepositoryImpl.class
 com\bros\quanlythuvien\repository\BorrowCardRepository.class
-com\bros\quanlythuvien\service\impl\LoanSlipServiceImpl$1.class
