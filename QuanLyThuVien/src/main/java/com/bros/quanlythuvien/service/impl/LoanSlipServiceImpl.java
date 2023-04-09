@@ -8,6 +8,7 @@ import com.bros.quanlythuvien.converter.LoanslipConverter;
 import com.bros.quanlythuvien.entity.LoanSlipEntity;
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.LoanSlipModel;
+import com.bros.quanlythuvien.model.ReportModel;
 import com.bros.quanlythuvien.repository.impl.LoanSlipRepositoryImpl;
 import com.bros.quanlythuvien.service.LoanSlipService;
 import java.util.ArrayList;
@@ -175,6 +176,16 @@ public class LoanSlipServiceImpl implements LoanSlipService {
             resultsLoanslipModel.add(loanSlipConverter.entityToModel(entity, LoanSlipModel.class));
         }
         return resultsLoanslipModel;
+    }
+
+    @Override
+    public List<ReportModel> getReportBorrow() {
+        return loanSlipRepository.getReportBorrow();
+    }
+
+    @Override
+    public List<ReportModel> getReportReturn() {
+         return loanSlipRepository.getReportReturn();
     }
 
 }

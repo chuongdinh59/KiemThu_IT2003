@@ -6,6 +6,7 @@ package com.bros.quanlythuvien.service;
 
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.LoanSlipModel;
+import com.bros.quanlythuvien.model.ReportModel;
 import java.util.List;
 import javafx.scene.control.TableView;
 
@@ -34,5 +35,8 @@ public interface LoanSlipService {
     public void updateBookGive(LoanSlipModel loanSlip);
 
     public void creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online);
-
+    
+    List<ReportModel> getReportBorrow();
+    
+    List<ReportModel> getReportReturn();
 }
