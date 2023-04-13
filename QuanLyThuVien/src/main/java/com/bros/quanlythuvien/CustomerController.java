@@ -7,19 +7,28 @@ package com.bros.quanlythuvien;
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.LoanSlipModel;
 import com.bros.quanlythuvien.model.ReaderModel;
+import com.bros.quanlythuvien.repository.ReaderRepository;
+import com.bros.quanlythuvien.repository.impl.ReaderRepositoryImpl;
 import com.bros.quanlythuvien.service.BookService;
 import com.bros.quanlythuvien.service.LoanSlipService;
 import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
 import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
+import com.bros.quanlythuvien.utils.LoanSlipUtils;
+import com.bros.quanlythuvien.utils.MessageBoxUtils;
+import com.bros.quanlythuvien.utils.ReaderUtils;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,13 +36,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -147,6 +159,133 @@ public class CustomerController implements Initializable {
     private BookService bookService;
     private ReaderService readerService = new ReaderServiceImpl();
     private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
+    private ReaderRepository readerRepository = new ReaderRepositoryImpl();
+
+//    Hàm
+    public void load_searchBook_column(TableView<BookModel> TBRSearchBook, List<BookModel> bookListCart) {
+        TableColumn colId = new TableColumn("BookID");
+        colId.setCellValueFactory(new PropertyValueFactory("id"));
+        TableColumn colName = new TableColumn("Title");
+        colName.setCellValueFactory(new PropertyValueFactory("title"));
+        TableColumn colAuthor = new TableColumn("Author");
+        colAuthor.setCellValueFactory(new PropertyValueFactory("author"));
+        TableColumn colDescription = new TableColumn("Description");
+        colDescription.setCellValueFactory(new PropertyValueFactory("description"));
+        TableColumn colPublishedYear = new TableColumn("Published Year");
+        colPublishedYear.setCellValueFactory(new PropertyValueFactory("publicationYear"));
+        TableColumn colPublishedPlace = new TableColumn("Published Place");
+        colPublishedPlace.setCellValueFactory(new PropertyValueFactory("publicationPlace"));
+        TableColumn colCategory = new TableColumn("Category");
+        colCategory.setCellValueFactory(new PropertyValueFactory("categoryValue"));
+        TableColumn colLocation = new TableColumn("Location");
+        colLocation.setCellValueFactory(new PropertyValueFactory("location"));
+        TableColumn<BookModel, Boolean> buyColumn = new TableColumn<>("Buy");
+        buyColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(true));
+        buyColumn.setCellFactory(column -> new TableCell<BookModel, Boolean>() {
+            final Button addButton = new Button("Add To Cart");
+
+            @Override
+            protected void updateItem(Boolean item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    addButton.setOnAction(event -> {
+                        BookModel book = getTableView().getItems().get(getIndex());
+                        boolean rs = false;
+                        for (BookModel b : bookListCart) {
+                            if (Objects.equals(b.getId(), book.getId())) {
+                                b.setQuantity(b.getQuantity() + 1);
+                                rs = true;
+
+                            }
+                        }
+                        if (rs == false) {
+                            book.setQuantity(1);
+                            bookListCart.add(book);
+                            System.out.println(" NAHN ROI NE1");
+
+                        }
+                        System.out.println(" NAHN ROI NE");
+
+                    });
+                    setGraphic(addButton);
+                    setText(null);
+                }
+            }
+        });
+
+        TBRSearchBook.getColumns().addAll(colId, colName, colAuthor, colDescription, colPublishedYear, colPublishedPlace, colCategory, colLocation, buyColumn);
+    }
+
+    public void load_cart_column(TableView<BookModel> tb_Cart, List<BookModel> bookListCart) {
+        TableColumn colName = new TableColumn("Title");
+        colName.setCellValueFactory(new PropertyValueFactory("title"));
+        TableColumn colAuthor = new TableColumn("Author");
+        colAuthor.setCellValueFactory(new PropertyValueFactory("author"));
+        TableColumn colDescription = new TableColumn("Description");
+        colDescription.setCellValueFactory(new PropertyValueFactory("description"));
+        TableColumn colPublishedYear = new TableColumn("Published Year");
+        colPublishedYear.setCellValueFactory(new PropertyValueFactory("publicationYear"));
+        TableColumn colPublishedPlace = new TableColumn("Published Place");
+        colPublishedPlace.setCellValueFactory(new PropertyValueFactory("publicationPlace"));
+        TableColumn colCategory = new TableColumn("Category");
+        colCategory.setCellValueFactory(new PropertyValueFactory("categoryValue"));
+        TableColumn colQuantity = new TableColumn("Quantity");
+        colQuantity.setCellValueFactory(new PropertyValueFactory("quantity"));
+        TableColumn<BookModel, Void> colDelete = new TableColumn<>("Delete");
+
+        colDelete.setCellFactory(param -> new TableCell<BookModel, Void>() {
+            private final Button deleteButton = new Button("Delete");
+
+            {
+                deleteButton.setOnAction(event -> {
+
+                    BookModel book = getTableView().getItems().get(getIndex());
+                    bookListCart.remove(book);
+                    tb_Cart.refresh();
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(deleteButton);
+                }
+            }
+        });
+        tb_Cart.getColumns().addAll(colName, colAuthor, colDescription, colPublishedYear, colPublishedPlace, colCategory, colQuantity, colDelete);
+    }
+
+    public void load_info_cart(List<BookModel> bookListCart, TableView<BookModel> tb_Cart, Integer page) {
+        tb_Cart.setItems(FXCollections.observableList(bookListCart));
+        tb_Cart.refresh();
+    }
+
+    public void info_reader(TableView<ReaderModel> infoCustomerTB, TextField infomation_name, ComboBox<String> infomation_gender, DatePicker infomation_birthDay) {
+        ReaderModel rowData = infoCustomerTB.getSelectionModel().getSelectedItem();
+        if (rowData != null) {
+            infomation_name.setText(rowData.getFullname());
+//            String gender = rowData.getGender();
+            if (rowData.getGender() == null) {
+                infomation_gender.setPromptText("Chọn giới tính");
+            } else if (rowData.getGender().equals("Nam") || rowData.getGender().equals("Nữ")) {
+                infomation_gender.setValue(rowData.getGender());
+            } else {
+                infomation_gender.setPromptText("Chọn giới tính");
+            }
+            if (rowData.getDateOfBirth() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate birthDay = LocalDate.parse(rowData.getDateOfBirth(), formatter);
+                infomation_birthDay.setValue(birthDay);
+            }
+        }
+    }
+//    -------------------------------------------------
 
     private int LScheckReader = 0;
 
@@ -188,34 +327,26 @@ public class CustomerController implements Initializable {
     //Hiển thị combobox gender
     @FXML
     private void loadGender() {
-        readerService.loadGender(infomation_gender);
+        ReaderUtils.load_gender(infomation_gender);
     }
 
     //nhấn vào table reader xuất ra thông tin tương ứng
     @FXML
     private void InforReader() {
-        readerService.InforReader(infoCustomerTB, infomation_name, infomation_gender, infomation_birthDay);
+        info_reader(infoCustomerTB, infomation_name, infomation_gender, infomation_birthDay);
     }
 
     //Update thông tin reader
     @FXML
     private void updateReader() {
-        ReaderModel reader = readerService.createReaderModel(readerId, infomation_name, infomation_gender, infomation_birthDay);
+        ReaderModel reader = ReaderUtils.create_readerModel(readerId, infomation_name, infomation_gender, infomation_birthDay);
         boolean rs = readerService.updateReader(reader);
         if (rs) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("INFORMATION");
-            alert.setHeaderText("INFORMATION");
-            alert.setContentText("Sửa đổi thành công");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("INFORMATION", "Sửa đổi thành công", AlertType.INFORMATION);
             loadReaderInfo();
             infoCustomerTB.refresh();
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error");
-            alert.setContentText("Sửa đổi thất bại");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("ERROR", "Sửa đổi thất bại", AlertType.ERROR);
         }
     }
 
@@ -224,11 +355,7 @@ public class CustomerController implements Initializable {
     @FXML
     public void createOnlineBook() {
         if (LScheckReader == 0) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error");
-            alert.setContentText("Vui lòng nhấn nút kiểm tra trước");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("Error", "Vui lòng nhấn nút kiểm tra trước", AlertType.ERROR);
         } else {
             for (BookModel book : bookListCart) {
                 totalQuantity += book.getQuantity();
@@ -238,11 +365,7 @@ public class CustomerController implements Initializable {
                 loanSlipService.creatLoanSlip(bookListCart, LScheckReader, strReaderId, 0);
                 clearCart();
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Error");
-                alert.setContentText("Không thể mượn quá 5 cuốn sách");
-                alert.showAndWait();
+                MessageBoxUtils.AlertBox("Error", "Không thể mượn quá 5 cuốn sách", AlertType.ERROR);
             }
         }
         totalQuantity = 0;
@@ -251,7 +374,7 @@ public class CustomerController implements Initializable {
     //hiển thị cột trong bảng reader
     @FXML
     private void loadReaderColumn(TableView<ReaderModel> infoCustomerTB) {
-        readerService.loadReaderColumn(infoCustomerTB);
+        ReaderUtils.load_reader_columns(infoCustomerTB);
     }
 
     //hiển thị dữ liệu bảng reader
@@ -265,7 +388,7 @@ public class CustomerController implements Initializable {
 
     @FXML
     private void loadLoanslipColumn(TableView<LoanSlipModel> infoLoanSlipTB) {
-        loanSlipService.loadLoanslipColumn(infoLoanSlipTB);
+        LoanSlipUtils.load_loanslip_columns(infoLoanSlipTB);
     }
 
     @FXML
@@ -283,23 +406,24 @@ public class CustomerController implements Initializable {
 
     @FXML
     private void loadCartColumn(TableView<BookModel> tb_Cart, List<BookModel> bookListCart) {
-        readerService.loadCartColumn(tb_Cart, bookListCart);
+        load_cart_column(tb_Cart, bookListCart);
     }
 
     @FXML
     public void loadInfoCart(List<BookModel> bookListCart, TableView<BookModel> tb_Cart, Integer page) {
-        readerService.loadInfoCart(bookListCart, tb_Cart, page);
+        load_info_cart(bookListCart, tb_Cart, page);
     }
 
     @FXML
     private void loadSearchCategory() {
-        readerService.loadCate(RsearchBook_category, categoriesMap);
+        Map<Integer, String> cateMap = readerRepository.loadCate(categoriesMap);
+        ReaderUtils.load_cate(RsearchBook_category, cateMap);
     }
 
     @FXML
     private void loadRSearchBookColumn(TableView<BookModel> TBRSearchBook, List<BookModel> bookListCart
     ) {
-        readerService.loadSearchBookColumn(TBRSearchBook, bookListCart);
+        load_searchBook_column(TBRSearchBook, bookListCart);
     }
 
     @FXML

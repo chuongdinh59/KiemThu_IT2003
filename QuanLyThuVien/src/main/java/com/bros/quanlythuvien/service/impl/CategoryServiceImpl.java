@@ -12,8 +12,6 @@ import com.bros.quanlythuvien.repository.impl.CategoryRepositoryImpl;
 import com.bros.quanlythuvien.service.CategoryService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import javafx.scene.control.ComboBox;
 
 /**
  *
@@ -41,20 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryConverter.entityToModel(categoryEntity, CategoryModel.class);
     }
     
-    @Override
-     public void loadCate(ComboBox <String> availableBooks_category,Map<Integer, String> categoriesMap) {
-        availableBooks_category.setPromptText("Chọn thể loại");
-        availableBooks_category.getItems().add(0, "Chọn thể loại");
-        categoriesMap.clear();
-
-        try {
-            List<CategoryModel> categories = findAll();
-            for (CategoryModel c : categories) {
-                categoriesMap.put(c.getCategoryID(), c.getValue());
-            }
-            availableBooks_category.getItems().addAll(categoriesMap.values());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    
 }
+
+

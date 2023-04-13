@@ -9,20 +9,17 @@ import com.bros.quanlythuvien.entity.BookEntity;
 import com.bros.quanlythuvien.entity.CategoryEntity;
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.repository.BookRepository;
-import com.bros.quanlythuvien.repository.BorrowCardRepository;
 import com.bros.quanlythuvien.repository.CategoryRepository;
 import com.bros.quanlythuvien.repository.impl.BookRepositoryImpl;
-import com.bros.quanlythuvien.repository.impl.BorrowCardRepositoryImpl;
 import com.bros.quanlythuvien.repository.impl.CategoryRepositoryImpl;
 import com.bros.quanlythuvien.service.BookService;
+import com.bros.quanlythuvien.utils.MessageBoxUtils;
 import com.bros.quanlythuvien.utils.ValidateUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 
 /**
  *
@@ -81,83 +78,19 @@ public class BookServiceImpl implements BookService {
             try {
                 searchMap.put("PublicationYear", Integer.valueOf(strPublish));
             } catch (NumberFormatException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("ERROR");
-                alert.setHeaderText("ERROR");
-                alert.setContentText("Vui lòng nhập số");
-                alert.showAndWait();
+                MessageBoxUtils.AlertBox("ERROR", "Vui lòng nhập số", Alert.AlertType.ERROR);
             }
         }
         return searchMap;
     }
 
     @Override
-    public BookModel getBook(TextField id, TextField title, TextField author, TextField description,
-            TextField publicationPlace, TextField publicationYear, ComboBox<String> category, TextField location, TextField quantity, Map<Integer, String> catemap) {
-        BookModel book = new BookModel();
-        if ("".equals(id.getText())) {
-            return book = null;
-        }
-        if ("".equals(title.getText()) && "".equals(author.getText())) {
-            return book = null;
-        }
-        book.setId(Integer.valueOf(id.getText()));
-        book.setTitle(title.getText());
-        book.setAuthor(author.getText());
-        book.setDescription(description.getText());
-        if (!"".equals(publicationYear.getText())) {
-            try {
-                book.setPublicationYear(Integer.valueOf(publicationYear.getText()));
-            } catch (NumberFormatException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("ERROR");
-                alert.setHeaderText("ERROR");
-                alert.setContentText("Vui lòng nhập số");
-                alert.showAndWait();
-            }
-        }
-
-        book.setPublicationPlace(publicationPlace.getText());
-        if (!"".equals(quantity.getText())) {
-            try {
-                book.setQuantity(Integer.valueOf(quantity.getText()));
-            } catch (NumberFormatException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("ERROR");
-                alert.setHeaderText("ERROR");
-                alert.setContentText("Vui lòng nhập số");
-                alert.showAndWait();
-            }
-        }
-
-        String selectedCategory = category.getValue();
-        Integer cateID = null;
-        for (Map.Entry<Integer, String> entry : catemap.entrySet()) {
-            if (entry.getValue().equals(selectedCategory)) {
-                cateID = entry.getKey();
-                break;
-            }
-        }
-        book.setCategoryID(cateID);
-        book.setLocation(location.getText());
-        return book;
-    }
-
-    @Override
     public void updateBook(BookModel book) {
         boolean rs = bookRepository.updateBook(book);
         if (rs) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText("Success");
-            alert.setContentText("Sửa đổi dữ liệu thành công");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("INFORMATION", "Sửa đổi dữ liệu thành công", Alert.AlertType.INFORMATION);
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("ERROR");
-            alert.setHeaderText("ERROR");
-            alert.setContentText("Sửa đổi dữ liệu thất bại");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("ERROR", "Sửa đổi dữ liệu thất bại", Alert.AlertType.ERROR);
         }
     }
 
@@ -165,17 +98,9 @@ public class BookServiceImpl implements BookService {
     public void inserBook(BookModel book) {
         boolean rs = bookRepository.insertBook(book);
         if (rs) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText("Success");
-            alert.setContentText("Thêm dữ liệu thành công");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("INFORMATION", "Thêm dữ liệu thành công", Alert.AlertType.INFORMATION);
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("ERROR");
-            alert.setHeaderText("ERROR");
-            alert.setContentText("Thêm dữ liệu thất bại");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("ERROR", "Thêm dữ liệu thất bại", Alert.AlertType.ERROR);
         }
     }
 
@@ -183,19 +108,10 @@ public class BookServiceImpl implements BookService {
     public void deleteBook(Integer id) {
         boolean rs = bookRepository.deleteBook(id);
         if (rs) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText("Success");
-            alert.setContentText("Xóa dữ liệu thành công");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("INFORMATION", "Xóa dữ liệu thành công", Alert.AlertType.INFORMATION);
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("ERROR");
-            alert.setHeaderText("ERROR");
-            alert.setContentText("Xóa dữ liệu thất bại");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("ERROR", "Xóa dữ liệu thất bại", Alert.AlertType.ERROR);
         }
     }
 
-    
 }
