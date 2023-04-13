@@ -5,6 +5,7 @@
 package com.bros.quanlythuvien;
 
 import com.bros.quanlythuvien.model.BookModel;
+import com.bros.quanlythuvien.model.CategoryModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.model.ReportModel;
 import com.bros.quanlythuvien.service.BookService;
@@ -18,9 +19,14 @@ import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
 import com.bros.quanlythuvien.utils.MessageBoxUtils;
 import java.io.File;
 import java.io.FileOutputStream;
+
+import com.bros.quanlythuvien.utils.ReaderUtils;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -209,9 +215,112 @@ public class QuanTriSachController implements Initializable {
     private LineChart<String, Number> YearChart;
 
     BookService bookService;
-    CategoryService categoryService;
     private Map<Integer, String> categoriesMap = new HashMap<>();
     private ReaderService readerService = new ReaderServiceImpl();
+    private CategoryService categoryService = new CategoryServiceImpl();
+
+//    Hàm
+    public BookModel get_book(TextField id, TextField title, TextField author, TextField description,
+            TextField publicationPlace, TextField publicationYear, ComboBox<String> category, TextField location, TextField quantity, Map<Integer, String> catemap) {
+        BookModel book = new BookModel();
+        if ("".equals(id.getText())) {
+            return book = null;
+        }
+        if ("".equals(title.getText()) || "".equals(author.getText()) || "".equals(description.getText())
+                || "".equals(publicationPlace.getText()) || "".equals(location.getText())) {
+            return book = null;
+        }
+        book.setId(Integer.valueOf(id.getText()));
+        book.setTitle(title.getText());
+        book.setAuthor(author.getText());
+        book.setDescription(description.getText());
+        if (!"".equals(publicationYear.getText())) {
+            try {
+                book.setPublicationYear(Integer.valueOf(publicationYear.getText()));
+            } catch (NumberFormatException e) {
+                MessageBoxUtils.AlertBox("ERROR", "Vui lòng nhập số", AlertType.ERROR);
+            }
+        } else {
+            return book = null;
+        }
+
+        book.setPublicationPlace(publicationPlace.getText());
+        if (!"".equals(quantity.getText())) {
+            try {
+                book.setQuantity(Integer.valueOf(quantity.getText()));
+            } catch (NumberFormatException e) {
+                MessageBoxUtils.AlertBox("ERROR", "Vui lòng nhập số", AlertType.ERROR);
+            }
+        } else {
+            return book = null;
+        }
+
+        int a = 1;
+        String selectedCategory = category.getValue();
+        System.out.println(selectedCategory);
+        if (selectedCategory == null || selectedCategory.equals("Chọn thể loại")) {
+
+            return book = null;
+        }
+        Integer cateID = null;
+        for (Map.Entry<Integer, String> entry : catemap.entrySet()) {
+            if (entry.getValue().equals(selectedCategory)) {
+                cateID = entry.getKey();
+                break;
+            }
+        }
+        book.setCategoryID(cateID);
+        book.setLocation(location.getText());
+        return book;
+    }
+
+    public void load_cate(ComboBox<String> availableBooks_category, Map<Integer, String> categoriesMap, List<CategoryModel> categories) {
+        availableBooks_category.setPromptText("Chọn thể loại");
+        availableBooks_category.getItems().add(0, "Chọn thể loại");
+        categoriesMap.clear();
+
+        try {
+            for (CategoryModel c : categories) {
+                categoriesMap.put(c.getCategoryID(), c.getValue());
+            }
+            availableBooks_category.getItems().addAll(categoriesMap.values());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void info_reader_admin(TableView<ReaderModel> tbReader, TextField customer_id, TextField customer_name, ComboBox<String> customer_gender, DatePicker customer_birthDay) {
+        ReaderModel rowData = tbReader.getSelectionModel().getSelectedItem();
+        if (rowData != null) {
+            customer_id.setText(rowData.getId().toString());
+            customer_name.setText(rowData.getFullname());
+//            String gender = rowData.getGender();
+            if (rowData.getGender() == null) {
+                customer_gender.setPromptText("Chọn giới tính");
+            } else if (rowData.getGender().equals("Nam") || rowData.getGender().equals("Nữ")) {
+                customer_gender.setValue(rowData.getGender());
+            } else {
+                customer_gender.setPromptText("Chọn giới tính");
+            }
+            if (rowData.getDateOfBirth() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate birthDay = LocalDate.parse(rowData.getDateOfBirth(), formatter);
+                customer_birthDay.setValue(birthDay);
+            }
+        }
+    }
+
+    public void clear_add_book(TextField addBook_title, TextField addBook_author, TextField addBook_description, TextField addBook_publishedPlace, TextField addBook_publishedYear, ComboBox<String> addBook_category, TextField addBook_location, TextField addBook_quantity) {
+        addBook_title.setText("");
+        addBook_author.setText("");
+        addBook_description.setText("");
+        addBook_publishedPlace.setText("");
+        addBook_publishedYear.setText("");
+        addBook_category.setValue("Chọn thể loại");
+        addBook_location.setText("");
+        addBook_quantity.setText("");
+    }
+//    ----------------------------------------
 
     @FXML
     public void minimize() {
@@ -276,7 +385,7 @@ public class QuanTriSachController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.bookService = new BookServiceImpl();
-        this.categoryService = new CategoryServiceImpl();
+//        this.categoryService = new CategoryServiceImpl();
         loadGender();
         loadReaderColumn();
         loadBookColumn();
@@ -351,7 +460,7 @@ public class QuanTriSachController implements Initializable {
     //hiển thị cột trong bảng reader
     @FXML
     private void loadReaderColumn() {
-        readerService.loadReaderColumn(tbReader);
+        ReaderUtils.load_reader_columns(tbReader);
     }
 
     //hiển thị dữ liệu bảng reader
@@ -363,17 +472,19 @@ public class QuanTriSachController implements Initializable {
 
     @FXML
     private void loadCateAvailable() {
-        categoryService.loadCate(availableBooks_category, categoriesMap);
+        List<CategoryModel> categories = categoryService.findAll();
+        load_cate(availableBooks_category, categoriesMap, categories);
     }
 
     @FXML
     private void loadCateAdd() {
-        categoryService.loadCate(addBook_category, categoriesMap);
+        List<CategoryModel> categories = categoryService.findAll();
+        load_cate(addBook_category, categoriesMap, categories);
     }
 
     @FXML
     private void updateBook() {
-        BookModel book = bookService.getBook(availableBooks_bookID, availableBooks_title,
+        BookModel book = get_book(availableBooks_bookID, availableBooks_title,
                 availableBooks_author, availableBooks_description, availableBooks_publishedPlace,
                 availableBooks_publishedYear, availableBooks_category, availableBooks_location, availableBooks_quantity, categoriesMap);
         bookService.updateBook(book);
@@ -387,11 +498,14 @@ public class QuanTriSachController implements Initializable {
 
         availableBooks_bookID.setText("0");
 
-        BookModel book = bookService.getBook(availableBooks_bookID, addBook_title,
+        BookModel book = get_book(availableBooks_bookID, addBook_title,
                 addBook_author, addBook_description, addBook_publishedPlace,
                 addBook_publishedYear, addBook_category, addBook_location, addBook_quantity, categoriesMap);
         if (book != null) {
             bookService.inserBook(book);
+            clear_add_book(addBook_title, addBook_author, addBook_description, addBook_publishedPlace, addBook_publishedYear, addBook_category, addBook_location, addBook_quantity);
+        } else {
+            MessageBoxUtils.AlertBox("ERROR", "Sửa đổi dữ liệu thất bại", AlertType.ERROR);
         }
         loadBookInfo(null, null);
         clear();
@@ -400,7 +514,7 @@ public class QuanTriSachController implements Initializable {
 
     @FXML
     private void deleteBook() {
-        BookModel book = bookService.getBook(availableBooks_bookID, availableBooks_title,
+        BookModel book = get_book(availableBooks_bookID, availableBooks_title,
                 availableBooks_author, availableBooks_description, availableBooks_publishedPlace,
                 availableBooks_publishedYear, availableBooks_category, availableBooks_location, availableBooks_quantity, categoriesMap);
         if (book != null) {
@@ -414,35 +528,27 @@ public class QuanTriSachController implements Initializable {
     //Hiển thị combobox gender
     @FXML
     private void loadGender() {
-        readerService.loadGender(customer_gender);
+        ReaderUtils.load_gender(customer_gender);
     }
 
     //nhấn vào table reader xuất ra thông tin tương ứng
     @FXML
     private void InforReader() {
-        readerService.InforReaderAdmin(tbReader, customer_id, customer_name, customer_gender, customer_birthDay);
+        info_reader_admin(tbReader, customer_id, customer_name, customer_gender, customer_birthDay);
     }
 
     //Update thông tin reader
     @FXML
     private void updateReader() {
         Integer id = Integer.valueOf(customer_id.getText());
-        ReaderModel reader = readerService.createReaderModel(id, customer_name, customer_gender, customer_birthDay);
+        ReaderModel reader = ReaderUtils.create_readerModel(id, customer_name, customer_gender, customer_birthDay);
         boolean rs = readerService.updateReader(reader);
         if (rs) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("INFORMATION");
-            alert.setHeaderText("INFORMATION");
-            alert.setContentText("Sửa đổi thành công");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("INFORMATION", "Sửa đổi thành công", AlertType.INFORMATION);
             loadReaderInfo();
             tbReader.refresh();
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error");
-            alert.setContentText("Sửa đổi thất bại");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("ERROR", "Sửa đổi thất bại", AlertType.ERROR);
         }
     }
 
@@ -515,7 +621,6 @@ public class QuanTriSachController implements Initializable {
         return result;
     }
 
-
     private void showPieChartDialog(String selectedValue) {
 
         Map<String, Integer> reportBorrowMap = mapReportQuaterQuantiry(reportBorrowModels, Integer.valueOf(selectedValue));
@@ -536,10 +641,7 @@ public class QuanTriSachController implements Initializable {
 //            Tooltip.install(data.getNode(), tooltip); // set tooltip for data node
 
             data.getNode().addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Data");
-                alert.setContentText(entry.getKey() + " : " + entry.getValue() + " quyển sách");
-                alert.showAndWait();
+                MessageBoxUtils.AlertBox("INFORMATION", entry.getKey() + " : " + entry.getValue() + " quyển sách", AlertType.INFORMATION);
             });
         }
 
@@ -555,10 +657,7 @@ public class QuanTriSachController implements Initializable {
 //        Tooltip.install(data.getNode(), tooltip); // set tooltip for data node
 
             data.getNode().addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Data");
-                alert.setContentText(entry.getKey() + " : " + entry.getValue() + " quyển sách");
-                alert.showAndWait();
+                MessageBoxUtils.AlertBox("INFORMATION", entry.getKey() + " : " + entry.getValue() + " quyển sách", AlertType.INFORMATION);
             });
         }
 

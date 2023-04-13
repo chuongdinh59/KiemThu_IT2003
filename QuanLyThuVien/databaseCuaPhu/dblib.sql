@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `librarymanagement` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `librarymanagement`;
+CREATE DATABASE  IF NOT EXISTS `librarymanagement1` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `librarymanagement1`;
 -- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
 --
--- Host: localhost    Database: librarymanagement
+-- Host: localhost    Database: librarymanagement1
 -- ------------------------------------------------------
 -- Server version	8.0.31
 
@@ -33,7 +33,7 @@ CREATE TABLE `account` (
   `type` varchar(255) DEFAULT NULL,
   `ReaderID` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'admin','123','Admin','admin@gmail.com','Admin',NULL),(2,'employee','123','Employee','employee@gmail.com','Employee',NULL),(3,'client','123','Dinh Chuong','chu@gmail.com','Customer',3);
+INSERT INTO `account` VALUES (1,'admin','$2a$10$1NbzTRUnOCgBQEtD4ADrHufPUaRyq8bwzuyV7YJGBUn3ad8fTLRT2','Admin','admin@gmail.com','Admin',NULL),(2,'employee','$2a$10$1NbzTRUnOCgBQEtD4ADrHufPUaRyq8bwzuyV7YJGBUn3ad8fTLRT2','Employee','employee@gmail.com','Employee',NULL),(3,'client','$2a$10$1NbzTRUnOCgBQEtD4ADrHufPUaRyq8bwzuyV7YJGBUn3ad8fTLRT2','Dinh Chuong','chu@gmail.com','Customer',3),(4,'cho','$2a$10$cEGyiJ7sNdLYB7ANyaXKjewwqPwOkEq.FLAC6IKEdiiYXQruTJLnO','Đình Chương ','chuong59@gmail.com','Customer',4),(6,'chuot','$2a$10$w8ZwfFvCVLY6ZIlXHS.iq.zlN5L0bj6S3ng92XFiu8cdYv.WeKFdS','chuot','a@gmail.com','Admin',7),(7,'gaucon','$2a$10$HREB3ETDu1RCt8SEAN4s.elzQQgLDtIs87.4RbbWLrzZSZQREe7Fy','ab','d@gmail.com','Employee',8);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,7 +97,7 @@ CREATE TABLE `books` (
   PRIMARY KEY (`id`),
   KEY `CategoryID` (`CategoryID`),
   CONSTRAINT `books_ibfk_1` FOREIGN KEY (`CategoryID`) REFERENCES `category` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,7 +106,7 @@ CREATE TABLE `books` (
 
 LOCK TABLES `books` WRITE;
 /*!40000 ALTER TABLE `books` DISABLE KEYS */;
-INSERT INTO `books` VALUES (1,'Sách A','Tác giả A','Mô Tả A',2020,'A','A',1,'2023-03-14 19:03:42',100),(2,'Sách B ','Tác giả B','Mô tả B',2021,'B','B',2,'2023-03-14 19:04:46',200),(3,'Sách C','Tác giả C','Mô tả C',2022,'C','C',1,'2023-04-03 19:02:28',459),(6,'sách d','tác giả d','mô tả d',2023,'d','d',1,'2023-04-03 21:53:02',328);
+INSERT INTO `books` VALUES (1,'Sách A','Tác giả A','Mô Tả A',2020,'A','A',1,'2023-03-14 19:03:42',100),(2,'Sách B ','Tác giả B','Mô tả B',2021,'B','B',2,'2023-03-14 19:04:46',200),(3,'Sách C','Tác giả C','Mô tả C',2022,'C','C',1,'2023-04-03 19:02:28',459),(6,'sách d','tác giả d','mô tả d',2022,'d','d',1,'2023-04-03 21:53:02',328),(7,'sachcuabang','bang','',2021,'','day a',1,'2023-04-13 12:27:52',21),(8,'sachcuabang','bang','bang',2021,'bangcho','day a',1,'2023-04-13 14:06:44',21);
 /*!40000 ALTER TABLE `books` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,7 +222,7 @@ CREATE TABLE `loanslip` (
 
 LOCK TABLES `loanslip` WRITE;
 /*!40000 ALTER TABLE `loanslip` DISABLE KEYS */;
-INSERT INTO `loanslip` VALUES (4,2,1,'Sách A','Tác giả A','2023-03-28 00:00:00','2023-04-05 00:00:00',1,1,1),(6,2,2,'Sách B ','Tác giả B','2023-03-28 00:00:00','2023-04-05 00:00:00',3,1,1),(7,1,1,'Sách A','Tác giả A','2023-03-29 00:00:00','2023-04-05 00:00:00',2,1,1),(8,1,2,'Sách B ','Tác giả B','2023-03-29 00:00:00','2023-04-28 00:00:00',4,0,1),(9,3,1,'Sách A','Tác giả A','2023-03-29 00:00:00','2023-04-28 00:00:00',2,0,1),(10,3,3,'Sách C','Tác giả C','2023-04-05 00:00:00','2023-05-05 00:00:00',3,0,1),(11,3,6,'sách d','tác giả d','2023-04-05 00:00:00','2023-05-05 00:00:00',2,0,1);
+INSERT INTO `loanslip` VALUES (4,2,1,'Sách A','Tác giả A','2023-03-28 00:00:00','2023-04-05 00:00:00',1,1,1),(6,2,2,'Sách B ','Tác giả B','2022-03-28 00:00:00','2022-04-05 00:00:00',3,1,1),(7,1,1,'Sách A','Tác giả A','2023-03-29 00:00:00','2023-04-05 00:00:00',2,1,1),(8,1,2,'Sách B ','Tác giả B','2023-03-29 00:00:00','2023-04-28 00:00:00',4,0,1),(9,3,1,'Sách A','Tác giả A','2023-03-29 00:00:00','2023-04-28 00:00:00',2,0,1),(10,3,3,'Sách C','Tác giả C','2023-11-05 00:00:00','2023-12-05 00:00:00',3,1,1),(11,3,6,'sách d','tác giả d','2022-04-05 00:00:00','2022-05-05 00:00:00',2,1,1);
 /*!40000 ALTER TABLE `loanslip` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -238,9 +238,8 @@ CREATE TABLE `readers` (
   `FullName` varchar(255) DEFAULT NULL,
   `Gender` varchar(10) DEFAULT NULL,
   `DateOfBirth` date DEFAULT NULL,
-  `ReaderType` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -249,36 +248,8 @@ CREATE TABLE `readers` (
 
 LOCK TABLES `readers` WRITE;
 /*!40000 ALTER TABLE `readers` DISABLE KEYS */;
-INSERT INTO `readers` VALUES (1,'phu','nam','2003-09-08','quanly'),(2,'chuong','nu','2003-09-08','nhanvien'),(3,'phan','nu','2004-02-01','nhanvien');
+INSERT INTO `readers` VALUES (1,'phu','nam','2003-09-08'),(2,'chuong','nu','2003-09-08'),(3,'phan','nu','2004-02-01'),(4,'Đình Chương ',NULL,NULL),(5,'Gia Heo',NULL,NULL),(6,'MeoH',NULL,NULL),(7,'chuot',NULL,NULL),(8,'ab',NULL,NULL);
 /*!40000 ALTER TABLE `readers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `report`
---
-
-DROP TABLE IF EXISTS `report`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `report` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `report_time` date DEFAULT NULL,
-  `borrowed` int DEFAULT NULL,
-  `returned` int DEFAULT NULL,
-  `on_loan` int DEFAULT NULL,
-  `overdue` int DEFAULT NULL,
-  `fine` double DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `report`
---
-
-LOCK TABLES `report` WRITE;
-/*!40000 ALTER TABLE `report` DISABLE KEYS */;
-/*!40000 ALTER TABLE `report` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -290,4 +261,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-05 16:31:25
+-- Dump completed on 2023-04-13 14:10:54
