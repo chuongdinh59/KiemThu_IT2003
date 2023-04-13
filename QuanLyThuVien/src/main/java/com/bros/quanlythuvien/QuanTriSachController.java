@@ -15,7 +15,11 @@ import com.bros.quanlythuvien.service.impl.BookServiceImpl;
 import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
 import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
+import com.bros.quanlythuvien.utils.MessageBoxUtils;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -50,8 +54,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -190,7 +201,10 @@ public class QuanTriSachController implements Initializable {
     private AnchorPane report_viewForm;
     @FXML
     private ComboBox<String> ComboBoxYear;
-
+    
+    @FXML
+    private Button btnReport;
+    
     @FXML
     private LineChart<String, Number> YearChart;
 
@@ -501,57 +515,7 @@ public class QuanTriSachController implements Initializable {
         return result;
     }
 
-//   private void showPieChartDialog(String selectedValue) {
-//
-//     Map<String, Integer> reportBorrowMap = mapReportQuaterQuantiry(reportBorrowModels, Integer.valueOf(selectedValue));
-//    // Create a new Stage for the modal dialog
-//    Stage dialog = new Stage();
-//    dialog.initModality(Modality.APPLICATION_MODAL);
-//    dialog.setTitle("Thông kê trong năm " + selectedValue);
-//
-//    // Create two new PieCharts and populate them with data
-//    PieChart pieChart1 = new PieChart();
-//    pieChart1.getData().clear();
-//    for (Map.Entry<String, Integer> entry : reportBorrowMap.entrySet()) {
-//        PieChart.Data data = new PieChart.Data(entry.getKey(), entry.getValue());
-//        Tooltip tooltip = new Tooltip(entry.getKey() + " : " + entry.getValue());
-//        tooltip.setStyle("-fx-z-index: 1000;");
-//        Tooltip.install(data.getNode(), tooltip);
-//        pieChart1.getData().add(data);
-//          data.getNode().addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-//              Alert alert = new Alert(AlertType.INFORMATION);
-//              alert.setTitle("Data");
-//              alert.setContentText(entry.getKey() + " : " + entry.getValue());
-//              alert.showAndWait();
-//          });
-//    }
-//
-//    Map<String, Integer> reportReturnMap = mapReportQuaterQuantiry(reportReturnModels, Integer.valueOf(selectedValue));
-//    PieChart pieChart2 = new PieChart();
-//    pieChart2.getData().clear();
-//    for (Map.Entry<String, Integer> entry : reportReturnMap.entrySet()) {
-//        PieChart.Data data = new PieChart.Data(entry.getKey(), entry.getValue());
-////        Tooltip tooltip = new Tooltip(entry.getKey() + " : " + entry.getValue());
-////        tooltip.setStyle("-fx-z-index: 1000;");
-////        Tooltip.install(data.getNode(), tooltip);
-//        pieChart2.getData().add(data);
-//          data.getNode().addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-//              Alert alert = new Alert(AlertType.INFORMATION);
-//              alert.setTitle("Data");
-//              alert.setContentText(entry.getKey() + " : " + entry.getValue());
-//              alert.showAndWait();
-//          });
-//    }
-//
-//    // Create a new HBox and add the PieCharts to it
-//    HBox hBox = new HBox();
-//    hBox.getChildren().addAll(pieChart1, pieChart2);
-//
-//    // Create a new Scene containing the VBox
-//    Scene dialogScene = new Scene(new Group(hBox));
-//    dialog.setScene(dialogScene);
-//    dialog.show();
-//}
+
     private void showPieChartDialog(String selectedValue) {
 
         Map<String, Integer> reportBorrowMap = mapReportQuaterQuantiry(reportBorrowModels, Integer.valueOf(selectedValue));
@@ -614,5 +578,126 @@ public class QuanTriSachController implements Initializable {
         }
         return years;
     }
+    
+    
+//    public void handlerExportBtn(ActionEvent event) {
+//        FileChooser fileChooser = new FileChooser();
+//        List<ReportModel> reports = loanSlipService.getReportBorrow();
+//        try {
+//            fileChooser.setTitle("Open File");
+//
+//            // Set the initial directory to open
+//            fileChooser.setInitialDirectory(new File("D:\\"));
+//
+//            // Add filters to the dialog to show only certain types of files
+//            fileChooser.getExtensionFilters().addAll(
+//                    new FileChooser.ExtensionFilter("Excel File", "*.xlsx")
+//            );
+//            File selectedFile = fileChooser.showSaveDialog(null);
+//            if (selectedFile != null) {
+//                // User selected a file, do something with it
+//                exportToExcel(reports, selectedFile.getAbsolutePath());
+//                MessageBoxUtils.AlertBox("Success", "Success", Alert.AlertType.INFORMATION);
+//            } else {
+//                System.out.println("No file selected");
+//            }
+//        } 
+//        catch (IOException | IllegalAccessException e) {
+//            System.err.println("Lỗi");
+//            e.printStackTrace();
+//        } 
+//    }
+    
+    public void handlerExportBtn(ActionEvent event) {
+    FileChooser fileChooser = new FileChooser();
+    List<ReportModel> borrowReports = loanSlipService.getReportBorrow();
+    List<ReportModel> returnReports = loanSlipService.getReportReturn();
+    try {
+        fileChooser.setTitle("Open File");
 
+        // Set the initial directory to open
+        fileChooser.setInitialDirectory(new File("D:\\"));
+
+        // Add filters to the dialog to show only certain types of files
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Excel File", "*.xlsx")
+        );
+        File selectedFile = fileChooser.showSaveDialog(null);
+        if (selectedFile != null) {
+            // User selected a file, do something with it
+            Workbook workbook = new XSSFWorkbook();
+            Sheet borrowSheet = workbook.createSheet("Borrow Report");
+            Sheet returnSheet = workbook.createSheet("Return Report");
+
+            // Populate the borrow sheet
+            int rownum = 0;
+            Row headerRow = borrowSheet.createRow(rownum++);
+            headerRow.createCell(0).setCellValue("Year");
+            headerRow.createCell(1).setCellValue("Quarter");
+            headerRow.createCell(2).setCellValue("Quantity");
+            for (ReportModel report : borrowReports) {
+                Row row = borrowSheet.createRow(rownum++);
+                row.createCell(0).setCellValue(report.getYear());
+                row.createCell(1).setCellValue(report.getQuarter());
+                row.createCell(2).setCellValue(report.getQuantity());
+            }
+
+            // Populate the return sheet
+            rownum = 0;
+            headerRow = returnSheet.createRow(rownum++);
+            headerRow.createCell(0).setCellValue("Year");
+            headerRow.createCell(1).setCellValue("Quarter");
+            headerRow.createCell(2).setCellValue("Quantity");
+            for (ReportModel report : returnReports) {
+                Row row = returnSheet.createRow(rownum++);
+                row.createCell(0).setCellValue(report.getYear());
+                row.createCell(1).setCellValue(report.getQuarter());
+                row.createCell(2).setCellValue(report.getQuantity());
+            }
+
+            FileOutputStream outputStream = new FileOutputStream(selectedFile);
+            workbook.write(outputStream);
+            workbook.close();
+            MessageBoxUtils.AlertBox("Success", "Success", Alert.AlertType.INFORMATION);
+        } else {
+            System.out.println("No file selected");
+        }
+    } 
+    catch (IOException e) {
+        System.err.println("Lỗi");
+        e.printStackTrace();
+    } 
+}
+
+    public void exportToExcel(List<?> list, String filePath) throws IOException, IllegalAccessException {
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Sheet1");
+            // Create header row
+            Row headerRow = sheet.createRow(0);
+            Field[] fields = list.get(0).getClass().getDeclaredFields();
+            int columnIndex = 0;
+            for (Field field : fields) {
+                field.setAccessible(true);
+                Cell cell = headerRow.createCell(columnIndex++);
+                cell.setCellValue(field.getName());
+            }   // Write data rows
+            int rowIndex = 1;
+            for (Object obj : list) {
+                Row dataRow = sheet.createRow(rowIndex++);
+                columnIndex = 0;
+                for (Field field : fields) {
+                    field.setAccessible(true);
+                    Cell cell = dataRow.createCell(columnIndex++);
+                    Object value = field.get(obj);
+                    if (value != null) {
+                        cell.setCellValue(value.toString());
+                    }
+                }
+            }   // Write to file
+            FileOutputStream outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+            outputStream.close();
+        }
+    }
+    
 }

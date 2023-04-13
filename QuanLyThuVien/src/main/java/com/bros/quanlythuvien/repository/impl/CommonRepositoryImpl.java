@@ -246,10 +246,6 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
         return null;
     }
 
-    
-
-
-
     private StringBuilder createSqlInsert() {
         String tableName = getTableName();
         if (tableName == null) {

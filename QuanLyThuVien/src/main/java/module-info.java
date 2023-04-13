@@ -3,6 +3,8 @@ module com.bros.quanlythuvien {
     requires commons.beanutils;
     requires lombok;
     requires modelmapper;
+    requires org.apache.poi.ooxml;
+    requires org.apache.poi.poi;
     requires de.jensd.fx.glyphs.fontawesome;
     requires com.jfoenix;
     requires javafx.controls;

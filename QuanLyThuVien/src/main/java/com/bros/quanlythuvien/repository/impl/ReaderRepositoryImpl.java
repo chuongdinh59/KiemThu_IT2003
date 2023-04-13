@@ -150,7 +150,7 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
             result = statement.executeQuery();
             if (result.next()) {
                 String hashedPassword = result.getString("password");
-                Boolean isLogin = BcryptUtils.matchPassword("123", hashedPassword, username.getText());
+                Boolean isLogin = BcryptUtils.matchPassword(password.getText(), hashedPassword, username.getText());
                 if (isLogin){
                     String accountType = result.getString("type");
                     // Lưu trữ readerId vào biến
