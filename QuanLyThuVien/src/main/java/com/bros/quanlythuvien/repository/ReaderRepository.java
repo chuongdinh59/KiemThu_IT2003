@@ -22,13 +22,14 @@ public interface ReaderRepository extends CommonRepository<ReaderEntity> {
 
     public List<ReaderEntity> findAll(Integer page);
 
-    public void loadCate(ComboBox<String> RsearchBook_category, Map<Integer, String> categoriesMap);
+//    public void loadCate(ComboBox<String> RsearchBook_category, Map<Integer, String> categoriesMap);
+    public Map<Integer, String> loadCate(Map<Integer, String> categoriesMap);
 
     public int checkReader(Integer id);
 
-    public Map<String, Object> login(TextField username, TextField password, Button loginBtn);
+    public Map<String, Object> login(String username, String password);
 
-    public int register(TextField register_username, TextField register_password, TextField register_fullname, TextField register_email);
+    public int register(String register_username, String register_password, String register_fullname, String register_email);
 
     public boolean updateReader(ReaderModel reader);
 

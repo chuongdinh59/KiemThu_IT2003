@@ -18,10 +18,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.application.Platform;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 
 /**
  *
@@ -44,11 +40,45 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
         return r;
     }
 
+//    @Override
+//    public void loadCate(ComboBox<String> RsearchBook_category, Map<Integer, String> categoriesMap) {
+//        Connection connect = getConnection();
+//        RsearchBook_category.setPromptText("Chọn thể loại");
+//        RsearchBook_category.getItems().add(0, "Chọn thể loại");
+//        categoriesMap.clear();
+//        try {
+//            String sql = "select * from category;";
+//            statement = connect.prepareStatement(sql);
+//            result = statement.executeQuery();
+//            while (result.next()) {
+//                Integer id = result.getInt("id");
+//                String value = result.getString("value");
+//                categoriesMap.put(id, value);
+//            }
+//            RsearchBook_category.getItems().addAll(categoriesMap.values());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (result != null) {
+//                    result.close();
+//                }
+//                if (statement != null) {
+//                    statement.close();
+//                }
+//                if (connect != null) {
+//                    connect.close();
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
     @Override
-    public void loadCate(ComboBox<String> RsearchBook_category, Map<Integer, String> categoriesMap) {
+    public Map<Integer, String> loadCate( Map<Integer, String> categoriesMap) {
         Connection connect = getConnection();
-        RsearchBook_category.setPromptText("Chọn thể loại");
-        RsearchBook_category.getItems().add(0, "Chọn thể loại");
+//        RsearchBook_category.setPromptText("Chọn thể loại");
+//        RsearchBook_category.getItems().add(0, "Chọn thể loại");
         categoriesMap.clear();
         try {
             String sql = "select * from category;";
@@ -59,7 +89,8 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
                 String value = result.getString("value");
                 categoriesMap.put(id, value);
             }
-            RsearchBook_category.getItems().addAll(categoriesMap.values());
+//            RsearchBook_category.getItems().addAll(categoriesMap.values());
+            return categoriesMap;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -77,6 +108,7 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
                 e.printStackTrace();
             }
         }
+          return categoriesMap;
     }
 
     @Override
@@ -137,41 +169,40 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
     }
 
     @Override
-    public Map<String, Object> login(TextField username, TextField password, Button loginBtn) {
-        String u = username.getText();
-        String p = password.getText();
+    public Map<String, Object> login(String username, String password) {
+//        String u = username.getText();
+//        String p = password.getText();
         Connection connect = getConnection();
         Map<String, Object> resultMap = new HashMap<>();
         try {
             String sql = "SELECT * FROM account WHERE user_name = ? ";
             statement = connect.prepareStatement(sql);
-            statement.setString(1, u);
+            statement.setString(1, username);
 //            statement.setString(2, password.getText());
             result = statement.executeQuery();
             if (result.next()) {
                 String hashedPassword = result.getString("password");
-                Boolean isLogin = BcryptUtils.matchPassword("123", hashedPassword, username.getText());
-                if (isLogin){
+                Boolean isLogin = BcryptUtils.matchPassword(password, hashedPassword, username);
+                if (isLogin) {
                     String accountType = result.getString("type");
                     // Lưu trữ readerId vào biến
                     Integer readerId = result.getInt("ReaderID");
                     if (accountType.equals("Admin")) {
                         // Chuyển hướng đến trang quản trị viên
-                        loginBtn.getScene().getWindow().hide();
+//                        loginBtn.getScene().getWindow().hide();
                         resultMap.put("type", "Admin");
                     } else if (accountType.equals("Employee")) {
                         // Chuyển hướng đến trang nhân viên
-                        loginBtn.getScene().getWindow().hide();
+//                        loginBtn.getScene().getWindow().hide();
                         resultMap.put("type", "Employee");
                     } else if (accountType.equals("Customer")) {
-                        loginBtn.getScene().getWindow().hide();
+//                        loginBtn.getScene().getWindow().hide();
                         resultMap.put("type", "Customer");
                         resultMap.put("readerId", readerId);
                     }
+                } else {
+                    resultMap.put("type", "Error");
                 }
-                else {
-                resultMap.put("type", "Error");
-            }
 
             } else {
                 resultMap.put("type", "Error");
@@ -197,20 +228,20 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
     }
 
     @Override
-    public int register(TextField register_username, TextField register_password, TextField register_fullname, TextField register_email) {
+    public int register(String register_username, String register_password, String register_fullname, String register_email) {
         Connection connect = getConnection();
         try {
             // Kiểm tra các trường dữ liệu
-            if (register_username.getText().isEmpty() || register_password.getText().isEmpty()
-                    || register_fullname.getText().isEmpty() || register_email.getText().isEmpty()) {
+            if (register_username.isEmpty() || register_password.isEmpty()
+                    || register_fullname.isEmpty() || register_email.isEmpty()) {
                 return 1;
             }
 
             // Kiểm tra username hoặc email có bị trùng
             String sql = "SELECT * FROM account WHERE user_name = ? OR email = ?";
             PreparedStatement checkStatement = connect.prepareStatement(sql);
-            checkStatement.setString(1, register_username.getText());
-            checkStatement.setString(2, register_email.getText());
+            checkStatement.setString(1, register_username);
+            checkStatement.setString(2, register_email);
             ResultSet resultSet = checkStatement.executeQuery();
             if (resultSet.next()) {
                 return 2;
@@ -218,7 +249,7 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
             //Tạo 1 reader
             String insertReader = "INSERT INTO readers (FullName) VALUES (?)";
             PreparedStatement insertReaderStatement = connect.prepareStatement(insertReader, Statement.RETURN_GENERATED_KEYS);
-            insertReaderStatement.setString(1, register_fullname.getText());
+            insertReaderStatement.setString(1, register_fullname);
             int resultReader = insertReaderStatement.executeUpdate();
             if (resultReader > 0) {
                 ResultSet generatedKeys = insertReaderStatement.getGeneratedKeys();
@@ -226,14 +257,14 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
                     int readerId = generatedKeys.getInt(1);
                     String insertSql = "INSERT INTO account (user_name, password, full_name, email, type,ReaderID) VALUES (?, ?, ?, ?, 'Customer',?)";
                     PreparedStatement insertStatement = connect.prepareStatement(insertSql);
-                    String hashedPassword = BcryptUtils.encryptPassword(register_password.getText().trim(), register_username.getText().trim());
-                    
+                    String hashedPassword = BcryptUtils.encryptPassword(register_password.trim(), register_username.trim());
+
                     System.out.print(hashedPassword);
-                    
-                    insertStatement.setString(1, register_username.getText());
+
+                    insertStatement.setString(1, register_username);
                     insertStatement.setString(2, hashedPassword);
-                    insertStatement.setString(3, register_fullname.getText());
-                    insertStatement.setString(4, register_email.getText());
+                    insertStatement.setString(3, register_fullname);
+                    insertStatement.setString(4, register_email);
                     insertStatement.setInt(5, readerId);
                     int result1 = insertStatement.executeUpdate();
                     if (result1 > 0) {
@@ -299,6 +330,4 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
         return false;
     }
 
-    }
-
-
+}

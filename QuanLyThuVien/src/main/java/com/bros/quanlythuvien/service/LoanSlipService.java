@@ -16,8 +16,6 @@ import javafx.scene.control.TableView;
  */
 public interface LoanSlipService {
 
-    public void loadLoanslipColumn(TableView<LoanSlipModel> returnLoanslipTB);
-
     public List<LoanSlipModel> loadLoanslipInfo();
 
     public LoanSlipModel findById(Integer id);
@@ -30,13 +28,12 @@ public interface LoanSlipService {
 
     public List<LoanSlipModel> findByCId(Integer id);
 
-//    public List<LoanSlipModel> findByCId(Integer id);
-
     public void updateBookGive(LoanSlipModel loanSlip);
 
     public void creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online);
-    
-    public List<ReportModel> getReportBorrow() ;
-        public List<ReportModel> getReportReturn() ;
+
+    public List<ReportModel> getReportBorrow();
+
+    public List<ReportModel> getReportReturn();
 
 }

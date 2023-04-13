@@ -24,30 +24,16 @@ public interface ReaderService {
 
     public List<ReaderModel> findAll();
 
-    public void loadSearchBookColumn(TableView<BookModel> TBRSearchBook, List<BookModel> bookListCart);
-
-    public void loadCate(ComboBox<String> RsearchBook_category, Map<Integer, String> categoriesMap);
-
-    public void loadCartColumn(TableView<BookModel> tb_Cart, List<BookModel> bookListCart);
-
-    public void loadInfoCart(List<BookModel> bookListCart, TableView<BookModel> tb_Cart, Integer page);
-
+//    public void loadCate(ComboBox<String> RsearchBook_category, Map<Integer, String> categoriesMap);
+//2
     public int checkReader(Integer id);
 
-    public void loadReaderColumn(TableView<ReaderModel> infoCustomerTB);
-
-    public Map<String, Object> login(TextField username, TextField password, Button loginBtn);
-
-    public int register(TextField register_username, TextField register_password, TextField register_fullname, TextField register_email);
-
-    public void InforReader(TableView<ReaderModel> infoCustomerTB, TextField infomation_name, ComboBox<String> infomation_gender, DatePicker infomation_birthDay);
-
-    public void loadGender(ComboBox<String> infomation_gender);
-
+//    public void loadReaderColumn(TableView<ReaderModel> infoCustomerTB);
+//3
+//    public void loadGender(ComboBox<String> infomation_gender);
+//2
     public boolean updateReader(ReaderModel reader);
 
-    public ReaderModel createReaderModel(Integer readerId, TextField infomation_name, ComboBox<String> infomation_gender, DatePicker infomation_birthDay);
-
-    public void InforReaderAdmin(TableView<ReaderModel> tbReader, TextField customer_id, TextField customer_name, ComboBox<String> customer_gender, DatePicker customer_birthDay);
-
+//    public ReaderModel createReaderModel(Integer readerId, TextField infomation_name, ComboBox<String> infomation_gender, DatePicker infomation_birthDay);
+//2
 }

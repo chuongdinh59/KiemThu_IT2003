@@ -4,20 +4,17 @@
  */
 package com.bros.quanlythuvien;
 
+import com.bros.quanlythuvien.repository.ReaderRepository;
+import com.bros.quanlythuvien.repository.impl.ReaderRepositoryImpl;
 import com.bros.quanlythuvien.service.LoanSlipService;
 import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
-import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
+import com.bros.quanlythuvien.utils.MessageBoxUtils;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.Map;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +23,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -86,6 +82,27 @@ public class LoginController implements Initializable {
 
     private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
     private ReaderService readerService = new ReaderServiceImpl();
+    private ReaderRepository readerRepository = new ReaderRepositoryImpl();
+
+//    Hàm
+    public Map<String, Object> login(TextField username, TextField password, Button loginBtn) {
+        String u = username.getText();
+        String p = password.getText();
+        Map<String, Object> resultMap = readerRepository.login(u, p);
+        loginBtn.getScene().getWindow().hide();
+        return resultMap;
+    }
+
+    public int register(TextField register_username, TextField register_password, TextField register_fullname, TextField register_email) {
+        String u = register_username.getText();
+        String p = register_password.getText();
+        String f = register_fullname.getText();
+        String e = register_email.getText();
+
+        int rs = readerRepository.register(u, p, f, e);
+        return rs;
+    }
+//    -------------------------
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -111,7 +128,7 @@ public class LoginController implements Initializable {
 
     @FXML
     public void login(ActionEvent evt) throws IOException {
-        Map<String, Object> resultMap = readerService.login(username, password, loginBtn);
+        Map<String, Object> resultMap = login(username, password, loginBtn);
         if (resultMap.get("type").equals("Admin")) {
             Parent root = FXMLLoader.load(getClass().getResource("QuanTriSachUI.fxml"));
             Scene scene = new Scene(root);
@@ -140,110 +157,36 @@ public class LoginController implements Initializable {
             stage.setTitle("Customer");
             stage.show();
         } else if (resultMap.get("type").equals("Error")) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Lỗi đăng nhập");
-            alert.setHeaderText("Error");
-            alert.setContentText("Sai tài khoản hoặc mật khẩu");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("Error", "Sai tài khoản hoặc mật khẩu", Alert.AlertType.ERROR);
         }
     }
 
     @FXML
     public void register(ActionEvent evt) {
 
-        int rs = readerService.register(register_username, register_password, register_fullname, register_email);
+        int rs = register(register_username, register_password, register_fullname, register_email);
         switch (rs) {
-            case 1:
-                {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Lỗi đăng ký");
-                    alert.setHeaderText("Error");
-                    alert.setContentText("Bạn phải nhập đầy đủ thông tin để đăng ký");
-                    alert.showAndWait();
-                    break;
-                }
-            case 2:
-                {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Lỗi đăng ký");
-                    alert.setHeaderText("Error");
-                    alert.setContentText("Tên đăng nhập hoặc email đã tồn tại");
-                    alert.showAndWait();
-                    break;
-                }
-            case 3:
-                {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Register");
-                    alert.setHeaderText("Successful");
-                    alert.setContentText("Đăng ký thành công");
-                    alert.showAndWait();
-                    login_form.setVisible(true);
-                    register_form.setVisible(false);
-                    break;
-                }
-            case 4:
-                {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Lỗi đăng ký");
-                    alert.setHeaderText("Error");
-                    alert.setContentText("Đăng ký thất bại");
-                    alert.showAndWait();
-                    break;
-                }
+            case 1: {
+                MessageBoxUtils.AlertBox("Error", "Bạn phải nhập đầy đủ thông tin để đăng ký", Alert.AlertType.ERROR);
+                break;
+            }
+            case 2: {
+                MessageBoxUtils.AlertBox("Error", "Tên đăng nhập hoặc email đã tồn tại", Alert.AlertType.ERROR);
+                break;
+            }
+            case 3: {
+                MessageBoxUtils.AlertBox("INFORMATION", "Đăng ký thành công", Alert.AlertType.INFORMATION);
+                login_form.setVisible(true);
+                register_form.setVisible(false);
+                break;
+            }
+            case 4: {
+                MessageBoxUtils.AlertBox("Error", "Đăng ký thất bại", Alert.AlertType.ERROR);
+                break;
+            }
             default:
                 break;
         }
 
     }
-//        Connection connect = getConnection();
-//        try {
-//            // Kiểm tra các trường dữ liệu
-//            if (register_username.getText().isEmpty() || register_password.getText().isEmpty()
-//                    || register_fullname.getText().isEmpty() || register_email.getText().isEmpty()) {
-//                Alert alert = new Alert(Alert.AlertType.WARNING);
-//                alert.setTitle("Lỗi đăng ký");
-//                alert.setHeaderText("Error");
-//                alert.setContentText("Bạn phải nhập đầy đủ thông tin để đăng ký");
-//                alert.showAndWait();
-//                return;
-//            }
-//
-//            // Kiểm tra username hoặc email có bị trùng
-//            String sql = "SELECT * FROM librarymanagement.account WHERE user_name = ? OR email = ?";
-//            PreparedStatement checkStatement = connect.prepareStatement(sql);
-//            checkStatement.setString(1, register_username.getText());
-//            checkStatement.setString(2, register_email.getText());
-//            ResultSet resultSet = checkStatement.executeQuery();
-//            if (resultSet.next()) {
-//                Alert alert = new Alert(Alert.AlertType.WARNING);
-//                alert.setTitle("Lỗi đăng ký");
-//                alert.setHeaderText("Error");
-//                alert.setContentText("Tên đăng nhập hoặc email đã tồn tại");
-//                alert.showAndWait();
-//                return;
-//            }
-//
-//            // Nếu không có lỗi, thực hiện lệnh insert
-//            String insertSql = "INSERT INTO librarymanagement.account (user_name, password, full_name, email, type) VALUES (?, ?, ?, ?, 'Customer')";
-//            PreparedStatement insertStatement = connect.prepareStatement(insertSql);
-//            insertStatement.setString(1, register_username.getText());
-//            insertStatement.setString(2, register_password.getText());
-//            insertStatement.setString(3, register_fullname.getText());
-//            insertStatement.setString(4, register_email.getText());
-//            int result1 = insertStatement.executeUpdate();
-//            if (result1 > 0) {
-//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                alert.setTitle("Register");
-//                alert.setHeaderText("Successful");
-//                alert.setContentText("Đăng ký thành công");
-//                alert.showAndWait();
-//                login_form.setVisible(true);
-//                register_form.setVisible(false);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 }

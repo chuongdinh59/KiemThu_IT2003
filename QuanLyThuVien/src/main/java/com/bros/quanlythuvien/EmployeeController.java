@@ -9,16 +9,19 @@ import com.bros.quanlythuvien.model.BorrowCardModel;
 import com.bros.quanlythuvien.model.LoanSlipModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.model.SearchBookModel;
+import com.bros.quanlythuvien.repository.ReaderRepository;
+import com.bros.quanlythuvien.repository.impl.ReaderRepositoryImpl;
 import com.bros.quanlythuvien.service.BookService;
 import com.bros.quanlythuvien.service.BorrowCardService;
-import com.bros.quanlythuvien.service.EmployeeService;
 import com.bros.quanlythuvien.service.LoanSlipService;
 import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
 import com.bros.quanlythuvien.service.impl.BorrowCardServiceImpl;
-import com.bros.quanlythuvien.service.impl.EmployeeServiceImpl;
 import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
+import com.bros.quanlythuvien.utils.LoanSlipUtils;
+import com.bros.quanlythuvien.utils.MessageBoxUtils;
+import com.bros.quanlythuvien.utils.ReaderUtils;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -244,9 +247,65 @@ public class EmployeeController implements Initializable {
     private BookService bookService;
     private Map<Integer, String> categoriesMap = new HashMap<>();
     private ReaderService readerService = new ReaderServiceImpl();
-    private EmployeeService employeeService = new EmployeeServiceImpl();
     private BorrowCardService borrowCardService;
     private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
+    private ReaderRepository readerRepository = new ReaderRepositoryImpl();
+
+    //    Hàm
+    public void load_book_columns(TableView<BookModel> tb_SearchBook) {
+        TableColumn colId = new TableColumn("BookID");
+        colId.setCellValueFactory(new PropertyValueFactory("id"));
+        TableColumn colName = new TableColumn("Title");
+        colName.setCellValueFactory(new PropertyValueFactory("title"));
+        TableColumn colAuthor = new TableColumn("Author");
+        colAuthor.setCellValueFactory(new PropertyValueFactory("author"));
+        TableColumn colDescription = new TableColumn("Description");
+        colDescription.setCellValueFactory(new PropertyValueFactory("description"));
+        TableColumn colPublishedYear = new TableColumn("Published Year");
+        colPublishedYear.setCellValueFactory(new PropertyValueFactory("publicationYear"));
+        TableColumn colPublishedPlace = new TableColumn("Published Place");
+        colPublishedPlace.setCellValueFactory(new PropertyValueFactory("publicationPlace"));
+        TableColumn colCategory = new TableColumn("Category");
+        colCategory.setCellValueFactory(new PropertyValueFactory("categoryValue"));
+        TableColumn colLocation = new TableColumn("Location");
+        colLocation.setCellValueFactory(new PropertyValueFactory("location"));
+        TableColumn colquantity = new TableColumn("Quantity");
+        colquantity.setCellValueFactory(new PropertyValueFactory("quantity"));
+
+        tb_SearchBook.getColumns().addAll(colId, colName, colAuthor, colDescription, colPublishedYear, colPublishedPlace, colCategory, colLocation, colquantity);
+    }
+
+    public void load_reader_columns(TableView<BorrowCardModel> tbReader) {
+        TableColumn colRId = new TableColumn("ReaderId");
+        colRId.setCellValueFactory(new PropertyValueFactory("readerID"));
+        TableColumn colId = new TableColumn("BorrowCardID");
+        colId.setCellValueFactory(new PropertyValueFactory("id"));
+        TableColumn colFName = new TableColumn("FullName");
+        colFName.setCellValueFactory(new PropertyValueFactory("fullName"));
+        TableColumn colIssuedDate = new TableColumn("IssuedDate");
+        colIssuedDate.setCellValueFactory(new PropertyValueFactory("issuedDate"));
+        TableColumn colExpiredDate = new TableColumn("ExpiredDate");
+        colExpiredDate.setCellValueFactory(new PropertyValueFactory("expiredDate"));
+
+        tbReader.getColumns().addAll(colId, colRId, colFName, colIssuedDate, colExpiredDate);
+    }
+
+    public void load_reader_infos(Integer id, TableView<BorrowCardModel> tbReader) {
+        List<BorrowCardModel> readerBorrowCardList = new ArrayList<>();
+        if (id != null) {
+            BorrowCardModel borrowCard = borrowCardService.findBorrowCardByRID(id);
+            ReaderModel reader = readerService.findById(borrowCard.getReaderID());
+            borrowCard.setFullName(reader.getFullname());
+            readerBorrowCardList.add(borrowCard);
+        } else {
+            List<BorrowCardModel> borrowCardModels = borrowCardService.findAll();
+            for (BorrowCardModel b : borrowCardModels) {
+                readerBorrowCardList.add(b);
+            }
+        }
+        tbReader.setItems(FXCollections.observableList(readerBorrowCardList));
+    }
+//    -----------------------------
 
 //    @FXML
 //    public ArrayList<BookModel> LSbookList = new ArrayList();
@@ -264,19 +323,20 @@ public class EmployeeController implements Initializable {
     // hiển thị dữ liệu ô thể loại trang tìm kiếm
     @FXML
     public void loadCate() {
-        readerService.loadCate(searchBook_category, categoriesMap);
+        Map<Integer, String> cateMap = readerRepository.loadCate(categoriesMap);
+        ReaderUtils.load_cate(searchBook_category, cateMap);
     }
 
     // hiển thị cột của bảng trang tìm kiếm
     @FXML
     public void loadSearchBookColumn(TableView<BookModel> tb_SearchBook) {
-        employeeService.loadBookColumn(tb_SearchBook);
+        load_book_columns(tb_SearchBook);
     }
 
     //hiển thị cột trong bảng reader trang reader
     @FXML
     private void loadReaderStatusColumn() {
-        readerService.loadReaderColumn(readerStatusTB);
+        ReaderUtils.load_reader_columns(readerStatusTB);
     }
 
     //hiển thị dữ liệu bảng reader trang reader
@@ -315,13 +375,13 @@ public class EmployeeController implements Initializable {
     //hiển thị cột trong bảng reader trong trang borrow
     @FXML
     private void loadReaderColumn(TableView<BorrowCardModel> tbReader) {
-        employeeService.loadReaderColumn(tbReader);
+        load_reader_columns(tbReader);
     }
 
     //hiển thị cột bảng book trong trang borrow
     @FXML
     private void loadBookColumn(TableView<BookModel> tbBook) {
-        employeeService.loadBookColumn(tbBook);
+        load_book_columns(tbBook);
     }
 
     // T sửa thành nếu có id thì tìm theo id nếu không có id tìm tất cả,
@@ -332,7 +392,7 @@ public class EmployeeController implements Initializable {
     // hiển thị dữ liệu bảng reader trong trang borrow
     @FXML
     private void loadReaderInfo(Integer id, TableView<BorrowCardModel> tbReader) {
-        employeeService.loadReaderInfo(id, tbReader);
+        load_reader_infos(id, tbReader);
     }
 
     //hiển thị dữ liệu bảng book trong trang borrow
@@ -368,17 +428,9 @@ public class EmployeeController implements Initializable {
             Integer id = selectedBorrowCard.getId();
             boolean rs = borrowCardService.createBorrowCard(id);
             if (rs) {
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Informaton");
-                alert.setHeaderText("Informaton");
-                alert.setContentText("Tạo phiếu mượn thành công");
-                alert.showAndWait();
+                MessageBoxUtils.AlertBox("INFORMATION", "Tạo thẻ thư viện thành công", AlertType.INFORMATION);
             } else {
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("ERROR");
-                alert.setHeaderText("ERROR");
-                alert.setContentText("Tạo phiếu mượn thất bại");
-                alert.showAndWait();
+                MessageBoxUtils.AlertBox("ERROR", "Tạo thẻ thư viện thất bại", AlertType.ERROR);
             }
         }
     }
@@ -432,11 +484,7 @@ public class EmployeeController implements Initializable {
                 loanSlipList = loanSlipService.findByCId(id);
                 this.statusBookTB.setItems(FXCollections.observableList(loanSlipList));
             } catch (NumberFormatException e) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Lỗi");
-                alert.setHeaderText("Error");
-                alert.setContentText("Bạn cần phải nhập số");
-                alert.showAndWait();
+                MessageBoxUtils.AlertBox("Error", "Bạn cần phải nhập số", AlertType.ERROR);
             }
         }
     }
@@ -454,11 +502,7 @@ public class EmployeeController implements Initializable {
                 loanSlipList = loanSlipService.findByBId(id);
                 this.statusBookTB.setItems(FXCollections.observableList(loanSlipList));
             } catch (NumberFormatException e) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Lỗi");
-                alert.setHeaderText("Error");
-                alert.setContentText("Bạn cần phải nhập số");
-                alert.showAndWait();
+                MessageBoxUtils.AlertBox("Error", "Bạn cần phải nhập số", AlertType.ERROR);
             }
         }
 
@@ -478,26 +522,14 @@ public class EmployeeController implements Initializable {
                     loanSlipList.add(loanSlip);
                     this.returnLoanslipTB.setItems(FXCollections.observableList(loanSlipList));
                 } else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Lỗi");
-                    alert.setHeaderText("Error");
-                    alert.setContentText("Không tìm thấy phiếu mượn");
-                    alert.showAndWait();
+                    MessageBoxUtils.AlertBox("Error", "Không tìm thấy phiếu mượn", AlertType.ERROR);
                 }
 
             } catch (NumberFormatException e) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Lỗi");
-                alert.setHeaderText("Error");
-                alert.setContentText("Bạn cần phải nhập số");
-                alert.showAndWait();
+                MessageBoxUtils.AlertBox("Error", "Bạn cần phải nhập số", AlertType.ERROR);
             }
         } else if ("".equals(strId)) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Lỗi");
-            alert.setHeaderText("Error");
-            alert.setContentText("Bạn chưa nhập id");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("Error", "Bạn chưa nhập id", AlertType.ERROR);
         }
     }
 
@@ -512,26 +544,14 @@ public class EmployeeController implements Initializable {
                 if (borrowCard != null) {
                     loadReaderInfo(id, tbReader);
                 } else if (borrowCard == null) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Lỗi");
-                    alert.setHeaderText("Error");
-                    alert.setContentText("Không tìm thấy khách hàng");
-                    alert.showAndWait();
+                    MessageBoxUtils.AlertBox("Error", "Không tìm thấy khách hàng", AlertType.ERROR);
                 }
 
             } catch (NumberFormatException e) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Lỗi");
-                alert.setHeaderText("Error");
-                alert.setContentText("Bạn cần phải nhập số");
-                alert.showAndWait();
+                MessageBoxUtils.AlertBox("Error", "Bạn cần phải nhập số", AlertType.ERROR);
             }
         } else if ("".equals(strId)) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Lỗi");
-            alert.setHeaderText("Error");
-            alert.setContentText("Bạn chưa nhập id");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("Error", "Bạn chưa nhập id", AlertType.ERROR);
         }
     }
 
@@ -546,33 +566,21 @@ public class EmployeeController implements Initializable {
                 if (borrowCard != null) {
                     loadReaderInfo(id, returnReaderTB);
                 } else if (borrowCard == null) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Lỗi");
-                    alert.setHeaderText("Error");
-                    alert.setContentText("Không tìm thấy khách hàng");
-                    alert.showAndWait();
+                    MessageBoxUtils.AlertBox("Error", "Không tìm thấy khách hàng", AlertType.ERROR);
                 }
 
             } catch (NumberFormatException e) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Lỗi");
-                alert.setHeaderText("Error");
-                alert.setContentText("Bạn cần phải nhập số");
-                alert.showAndWait();
+                MessageBoxUtils.AlertBox("Error", "Bạn chưa nhập số", AlertType.ERROR);
             }
         } else if ("".equals(strId)) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Lỗi");
-            alert.setHeaderText("Error");
-            alert.setContentText("Bạn chưa nhập id");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("Error", "Bạn chưa nhập id", AlertType.ERROR);
         }
     }
 
     //xử lý thêm cột bảng loanslip trong trang return
     @FXML
     private void loadLoanslipColumn(TableView<LoanSlipModel> returnLoanslipTB) {
-        loanSlipService.loadLoanslipColumn(returnLoanslipTB);
+        LoanSlipUtils.load_loanslip_columns(returnLoanslipTB);
     }
 
     // xử lý nút tìm kiếm book trong trang borrow
@@ -596,26 +604,14 @@ public class EmployeeController implements Initializable {
                     }
                 }
                 if (pass == 0) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Lỗi");
-                    alert.setHeaderText("Error");
-                    alert.setContentText("Không tìm thấy sách");
-                    alert.showAndWait();
+                    MessageBoxUtils.AlertBox("Error", "Không tìm thấy sách", AlertType.ERROR);
                 }
 
             } catch (NumberFormatException e) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Lỗi");
-                alert.setHeaderText("Error");
-                alert.setContentText("Bạn cần phải nhập số");
-                alert.showAndWait();
+                MessageBoxUtils.AlertBox("Error", "Bạn chưa nhập số", AlertType.ERROR);
             }
         } else if ("".equals(strId)) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Lỗi");
-            alert.setHeaderText("Error");
-            alert.setContentText("Bạn chưa nhập id");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("Error", "Bạn chưa nhập id", AlertType.ERROR);
         }
     }
 
@@ -625,11 +621,7 @@ public class EmployeeController implements Initializable {
 
         String sid = LSCustomerID.getText();
         if ("".equals(sid)) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Informatin");
-            alert.setHeaderText("Lỗi nhập");
-            alert.setContentText("Vui lòng nhập id vào");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("INFORMATION", "Vui lòng nhập id vào", AlertType.INFORMATION);
             LScheckReader = 0;
         } else {
             try {
@@ -642,11 +634,7 @@ public class EmployeeController implements Initializable {
                 }
 
             } catch (NumberFormatException e) {
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Lỗi nhập");
-                alert.setContentText("Vui lòng chỉ nhập số");
-                alert.showAndWait();
+                MessageBoxUtils.AlertBox("ERROR", "Vui lòng chỉ nhập số", AlertType.ERROR);
                 LScheckReader = 0;
             }
         }
@@ -661,11 +649,7 @@ public class EmployeeController implements Initializable {
         LSBookQuantity.setText("1");
 
         if ("".equals(sid)) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Informatin");
-            alert.setHeaderText("Lỗi nhập");
-            alert.setContentText("Vui lòng nhập id vào");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("INFORMATION", "Vui lòng nhập id vào", AlertType.INFORMATION);
             LScheckBook = 0;
         } else {
             try {
@@ -697,11 +681,7 @@ public class EmployeeController implements Initializable {
                     LScheckBook = 0;
                 }
             } catch (NumberFormatException e) {
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Lỗi nhập");
-                alert.setContentText("Vui lòng chỉ nhập số");
-                alert.showAndWait();
+                MessageBoxUtils.AlertBox("ERROR", "Vui lòng chỉ nhập số", AlertType.ERROR);
                 LScheckBook = 0;
             }
         }
@@ -738,34 +718,17 @@ public class EmployeeController implements Initializable {
                         LSbookList.add(newBook);
                     }
                     LSTBBookList.refresh();
-
-                    Alert alert = new Alert(AlertType.INFORMATION);
-                    alert.setTitle("Success");
-                    alert.setHeaderText("Thành công");
-                    alert.setContentText("Đã thêm sách vào danh sách phiếu mượn");
-                    alert.showAndWait();
+                    MessageBoxUtils.AlertBox("INFORMATION", "Đã thêm sách vào danh sách phiếu mượn", AlertType.INFORMATION);
                 } else {
                     countQuantity -= quantity;
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Lỗi");
-                    alert.setContentText("Tổng số lượng mượn đã lớn hơn 5");
-                    alert.showAndWait();
+                    MessageBoxUtils.AlertBox("ERROR", "Tổng số lượng mượn đã lớn hơn 5", AlertType.ERROR);
                 }
             } else {
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Lỗi");
-                alert.setContentText("Số lượng không được lớn hơn 5");
-                alert.showAndWait();
+                MessageBoxUtils.AlertBox("ERROR", "Số lượng không được lớn hơn 5", AlertType.ERROR);
             }
 
         } else {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Lỗi");
-            alert.setContentText("Vui lòng kiểm tra sách và người dùng trước khi thêm");
-            alert.showAndWait();
+            MessageBoxUtils.AlertBox("ERROR", "Vui lòng kiểm tra sách và người dùng trước khi thêm", AlertType.ERROR);
         }
         LScheckBook = 0;
     }
@@ -781,7 +744,6 @@ public class EmployeeController implements Initializable {
             this.itemList = itemList;
 
             this.deleteButton.setOnAction(event -> {
-                System.out.println("nut da duoc click");
                 S currentItem = (S) getTableRow().getItem();
                 if (currentItem != null) {
                     itemList.remove(currentItem);
@@ -975,7 +937,6 @@ public class EmployeeController implements Initializable {
         loadLSBookListColumn();
         loadReaderColumn(tbReader);
         loadReaderColumn(returnReaderTB);
-        loadBookColumn(tbBook);
         loadCate();
         loadSearchBookColumn(tb_SearchBook);
         loadSearchBookInfo(null, null);
@@ -984,4 +945,5 @@ public class EmployeeController implements Initializable {
         loadReaderStatusColumn();
 
     }
+
 }

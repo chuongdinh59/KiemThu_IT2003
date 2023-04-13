@@ -33,7 +33,5 @@ public interface BookService {
     
     public void deleteBook(Integer id);
 
-
-    public  BookModel getBook(TextField id,TextField title,TextField author,TextField description,TextField publicationYear,TextField publicationPlace,ComboBox<String> category,TextField locationn,TextField quantity,Map<Integer,String> catemap);
 }
     
