@@ -211,8 +211,6 @@ public class QuanTriSachController implements Initializable {
     @FXML
     private Button btnReport;
     
-    @FXML
-    private Button btnReport;
 
     @FXML
     private LineChart<String, Number> YearChart;
@@ -614,14 +612,7 @@ public class QuanTriSachController implements Initializable {
         });
     }
 
-//    @FXML
-//    public void initialize() {
-//        loanSlipService = new LoanSlipServiceImpl();
-//        reportBorrowModels = loanSlipService.getReportBorrow();
-//        reportReturnModels =  loanSlipService.getReportReturn();
-//        load();
-//        loadComboBox();
-//    }
+
     private Map<Integer, Integer> mapReportYearQuantiry(List<ReportModel> reportModels) {
         Map<Integer, Integer> result = new HashMap<>();
         for (ReportModel report : reportModels) {
@@ -698,71 +689,8 @@ public class QuanTriSachController implements Initializable {
         }
         return years;
     }
+
     
-    
-//    public void handlerExportBtn(ActionEvent event) {
-//        FileChooser fileChooser = new FileChooser();
-//        List<ReportModel> reports = loanSlipService.getReportBorrow();
-//        try {
-//            fileChooser.setTitle("Open File");
-//
-//            // Set the initial directory to open
-//            fileChooser.setInitialDirectory(new File("D:\\"));
-//
-//            // Add filters to the dialog to show only certain types of files
-//            fileChooser.getExtensionFilters().addAll(
-//                    new FileChooser.ExtensionFilter("Excel File", "*.xlsx")
-//            );
-//            File selectedFile = fileChooser.showSaveDialog(null);
-//            if (selectedFile != null) {
-//                // User selected a file, do something with it
-//                exportToExcel(reports, selectedFile.getAbsolutePath());
-//                MessageBoxUtils.AlertBox("Success", "Success", Alert.AlertType.INFORMATION);
-//            } else {
-//                System.out.println("No file selected");
-//            }
-//        } 
-//        catch (IOException | IllegalAccessException e) {
-//            System.err.println("Lỗi");
-//            e.printStackTrace();
-//        } 
-//    }
-    
-    public void handlerExportBtn(ActionEvent event) {
-    FileChooser fileChooser = new FileChooser();
-    List<ReportModel> borrowReports = loanSlipService.getReportBorrow();
-    List<ReportModel> returnReports = loanSlipService.getReportReturn();
-    try {
-        fileChooser.setTitle("Open File");
-
-        // Set the initial directory to open
-        fileChooser.setInitialDirectory(new File("D:\\"));
-
-        // Add filters to the dialog to show only certain types of files
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Excel File", "*.xlsx")
-        );
-        File selectedFile = fileChooser.showSaveDialog(null);
-        if (selectedFile != null) {
-            // User selected a file, do something with it
-            Workbook workbook = new XSSFWorkbook();
-            Sheet borrowSheet = workbook.createSheet("Borrow Report");
-            Sheet returnSheet = workbook.createSheet("Return Report");
-
-            // Populate the borrow sheet
-            int rownum = 0;
-            Row headerRow = borrowSheet.createRow(rownum++);
-            headerRow.createCell(0).setCellValue("Year");
-            headerRow.createCell(1).setCellValue("Quarter");
-            headerRow.createCell(2).setCellValue("Quantity");
-            for (ReportModel report : borrowReports) {
-                Row row = borrowSheet.createRow(rownum++);
-                row.createCell(0).setCellValue(report.getYear());
-                row.createCell(1).setCellValue(report.getQuarter());
-                row.createCell(2).setCellValue(report.getQuantity());
-            }
-
-
     public void handlerExportBtn(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         List<ReportModel> borrowReports = loanSlipService.getReportBorrow();
@@ -823,32 +751,6 @@ public class QuanTriSachController implements Initializable {
         }
     }
 
-            // Populate the return sheet
-            rownum = 0;
-            headerRow = returnSheet.createRow(rownum++);
-            headerRow.createCell(0).setCellValue("Year");
-            headerRow.createCell(1).setCellValue("Quarter");
-            headerRow.createCell(2).setCellValue("Quantity");
-            for (ReportModel report : returnReports) {
-                Row row = returnSheet.createRow(rownum++);
-                row.createCell(0).setCellValue(report.getYear());
-                row.createCell(1).setCellValue(report.getQuarter());
-                row.createCell(2).setCellValue(report.getQuantity());
-            }
-
-            FileOutputStream outputStream = new FileOutputStream(selectedFile);
-            workbook.write(outputStream);
-            workbook.close();
-            MessageBoxUtils.AlertBox("Success", "Success", Alert.AlertType.INFORMATION);
-        } else {
-            System.out.println("No file selected");
-        }
-    } 
-    catch (IOException e) {
-        System.err.println("Lỗi");
-        e.printStackTrace();
-    } 
-}
 
 
     public void exportToExcel(List<?> list, String filePath) throws IOException, IllegalAccessException {
