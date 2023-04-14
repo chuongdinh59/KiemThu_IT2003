@@ -44,7 +44,7 @@ public class LoanSlipUtils {
             }
         });
 
-        TableColumn colOnline = new TableColumn("Online");
+        TableColumn colOnline = new TableColumn("Status");
         colOnline.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LoanSlipModel, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<LoanSlipModel, String> p) {

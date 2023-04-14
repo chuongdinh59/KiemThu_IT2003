@@ -47,6 +47,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -160,6 +162,7 @@ public class CustomerController implements Initializable {
     private ReaderService readerService = new ReaderServiceImpl();
     private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
     private ReaderRepository readerRepository = new ReaderRepositoryImpl();
+    private int totalQuan = 0;
 
 //    Hàm
     public void load_searchBook_column(TableView<BookModel> TBRSearchBook, List<BookModel> bookListCart) {
@@ -198,17 +201,18 @@ public class CustomerController implements Initializable {
                             if (Objects.equals(b.getId(), book.getId())) {
                                 b.setQuantity(b.getQuantity() + 1);
                                 rs = true;
+                                totalQuan++;
+                                countQuantityOnCart();
 
                             }
                         }
                         if (rs == false) {
                             book.setQuantity(1);
                             bookListCart.add(book);
-                            System.out.println(" NAHN ROI NE1");
+                            totalQuan++;
+                            countQuantityOnCart();
 
                         }
-                        System.out.println(" NAHN ROI NE");
-
                     });
                     setGraphic(addButton);
                     setText(null);
@@ -241,10 +245,19 @@ public class CustomerController implements Initializable {
 
             {
                 deleteButton.setOnAction(event -> {
-
                     BookModel book = getTableView().getItems().get(getIndex());
-                    bookListCart.remove(book);
-                    tb_Cart.refresh();
+                    int currentQuantity = book.getQuantity();
+                    if (currentQuantity > 0) {
+                        book.setQuantity(currentQuantity - 1);
+                        colQuantity.getTableView().refresh();
+                        totalQuan--;
+                        countQuantityOnCart();
+
+                    }
+                    if (book.getQuantity() == 0) {
+                        bookListCart.remove(book);
+
+                    }
                 });
             }
 
@@ -270,18 +283,17 @@ public class CustomerController implements Initializable {
         ReaderModel rowData = infoCustomerTB.getSelectionModel().getSelectedItem();
         if (rowData != null) {
             infomation_name.setText(rowData.getFullname());
-//            String gender = rowData.getGender();
-            if (rowData.getGender() == null) {
-                infomation_gender.setPromptText("Chọn giới tính");
-            } else if (rowData.getGender().equals("Nam") || rowData.getGender().equals("Nữ")) {
-                infomation_gender.setValue(rowData.getGender());
+            if (null == rowData.getGender() || "".equals(rowData.getGender())) {
+                infomation_gender.setValue("Chọn giới tính");
             } else {
-                infomation_gender.setPromptText("Chọn giới tính");
+                infomation_gender.setValue(rowData.getGender());
             }
             if (rowData.getDateOfBirth() != null) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate birthDay = LocalDate.parse(rowData.getDateOfBirth(), formatter);
                 infomation_birthDay.setValue(birthDay);
+            } else {
+                infomation_birthDay.setValue(null);
             }
         }
     }
@@ -301,6 +313,9 @@ public class CustomerController implements Initializable {
         loadReaderColumn(infoCustomerTB);
         loadLoanslipColumn(infoLoanSlipTB);
         loadGender();
+        countQuantityOnCart();
+        searchBook_Btn.requestFocus();
+        searchBook_Btn.fire();
     }
 
     private Map<Integer, String> categoriesMap = new HashMap<>();
@@ -313,17 +328,16 @@ public class CustomerController implements Initializable {
         this.readerId = id;
     }
 
-    @FXML
-    public void checkReader() {
-        int check = readerService.checkReader(readerId);
-        if (check == 0) {
-            LScheckReader = 0;
-        } else {
-            LScheckReader = 1;
-        }
-
-    }
-
+//    @FXML
+//    public void checkReader() {
+//        int check = readerService.checkReader(readerId);
+//        if (check == 0) {
+//            LScheckReader = 0;
+//        } else {
+//            LScheckReader = 1;
+//        }
+//
+//    }
     //Hiển thị combobox gender
     @FXML
     private void loadGender() {
@@ -350,13 +364,19 @@ public class CustomerController implements Initializable {
         }
     }
 
-    private int totalQuantity = 0;
+    @FXML
+    public void countQuantityOnCart() {
+        Cart_Btn.setText("Cart  " + totalQuan);
+    }
 
     @FXML
     public void createOnlineBook() {
-        if (LScheckReader == 0) {
-            MessageBoxUtils.AlertBox("Error", "Vui lòng nhấn nút kiểm tra trước", AlertType.ERROR);
+        int totalQuantity = 0;
+        int check = readerService.checkReader(readerId);
+        if (check == 0) {
+            LScheckReader = 0;
         } else {
+            LScheckReader = 1;
             for (BookModel book : bookListCart) {
                 totalQuantity += book.getQuantity();
             }
@@ -402,6 +422,9 @@ public class CustomerController implements Initializable {
     private void clearCart() {
         bookListCart.clear();
         tb_Cart.refresh();
+        totalQuan = 0;
+        countQuantityOnCart();
+
     }
 
     @FXML
@@ -433,6 +456,14 @@ public class CustomerController implements Initializable {
         this.TBRSearchBook.setItems(FXCollections.observableList(searchBookList));
     }
 
+//    Bắt sự kiện nhấn enter tìm kiếm
+    @FXML
+    private void onEnterPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            loadRSearch();
+        }
+    }
+
     @FXML
     private void loadRSearch() {
         String strTitle = RsearchBook_name.getText();
@@ -451,28 +482,46 @@ public class CustomerController implements Initializable {
     }
 
     @FXML
-    public void switchForm(ActionEvent event
-    ) {
+    public void switchForm(ActionEvent event) {
+        String style = "-fx-background-color: #93773e; -fx-text-fill: #fff; -fx-font-weight: bold; -fx-font-style: italic;";
         if (event.getSource() == information_Btn) {
             loadReaderInfo();
             loadLoanSlipInfo();
             information_viewForm.setVisible(true);
-            searchBook_viewForm.setVisible(false);
-            cart_viewForm.setVisible(false);
-
+            information_Btn.setStyle(style);
+            AnchorPane[] allForms = {searchBook_viewForm, cart_viewForm};
+            Button[] allButtons = {searchBook_Btn, Cart_Btn};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
+            for (Button allButton : allButtons) {
+                allButton.setStyle("");
+            }
         }
         if (event.getSource() == searchBook_Btn) {
-            information_viewForm.setVisible(false);
             searchBook_viewForm.setVisible(true);
-            cart_viewForm.setVisible(false);
-
+            searchBook_Btn.setStyle(style);
+            AnchorPane[] allForms = {information_viewForm, cart_viewForm};
+            Button[] allButtons = {information_Btn, Cart_Btn};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
+            for (Button allButton : allButtons) {
+                allButton.setStyle("");
+            }
         }
         if (event.getSource() == Cart_Btn) {
             cart_viewForm.setVisible(true);
-            information_viewForm.setVisible(false);
-            searchBook_viewForm.setVisible(false);
             loadInfoCart(bookListCart, tb_Cart, null);
-
+            Cart_Btn.setStyle(style);
+            AnchorPane[] allForms = {information_viewForm, searchBook_viewForm};
+            Button[] allButtons = {information_Btn, searchBook_Btn};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
+            for (Button allButton : allButtons) {
+                allButton.setStyle("");
+            }
         }
     }
 

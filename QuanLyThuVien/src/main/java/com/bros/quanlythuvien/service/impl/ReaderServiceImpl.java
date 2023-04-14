@@ -40,30 +40,17 @@ public class ReaderServiceImpl implements ReaderService {
         }
         return resultsBorrowCardModel;
     }
+    
+    @Override
+    public List<ReaderModel> findReaderNotHaveBorrowCard() {
+        List<ReaderEntity> readerList = readerRepository.findReaderNotHaveBorrowCard();
+        List<ReaderModel> resultsReaderModel = new ArrayList<>();
+        for (ReaderEntity entity : readerList) {
+            resultsReaderModel.add(readerConverter.entityToModel(entity, ReaderModel.class));
+        }
+        return resultsReaderModel;
+    }
 
-//    @Override
-//    public void loadReaderColumn(TableView<ReaderModel> infoCustomerTB) {
-//        TableColumn colId = new TableColumn("ReaderId");
-//        colId.setCellValueFactory(new PropertyValueFactory("id"));
-//        TableColumn colName = new TableColumn("Fullname");
-//        colName.setCellValueFactory(new PropertyValueFactory("fullname"));
-//        TableColumn colGender = new TableColumn("Gender");
-//        colGender.setCellValueFactory(new PropertyValueFactory("gender"));
-//        TableColumn colDateOfBirth = new TableColumn("BirthDay");
-//        colDateOfBirth.setCellValueFactory(new PropertyValueFactory("dateOfBirth"));
-//
-//        infoCustomerTB.getColumns().addAll(colId, colName, colGender, colDateOfBirth);
-//    }
-//
-//    @Override
-//    public void loadInfoCart(List<BookModel> bookListCart, TableView<BookModel> tb_Cart, Integer page) {
-//        tb_Cart.setItems(FXCollections.observableList(bookListCart));
-//        tb_Cart.refresh();
-//    }
-//    @Override
-//    public void loadCate(ComboBox<String> RsearchBook_category, Map<Integer, String> categoriesMap) {
-//        readerRepository.loadCate(RsearchBook_category, categoriesMap);
-//    }
     @Override
     public int checkReader(Integer id) {
         switch (readerRepository.checkReader(id)) {
@@ -80,7 +67,7 @@ public class ReaderServiceImpl implements ReaderService {
                 }
                 return 1;
             case 2: {
-                MessageBoxUtils.AlertBox("ERROR", "Người dùng không tồn tại", Alert.AlertType.ERROR);
+                MessageBoxUtils.AlertBox("ERROR", "Người dùng chưa tạo thẻ thư viện", Alert.AlertType.ERROR);
                 return 0;
             }
             case 3: {

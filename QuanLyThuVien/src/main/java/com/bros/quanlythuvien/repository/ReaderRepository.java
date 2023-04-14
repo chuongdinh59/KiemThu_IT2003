@@ -22,7 +22,6 @@ public interface ReaderRepository extends CommonRepository<ReaderEntity> {
 
     public List<ReaderEntity> findAll(Integer page);
 
-//    public void loadCate(ComboBox<String> RsearchBook_category, Map<Integer, String> categoriesMap);
     public Map<Integer, String> loadCate(Map<Integer, String> categoriesMap);
 
     public int checkReader(Integer id);
@@ -32,5 +31,9 @@ public interface ReaderRepository extends CommonRepository<ReaderEntity> {
     public int register(String register_username, String register_password, String register_fullname, String register_email);
 
     public boolean updateReader(ReaderModel reader);
+
+    public List<ReaderEntity> findReaderNotHaveBorrowCard();
+
+    public List<Integer> findreaderId();
 
 }

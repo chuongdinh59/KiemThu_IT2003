@@ -254,7 +254,7 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
                     PreparedStatement statement = null;
                     ResultSet result = null;
                     try {
-                        String sql = "INSERT INTO librarymanagement.loanslip (CustomerID, BookID, BookName, BookAuthor, BorrowedDate, ExpirationDate,Quantity,isReturned,isOnline) VALUES (?, ?, ?, ?, ?, ?,?,0,?);";
+                        String sql = "INSERT INTO loanslip (CustomerID, BookID, BookName, BookAuthor, BorrowedDate, ExpirationDate,Quantity,isReturned,isOnline) VALUES (?, ?, ?, ?, ?, ?,?,0,?);";
                         statement = connect.prepareStatement(sql);
                         statement.setString(1, LSCustomerID);
                         statement.setInt(2, book.getId());
@@ -375,7 +375,7 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
         PreparedStatement statement = null;
         ResultSet result = null;
         try {
-            String sql = "SELECT * FROM librarymanagement.books WHERE id = ?;";
+            String sql = "SELECT * FROM books WHERE id = ?;";
             statement = connect.prepareStatement(sql);
             statement.setInt(1, id);
 

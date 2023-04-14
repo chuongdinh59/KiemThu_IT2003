@@ -146,7 +146,7 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="searchBook_viewForm" layoutX="273.0" layoutY="134.0" prefHeight="554.4" prefWidth="898.4" stylesheets="@style/CustomerStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="searchBook_viewForm" layoutX="273.0" layoutY="134.0" onKeyPressed="#onEnterPressed" prefHeight="554.4" prefWidth="898.4" stylesheets="@style/CustomerStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="10.0" layoutY="166.0" prefHeight="381.0" prefWidth="880.0">
                                  <children>
@@ -218,7 +218,6 @@
                               </TableView>
                               <Button fx:id="submitCart_Btn" layoutX="819.0" layoutY="501.0" mnemonicParsing="false" onMouseClicked="#createOnlineBook" styleClass="updateBtn" stylesheets="@style/QuanTriSachStyle.css" text="Submit" />
                               <Button fx:id="clear_Btn" layoutX="739.0" layoutY="501.0" mnemonicParsing="false" onMouseClicked="#clearCart" styleClass="clearBtn" stylesheets="@style/QuanTriSachStyle.css" text="Clear" />
-                              <Button fx:id="submitCart_Btn1" layoutX="819.0" layoutY="43.0" mnemonicParsing="false" onMouseClicked="#checkReader" styleClass="updateBtn" stylesheets="@style/QuanTriSachStyle.css" text="Check" />
                            </children>
                         </AnchorPane>
                      </children>

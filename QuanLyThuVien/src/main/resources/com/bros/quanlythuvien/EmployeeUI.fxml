@@ -104,7 +104,7 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="searchBook_viewForm" layoutX="273.0" layoutY="134.0" prefHeight="554.4" prefWidth="898.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="searchBook_viewForm" layoutX="273.0" layoutY="134.0" onKeyPressed="#onEnterPressed" prefHeight="554.4" prefWidth="898.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="10.0" layoutY="166.0" prefHeight="381.0" prefWidth="880.0">
                                  <children>
@@ -132,24 +132,24 @@
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
+                                    <TextField fx:id="searchBook_author" layoutX="496.0" layoutY="20.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/EmployeeStyle.css" />
                                     <Label layoutX="31.0" layoutY="85.0" text="Category: ">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="searchBook_author" layoutX="496.0" layoutY="20.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/EmployeeStyle.css" />
+                                    <ComboBox fx:id="searchBook_category" layoutX="127.0" layoutY="80.0" prefHeight="26.0" prefWidth="186.0" />
                                     <Label layoutX="375.0" layoutY="85.0" text="Published Year: ">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
+                                    <TextField fx:id="searchBook_publishedYear" layoutX="496.0" layoutY="79.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/EmployeeStyle.css" />
                                     <Button layoutX="732.0" layoutY="70.0" mnemonicParsing="false" onMouseClicked="#loadRSearch" prefHeight="45.0" prefWidth="114.0" styleClass="updateBtn" stylesheets="@style/EmployeeStyle.css" text="Search">
                                        <graphic>
                                           <FontAwesomeIconView fill="#918989" glyphName="SEARCH" size="1.5EM" />
                                        </graphic>
                                     </Button>
-                                    <ComboBox fx:id="searchBook_category" layoutX="127.0" layoutY="80.0" prefHeight="26.0" prefWidth="186.0" />
-                                    <TextField fx:id="searchBook_publishedYear" layoutX="496.0" layoutY="79.0" prefHeight="27.0" prefWidth="183.0" styleClass="textField" stylesheets="@style/EmployeeStyle.css" />
                                  </children>
                                  <styleClass>
                                     <String fx:value="whiteBg" />
@@ -222,11 +222,6 @@
                                        </columnResizePolicy>
                                     </TableView>
                                     <Button fx:id="createLoanslipBtn" layoutX="761.0" layoutY="255.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="26.0" prefWidth="118.0" styleClass="deleteBtn" text="Create loan slip">
-                                       <font>
-                                          <Font name="Arial" size="14.0" />
-                                       </font>
-                                    </Button>
-                                    <Button layoutX="676.0" layoutY="255.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="74.0" styleClass="clearBtn" text="Error">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>

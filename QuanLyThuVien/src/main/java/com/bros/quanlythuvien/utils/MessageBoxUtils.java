@@ -10,6 +10,7 @@ package com.bros.quanlythuvien.utils;
  */
 import javafx.scene.control.Alert;
 
+
 public class MessageBoxUtils {
 
     public static Alert AlertBox(String title, String content, Alert.AlertType type) {

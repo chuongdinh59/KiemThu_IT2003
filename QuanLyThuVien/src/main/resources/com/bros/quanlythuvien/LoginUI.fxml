@@ -59,9 +59,9 @@
                      </font>
                   </Label>
                   <TextField fx:id="register_username" layoutX="53.0" layoutY="126.0" onAction="#register" prefHeight="30.0" prefWidth="220.0" promptText="User Name" styleClass="textField" stylesheets="@style/LoginStyle.css" />
+                  <PasswordField fx:id="register_password" layoutX="53.0" layoutY="180.0" onAction="#register" prefHeight="30.0" prefWidth="220.0" promptText="Password" styleClass="textField" stylesheets="@style/LoginStyle.css" />
                   <TextField fx:id="register_fullname" layoutX="53.0" layoutY="235.0" onAction="#register" prefHeight="30.0" prefWidth="220.0" promptText="Full Name" styleClass="textField" stylesheets="@style/LoginStyle.css" />
                   <TextField fx:id="register_email" layoutX="53.0" layoutY="288.0" onAction="#register" prefHeight="30.0" prefWidth="220.0" promptText="Email" styleClass="textField" stylesheets="@style/LoginStyle.css" />
-                  <PasswordField fx:id="register_password" layoutX="53.0" layoutY="180.0" onAction="#register" prefHeight="30.0" prefWidth="220.0" promptText="Password" styleClass="textField" stylesheets="@style/LoginStyle.css" />
                   <Button fx:id="registerBtn" layoutX="53.0" layoutY="329.0" mnemonicParsing="false" onAction="#register" prefHeight="40.0" prefWidth="220.0" styleClass="loginBtn" stylesheets="@style/LoginStyle.css" text="Register" />
                   <Button fx:id="BacktoLoginBtn" layoutX="189.0" layoutY="386.0" mnemonicParsing="false" onAction="#switchForm" styleClass="BacktoLoginBtn" stylesheets="@style/LoginStyle.css" text="Back to Login">
                      <font>

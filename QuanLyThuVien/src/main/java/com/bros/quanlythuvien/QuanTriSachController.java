@@ -17,8 +17,13 @@ import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
 import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
 import com.bros.quanlythuvien.utils.MessageBoxUtils;
+import java.io.File;
+import java.io.FileOutputStream;
+
 import com.bros.quanlythuvien.utils.ReaderUtils;
+
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -41,6 +46,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -54,8 +60,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -196,6 +209,9 @@ public class QuanTriSachController implements Initializable {
     private ComboBox<String> ComboBoxYear;
 
     @FXML
+    private Button btnReport;
+
+    @FXML
     private LineChart<String, Number> YearChart;
 
     BookService bookService;
@@ -278,18 +294,17 @@ public class QuanTriSachController implements Initializable {
         if (rowData != null) {
             customer_id.setText(rowData.getId().toString());
             customer_name.setText(rowData.getFullname());
-//            String gender = rowData.getGender();
-            if (rowData.getGender() == null) {
-                customer_gender.setPromptText("Chọn giới tính");
-            } else if (rowData.getGender().equals("Nam") || rowData.getGender().equals("Nữ")) {
-                customer_gender.setValue(rowData.getGender());
+            if (null == rowData.getGender()||"".equals(rowData.getGender()) ) {
+                customer_gender.setValue("Chọn giới tính");
             } else {
-                customer_gender.setPromptText("Chọn giới tính");
+                customer_gender.setValue(rowData.getGender());
             }
             if (rowData.getDateOfBirth() != null) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate birthDay = LocalDate.parse(rowData.getDateOfBirth(), formatter);
                 customer_birthDay.setValue(birthDay);
+            } else {
+                customer_birthDay.setValue(null);
             }
         }
     }
@@ -319,39 +334,57 @@ public class QuanTriSachController implements Initializable {
 
     @FXML
     public void switchForm(ActionEvent event) {
+        String style = "-fx-background-color: #93773e; -fx-text-fill: #fff; -fx-font-weight: bold; -fx-font-style: italic;";
         if (event.getSource() == availableBooks_Btn) {
             availableBooks_viewForm.setVisible(true);
-            customer_viewForm.setVisible(false);
-            report_viewForm.setVisible(false);
-
+            availableBooks_Btn.setStyle(style);
+            AnchorPane[] allForms = {customer_viewForm, report_viewForm, add_viewForm};
+            Button[] allButtons = {customer_btn, report_Btn};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
+            for (Button allButton : allButtons) {
+                allButton.setStyle("");
+            }
         }
         if (event.getSource() == customer_btn) {
             loadReaderInfo();
-            availableBooks_viewForm.setVisible(false);
             customer_viewForm.setVisible(true);
-            report_viewForm.setVisible(false);
-            add_viewForm.setVisible(false);
-
+            customer_btn.setStyle(style);
+            AnchorPane[] allForms = {availableBooks_viewForm, report_viewForm, add_viewForm};
+            Button[] allButtons = {availableBooks_Btn, report_Btn};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
+            for (Button allButton : allButtons) {
+                allButton.setStyle("");
+            }
         }
         if (event.getSource() == availableBooks_addBtn) {
-            availableBooks_viewForm.setVisible(false);
             add_viewForm.setVisible(true);
-            report_viewForm.setVisible(false);
-            customer_viewForm.setVisible(false);
-
+            AnchorPane[] allForms = {customer_viewForm, report_viewForm, availableBooks_viewForm};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
         }
         if (event.getSource() == addBook_exitBtn) {
             availableBooks_viewForm.setVisible(true);
-            report_viewForm.setVisible(false);
-            customer_viewForm.setVisible(false);
-
-            add_viewForm.setVisible(false);
+            AnchorPane[] allForms = {customer_viewForm, report_viewForm, add_viewForm};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
         }
         if (event.getSource() == report_Btn) {
             report_viewForm.setVisible(true);
-            availableBooks_viewForm.setVisible(false);
-            add_viewForm.setVisible(false);
-            customer_viewForm.setVisible(false);
+            report_Btn.setStyle(style);
+            AnchorPane[] allForms = {availableBooks_viewForm, customer_viewForm, add_viewForm};
+            Button[] allButtons = {availableBooks_Btn, customer_btn};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
+            for (Button allButton : allButtons) {
+                allButton.setStyle("");
+            }
         }
     }
 
@@ -369,7 +402,8 @@ public class QuanTriSachController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.bookService = new BookServiceImpl();
-//        this.categoryService = new CategoryServiceImpl();
+        availableBooks_Btn.requestFocus();
+        availableBooks_Btn.fire();
         loadGender();
         loadReaderColumn();
         loadBookColumn();
@@ -660,6 +694,124 @@ public class QuanTriSachController implements Initializable {
             years.add(report.getYear().toString());
         }
         return years;
+    }
+
+//    public void handlerExportBtn(ActionEvent event) {
+//        FileChooser fileChooser = new FileChooser();
+//        List<ReportModel> reports = loanSlipService.getReportBorrow();
+//        try {
+//            fileChooser.setTitle("Open File");
+//
+//            // Set the initial directory to open
+//            fileChooser.setInitialDirectory(new File("D:\\"));
+//
+//            // Add filters to the dialog to show only certain types of files
+//            fileChooser.getExtensionFilters().addAll(
+//                    new FileChooser.ExtensionFilter("Excel File", "*.xlsx")
+//            );
+//            File selectedFile = fileChooser.showSaveDialog(null);
+//            if (selectedFile != null) {
+//                // User selected a file, do something with it
+//                exportToExcel(reports, selectedFile.getAbsolutePath());
+//                MessageBoxUtils.AlertBox("Success", "Success", Alert.AlertType.INFORMATION);
+//            } else {
+//                System.out.println("No file selected");
+//            }
+//        } 
+//        catch (IOException | IllegalAccessException e) {
+//            System.err.println("Lỗi");
+//            e.printStackTrace();
+//        } 
+//    }
+    public void handlerExportBtn(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        List<ReportModel> borrowReports = loanSlipService.getReportBorrow();
+        List<ReportModel> returnReports = loanSlipService.getReportReturn();
+        try {
+            fileChooser.setTitle("Open File");
+
+            // Set the initial directory to open
+            fileChooser.setInitialDirectory(new File("D:\\"));
+
+            // Add filters to the dialog to show only certain types of files
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Excel File", "*.xlsx")
+            );
+            File selectedFile = fileChooser.showSaveDialog(null);
+            if (selectedFile != null) {
+                // User selected a file, do something with it
+                Workbook workbook = new XSSFWorkbook();
+                Sheet borrowSheet = workbook.createSheet("Borrow Report");
+                Sheet returnSheet = workbook.createSheet("Return Report");
+
+                // Populate the borrow sheet
+                int rownum = 0;
+                Row headerRow = borrowSheet.createRow(rownum++);
+                headerRow.createCell(0).setCellValue("Year");
+                headerRow.createCell(1).setCellValue("Quarter");
+                headerRow.createCell(2).setCellValue("Quantity");
+                for (ReportModel report : borrowReports) {
+                    Row row = borrowSheet.createRow(rownum++);
+                    row.createCell(0).setCellValue(report.getYear());
+                    row.createCell(1).setCellValue(report.getQuarter());
+                    row.createCell(2).setCellValue(report.getQuantity());
+                }
+
+                // Populate the return sheet
+                rownum = 0;
+                headerRow = returnSheet.createRow(rownum++);
+                headerRow.createCell(0).setCellValue("Year");
+                headerRow.createCell(1).setCellValue("Quarter");
+                headerRow.createCell(2).setCellValue("Quantity");
+                for (ReportModel report : returnReports) {
+                    Row row = returnSheet.createRow(rownum++);
+                    row.createCell(0).setCellValue(report.getYear());
+                    row.createCell(1).setCellValue(report.getQuarter());
+                    row.createCell(2).setCellValue(report.getQuantity());
+                }
+
+                FileOutputStream outputStream = new FileOutputStream(selectedFile);
+                workbook.write(outputStream);
+                workbook.close();
+                MessageBoxUtils.AlertBox("Success", "Success", Alert.AlertType.INFORMATION);
+            } else {
+                System.out.println("No file selected");
+            }
+        } catch (IOException e) {
+            System.err.println("Lỗi");
+            e.printStackTrace();
+        }
+    }
+
+    public void exportToExcel(List<?> list, String filePath) throws IOException, IllegalAccessException {
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Sheet1");
+            // Create header row
+            Row headerRow = sheet.createRow(0);
+            Field[] fields = list.get(0).getClass().getDeclaredFields();
+            int columnIndex = 0;
+            for (Field field : fields) {
+                field.setAccessible(true);
+                Cell cell = headerRow.createCell(columnIndex++);
+                cell.setCellValue(field.getName());
+            }   // Write data rows
+            int rowIndex = 1;
+            for (Object obj : list) {
+                Row dataRow = sheet.createRow(rowIndex++);
+                columnIndex = 0;
+                for (Field field : fields) {
+                    field.setAccessible(true);
+                    Cell cell = dataRow.createCell(columnIndex++);
+                    Object value = field.get(obj);
+                    if (value != null) {
+                        cell.setCellValue(value.toString());
+                    }
+                }
+            }   // Write to file
+            FileOutputStream outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+            outputStream.close();
+        }
     }
 
 }
