@@ -77,7 +77,6 @@ public class CommonRepositoryImpl<T> implements CommonRepository<T> {
         return null;
     }
     
-    @Override
     public T findByRId(Integer id) {
         String tableName = getTableName();
         if (tableName == null) {

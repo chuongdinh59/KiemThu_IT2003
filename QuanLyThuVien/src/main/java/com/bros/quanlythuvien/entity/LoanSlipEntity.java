@@ -34,7 +34,7 @@ public class LoanSlipEntity {
     }
 
    
-
+    
     public Integer getId() {
         return id;
     }

@@ -22,6 +22,7 @@ import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
 import com.bros.quanlythuvien.utils.LoanSlipUtils;
 import com.bros.quanlythuvien.utils.MessageBoxUtils;
 import com.bros.quanlythuvien.utils.ReaderUtils;
+import com.bros.quanlythuvien.utils.ValidateUtils;
 import java.io.IOException;
 import java.net.URL;
 import java.text.Normalizer.Form;
@@ -486,40 +487,45 @@ public class EmployeeController implements Initializable {
     }
 
     //xử lý nút tìm kiếm reader trang status
-    @FXML
-    private void loadStatusReader() {
-        List<LoanSlipModel> loanSlipList = new ArrayList<>();
-        if ("".equals(statusReaderTF.getText())) {
-            loadLoanslipInfo(statusBookTB);
-
-        } else {
-            try {
-                Integer id = Integer.valueOf(statusReaderTF.getText());
-                loanSlipList = loanSlipService.findByCId(id);
-                this.statusBookTB.setItems(FXCollections.observableList(loanSlipList));
-            } catch (NumberFormatException e) {
-                MessageBoxUtils.AlertBox("Error", "Bạn cần phải nhập số", AlertType.ERROR);
-            }
-        }
-    }
+//    @FXML
+//    private void loadStatusReader() {
+//        List<LoanSlipModel> loanSlipList = new ArrayList<>();
+//        if ("".equals(statusReaderTF.getText())) {
+//            loadLoanslipInfo(statusBookTB);
+//
+//        } else {
+//            try {
+//                Integer id = Integer.valueOf(statusReaderTF.getText());
+//                loanSlipList = loanSlipService.findByCId(id);
+//                this.statusBookTB.setItems(FXCollections.observableList(loanSlipList));
+//            } catch (NumberFormatException e) {
+//                MessageBoxUtils.AlertBox("Error", "Bạn cần phải nhập số", AlertType.ERROR);
+//            }
+//        }
+//    }
 
     //xử lý nút tìm kiếm book trang status
     @FXML
     private void loadStatusBook() {
         List<LoanSlipModel> loanSlipList = new ArrayList<>();
-        if ("".equals(statusBookTF.getText())) {
+        if ("".equals(statusBookTF.getText()) && "".equals(statusReaderTF.getText())) {
             loadLoanslipInfo(statusBookTB);
-
         } else {
             try {
-                Integer id = Integer.valueOf(statusBookTF.getText());
-                loanSlipList = loanSlipService.findByBId(id);
+                Integer bookID = null;
+                Integer readerID = null;
+                if (ValidateUtils.isNotBlank(statusBookTF.getText())){
+                        bookID = Integer.parseInt(statusBookTF.getText());
+                }
+                if (ValidateUtils.isNotBlank(statusReaderTF.getText())){
+                        readerID = Integer.parseInt(statusReaderTF.getText());
+                }
+                loanSlipList = loanSlipService.findByBookIDAndReaderID(bookID, readerID);
                 this.statusBookTB.setItems(FXCollections.observableList(loanSlipList));
             } catch (NumberFormatException e) {
                 MessageBoxUtils.AlertBox("Error", "Bạn cần phải nhập số", AlertType.ERROR);
             }
         }
-
     }
 
     //Xử lý nút tìm kiếm loadslip trong trang return

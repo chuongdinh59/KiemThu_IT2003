@@ -5,6 +5,7 @@
 package com.bros.quanlythuvien.repository.impl;
 
 import com.bros.quanlythuvien.entity.LoanSlipEntity;
+import com.bros.quanlythuvien.mapper.ResultSetMapper;
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.LoanSlipModel;
 import com.bros.quanlythuvien.model.ReportModel;
@@ -23,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Alert;
 import com.bros.quanlythuvien.repository.LoanSlipRepository;
+import com.bros.quanlythuvien.utils.ConnectionUtils;
 import com.bros.quanlythuvien.utils.MessageBoxUtils;
 
 /**
@@ -505,6 +507,49 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
             e.printStackTrace();
         }
         return reports;
+    }
+
+    @Override
+    public List<LoanSlipEntity> findByBookIDAndReaderID(Integer bookID, Integer readerID) {
+        List<LoanSlipEntity> result = new ArrayList<>();
+        try (Connection conn = getConnection()) {
+            StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM loanslip WHERE 1 = 1");
+            if (bookID != null) {
+                sqlBuilder.append(" AND BookID = ?");
+            }
+            if (readerID != null) {
+                sqlBuilder.append(" AND CustomerID = ?");
+            }
+            try (PreparedStatement ps = conn.prepareStatement(sqlBuilder.toString())) {
+                int parameterIndex = 1;
+                if (bookID != null) {
+                    ps.setInt(parameterIndex++, bookID);
+                }
+                if (readerID != null) {
+                    ps.setInt(parameterIndex++, readerID);
+                }
+                System.err.println(sqlBuilder.toString());
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        LoanSlipEntity loanSlip = new LoanSlipEntity();
+                        loanSlip.setId(rs.getInt("id"));
+                        loanSlip.setCustomerID(rs.getInt("CustomerID"));
+                        loanSlip.setBookID(rs.getInt("BookID"));
+                        loanSlip.setBookName(rs.getString("BookName"));
+                        loanSlip.setBookAuthor(rs.getString("BookAuthor"));
+                        loanSlip.setBorrowedDate(rs.getDate("BorrowedDate"));
+                        loanSlip.setExpirationDate(rs.getDate("ExpirationDate"));
+                        loanSlip.setQuantity(rs.getInt("Quantity"));
+                        loanSlip.setIsReturned(rs.getInt("isReturned"));
+                        loanSlip.setIsOnline(rs.getInt("isOnline"));
+                        result.add(loanSlip);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
 }

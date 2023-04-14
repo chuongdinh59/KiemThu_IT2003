@@ -183,7 +183,7 @@
                                     <String fx:value="shadow" />
                                  </styleClass>
                                  <children>
-                                    <TextField fx:id="availableBooks_search" layoutX="14.0" layoutY="12.0" prefHeight="30.0" prefWidth="263.0" promptText="Search" styleClass="search" stylesheets="@style/QuanTriSachStyle.css" />
+                                    <TextField fx:id="availableBooks_search" layoutX="14.0" layoutY="12.0" onKeyPressed="#handleSeachInAvailableBooks" onKeyTyped="#handleSeachInAvailableBooks" prefHeight="30.0" prefWidth="263.0" promptText="Search" styleClass="search" stylesheets="@style/QuanTriSachStyle.css" />
                                     <FontAwesomeIconView fill="#969696" glyphName="SEARCH" layoutX="17.0" layoutY="33.0" size="1.5EM" />
                                     <TableView fx:id="tbBook" layoutX="9.0" layoutY="74.0" onMouseClicked="#TBInfor" prefHeight="492.0" prefWidth="563.0" styleClass="my-tableview" stylesheets="@style/QuanTriSachStyle.css">
                                        <columnResizePolicy>

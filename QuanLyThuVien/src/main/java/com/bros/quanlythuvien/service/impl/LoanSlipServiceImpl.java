@@ -29,14 +29,21 @@ public class LoanSlipServiceImpl implements LoanSlipService {
     @Override
     public List<LoanSlipModel> findByCId(Integer id) {
         List<LoanSlipEntity> loanslipList = loanSlipRepository.findByCId(id);
-
         List<LoanSlipModel> resultsLoanslipModel = new ArrayList<>();
         for (LoanSlipEntity entity : loanslipList) {
             resultsLoanslipModel.add(loanSlipConverter.entityToModel(entity, LoanSlipModel.class));
         }
         return resultsLoanslipModel;
     }
-
+    
+    public List<LoanSlipModel> findByBookIDAndReaderID(Integer bookID, Integer readerID) {
+        List<LoanSlipModel> resutlt = new ArrayList<>();
+        List<LoanSlipEntity> loanslipList = loanSlipRepository.findByBookIDAndReaderID(bookID, readerID);
+        for (LoanSlipEntity entity : loanslipList) {
+            resutlt.add(loanSlipConverter.entityToModel(entity, LoanSlipModel.class));
+        }
+        return resutlt;
+    }
     @Override
     public void creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online) {
         loanSlipRepository.creatLoanSlip(LSbookList, LScheckReader, LSCustomerID, online);

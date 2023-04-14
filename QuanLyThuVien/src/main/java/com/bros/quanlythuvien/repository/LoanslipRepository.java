@@ -35,7 +35,12 @@ public interface LoanSlipRepository extends CommonRepository<LoanSlipEntity> {
     public void insertQuantity(Integer quantity, Integer id);
 
     public void deleteQuantity(Integer quantity, Integer id);
-     public boolean checkQuantity(Integer quantity, Integer id);
-       public  List<ReportModel> getReportBorrow();
-        public  List<ReportModel> getReportReturn() ;
+
+    public boolean checkQuantity(Integer quantity, Integer id);
+
+    public List<ReportModel> getReportBorrow();
+
+    public List<ReportModel> getReportReturn();
+    
+    public List<LoanSlipEntity> findByBookIDAndReaderID(Integer bookID, Integer readerID);
 }

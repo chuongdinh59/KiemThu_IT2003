@@ -44,7 +44,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookModel findById(Integer id) {
-        return null;
+        return bookConverter.entityToModel( bookRepository.findById(id), BookModel.class);
     }
 
     @Override

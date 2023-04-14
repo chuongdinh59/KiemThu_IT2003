@@ -17,7 +17,6 @@ public interface CommonRepository<T> {
 
     T findById(Integer id);
 
-    T findByRId(Integer id);
 
     List<T> findByCondition(String sql);
 

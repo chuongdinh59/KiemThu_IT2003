@@ -21,12 +21,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import com.bros.quanlythuvien.utils.ReaderUtils;
+import com.bros.quanlythuvien.utils.ValidateUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -57,6 +59,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -783,5 +787,30 @@ public class QuanTriSachController implements Initializable {
             outputStream.close();
         }
     }
-
+    @FXML
+    public void handleSeachInAvailableBooks(KeyEvent event) {
+          if (event.getCode() == KeyCode.ENTER) {
+            String id = availableBooks_search.getText();
+            try{
+                Integer targetID = null;
+                if (ValidateUtils.isNotBlank(id)) {
+                    targetID = Integer.valueOf(id);
+                }
+                List<BookModel> searchBookList = new ArrayList<>();
+                if (targetID != null) {
+                    System.out.print(targetID);
+                    System.out.print(bookService.findById(targetID).getTitle());
+                    searchBookList.add(bookService.findById(targetID));
+                }
+                else {
+                    searchBookList.addAll( bookService.findAll(null));
+                }
+                if(searchBookList.size() > 0)
+                    this.tbBook.setItems(FXCollections.observableList(searchBookList));
+            }
+            catch(Exception ex) {
+                MessageBoxUtils.AlertBox("Error", "Bạn cần phải nhập số", AlertType.ERROR); 
+            }
+        }
+    }
 }

@@ -104,7 +104,7 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="searchBook_viewForm" layoutX="273.0" layoutY="134.0" onKeyPressed="#onEnterPressed" prefHeight="554.4" prefWidth="898.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="searchBook_viewForm" layoutX="273.0" layoutY="134.0" onKeyPressed="#onEnterPressed" prefHeight="554.4" prefWidth="898.4" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="10.0" layoutY="166.0" prefHeight="381.0" prefWidth="880.0">
                                  <children>
@@ -239,7 +239,7 @@
                               <String fx:value="shadow" />
                            </styleClass>
                         </AnchorPane>
-                        <AnchorPane fx:id="status_viewForm" prefHeight="554.4" prefWidth="898.4" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="status_viewForm" prefHeight="554.4" prefWidth="898.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <styleClass>
                               <String fx:value="whiteBg" />
                               <String fx:value="shadow" />
@@ -251,14 +251,6 @@
                                  </font>
                               </Label>
                               <TextField fx:id="statusReaderTF" layoutX="164.0" layoutY="54.0" prefHeight="25.0" prefWidth="180.0" styleClass="textField" />
-                              <Button layoutX="354.0" layoutY="51.0" mnemonicParsing="false" onMouseClicked="#loadStatusReader" prefHeight="2.0" prefWidth="85.0" styleClass="updateBtn" text="Search">
-                                 <graphic>
-                                    <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" size="1.5em" />
-                                 </graphic>
-                                 <font>
-                                    <Font name="Arial" size="14.0" />
-                                 </font>
-                              </Button>
                               <Label layoutX="517.0" layoutY="57.0" text="Book ID: ">
                                  <font>
                                     <Font name="Arial" size="17.0" />

@@ -35,5 +35,6 @@ public interface LoanSlipService {
     public List<ReportModel> getReportBorrow();
 
     public List<ReportModel> getReportReturn();
-
+    
+    public List<LoanSlipModel> findByBookIDAndReaderID(Integer bookID, Integer readerID);
 }
