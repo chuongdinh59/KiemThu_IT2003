@@ -24,16 +24,10 @@ public interface ReaderService {
 
     public List<ReaderModel> findAll();
 
-//    public void loadCate(ComboBox<String> RsearchBook_category, Map<Integer, String> categoriesMap);
-//2
     public int checkReader(Integer id);
 
-//    public void loadReaderColumn(TableView<ReaderModel> infoCustomerTB);
-//3
-//    public void loadGender(ComboBox<String> infomation_gender);
-//2
     public boolean updateReader(ReaderModel reader);
 
-//    public ReaderModel createReaderModel(Integer readerId, TextField infomation_name, ComboBox<String> infomation_gender, DatePicker infomation_birthDay);
-//2
+    public List<ReaderModel> findReaderNotHaveBorrowCard();
+
 }

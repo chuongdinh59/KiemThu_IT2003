@@ -6,6 +6,7 @@ package com.bros.quanlythuvien.repository.impl;
 
 import com.bros.quanlythuvien.entity.ReaderEntity;
 import com.bros.quanlythuvien.model.ReaderModel;
+import com.bros.quanlythuvien.repository.BorrowCardRepository;
 import com.bros.quanlythuvien.repository.ReaderRepository;
 import com.bros.quanlythuvien.utils.BcryptUtils;
 import static com.bros.quanlythuvien.utils.ConnectionUtils.getConnection;
@@ -15,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +27,60 @@ import java.util.Map;
  */
 public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> implements ReaderRepository {
 
-    private PreparedStatement statement;
-    private ResultSet result;
+    private BorrowCardRepository borrowCardRepository = new BorrowCardRepositoryImpl();
+
+    @Override
+    public List<ReaderEntity> findReaderNotHaveBorrowCard() {
+        List<ReaderEntity> readers = new ArrayList<>();
+        List<Integer> myList = borrowCardRepository.findreaderId();
+        List<Integer> idList = findreaderId();
+        List<Integer> myReaderList = new ArrayList<>();
+        for (Integer id : idList) {
+            if (!myList.contains(id)) {
+                myReaderList.add(id);
+            }
+        }
+        for (Integer id : myReaderList) {
+            ReaderEntity reader = findById(id);
+            readers.add(reader);
+        }
+
+        return readers;
+    }
+
+    @Override
+    public List<Integer> findreaderId() {
+        Connection connect = getConnection();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        List<Integer> idList = new ArrayList<>();
+        try {
+            String sql = "SELECT id FROM readers;";
+            statement = connect.prepareStatement(sql);
+            result = statement.executeQuery();
+            while (result.next()) {
+                int readerID = result.getInt("id");
+                idList.add(readerID);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) {
+                    result.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return idList;
+    }
 
     @Override
     public ReaderEntity findReaderById(Integer readerId) {
@@ -40,45 +94,11 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
         return r;
     }
 
-//    @Override
-//    public void loadCate(ComboBox<String> RsearchBook_category, Map<Integer, String> categoriesMap) {
-//        Connection connect = getConnection();
-//        RsearchBook_category.setPromptText("Chọn thể loại");
-//        RsearchBook_category.getItems().add(0, "Chọn thể loại");
-//        categoriesMap.clear();
-//        try {
-//            String sql = "select * from category;";
-//            statement = connect.prepareStatement(sql);
-//            result = statement.executeQuery();
-//            while (result.next()) {
-//                Integer id = result.getInt("id");
-//                String value = result.getString("value");
-//                categoriesMap.put(id, value);
-//            }
-//            RsearchBook_category.getItems().addAll(categoriesMap.values());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                if (result != null) {
-//                    result.close();
-//                }
-//                if (statement != null) {
-//                    statement.close();
-//                }
-//                if (connect != null) {
-//                    connect.close();
-//                }
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
     @Override
-    public Map<Integer, String> loadCate( Map<Integer, String> categoriesMap) {
+    public Map<Integer, String> loadCate(Map<Integer, String> categoriesMap) {
         Connection connect = getConnection();
-//        RsearchBook_category.setPromptText("Chọn thể loại");
-//        RsearchBook_category.getItems().add(0, "Chọn thể loại");
+        PreparedStatement statement = null;
+        ResultSet result = null;
         categoriesMap.clear();
         try {
             String sql = "select * from category;";
@@ -89,7 +109,6 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
                 String value = result.getString("value");
                 categoriesMap.put(id, value);
             }
-//            RsearchBook_category.getItems().addAll(categoriesMap.values());
             return categoriesMap;
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,12 +127,14 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
                 e.printStackTrace();
             }
         }
-          return categoriesMap;
+        return categoriesMap;
     }
 
     @Override
     public int checkReader(Integer id) {
         Connection connect = getConnection();
+        PreparedStatement statement = null;
+        ResultSet result = null;
         try {
             String sql = "select ExpiryDate from borrowcards where ReaderID =?;";
             statement = connect.prepareStatement(sql);
@@ -170,15 +191,14 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
 
     @Override
     public Map<String, Object> login(String username, String password) {
-//        String u = username.getText();
-//        String p = password.getText();
         Connection connect = getConnection();
+        PreparedStatement statement = null;
+        ResultSet result = null;
         Map<String, Object> resultMap = new HashMap<>();
         try {
             String sql = "SELECT * FROM account WHERE user_name = ? ";
             statement = connect.prepareStatement(sql);
             statement.setString(1, username);
-//            statement.setString(2, password.getText());
             result = statement.executeQuery();
             if (result.next()) {
                 String hashedPassword = result.getString("password");
@@ -189,14 +209,12 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
                     Integer readerId = result.getInt("ReaderID");
                     if (accountType.equals("Admin")) {
                         // Chuyển hướng đến trang quản trị viên
-//                        loginBtn.getScene().getWindow().hide();
                         resultMap.put("type", "Admin");
                     } else if (accountType.equals("Employee")) {
                         // Chuyển hướng đến trang nhân viên
 //                        loginBtn.getScene().getWindow().hide();
                         resultMap.put("type", "Employee");
                     } else if (accountType.equals("Customer")) {
-//                        loginBtn.getScene().getWindow().hide();
                         resultMap.put("type", "Customer");
                         resultMap.put("readerId", readerId);
                     }
@@ -230,6 +248,8 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
     @Override
     public int register(String register_username, String register_password, String register_fullname, String register_email) {
         Connection connect = getConnection();
+        PreparedStatement statement = null;
+        ResultSet result = null;
         try {
             // Kiểm tra các trường dữ liệu
             if (register_username.isEmpty() || register_password.isEmpty()

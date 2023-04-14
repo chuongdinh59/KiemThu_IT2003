@@ -24,6 +24,7 @@ import com.bros.quanlythuvien.utils.MessageBoxUtils;
 import com.bros.quanlythuvien.utils.ReaderUtils;
 import java.io.IOException;
 import java.net.URL;
+import java.text.Normalizer.Form;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import javafx.animation.ScaleTransition;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -52,8 +54,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  *
@@ -342,7 +347,7 @@ public class EmployeeController implements Initializable {
     //hiển thị dữ liệu bảng reader trang reader
     @FXML
     private void loadReaderStatusInfo() {
-        List<ReaderModel> readerList = readerService.findAll();
+        List<ReaderModel> readerList = readerService.findReaderNotHaveBorrowCard();
         this.readerStatusTB.setItems(FXCollections.observableList(readerList));
     }
 
@@ -352,6 +357,14 @@ public class EmployeeController implements Initializable {
     ) {
         List<BookModel> searchBookList = bookService.findBooks(searchMap, page);
         this.tb_SearchBook.setItems(FXCollections.observableList(searchBookList));
+    }
+    
+    //    Bắt sự kiện nhấn enter tìm kiếm
+    @FXML
+    private void onEnterPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            loadRSearch();
+        }
     }
 
     // xử lý nút tìm kiếm trang search
@@ -429,6 +442,7 @@ public class EmployeeController implements Initializable {
             boolean rs = borrowCardService.createBorrowCard(id);
             if (rs) {
                 MessageBoxUtils.AlertBox("INFORMATION", "Tạo thẻ thư viện thành công", AlertType.INFORMATION);
+                loadReaderStatusInfo();
             } else {
                 MessageBoxUtils.AlertBox("ERROR", "Tạo thẻ thư viện thất bại", AlertType.ERROR);
             }
@@ -823,97 +837,100 @@ public class EmployeeController implements Initializable {
 
     @FXML
     public void switchForm(ActionEvent event) {
+        String style = "-fx-background-color: #93773e; -fx-text-fill: #fff; -fx-font-weight: bold; -fx-font-style: italic;";
         if (event.getSource() == borrowBook_Btn) {
             loadReaderInfo(null, tbReader);
             loadBookInfo(null, null);
+            AnchorPane[] allForms = {searchBook_viewForm, status_viewForm, returnBook_viewForm, readerStatus_viewForm, loanslip_viewForm, bookList_viewForm};
+            Button[] allButtons = {searchBook_Btn, status_Btn, returnBook_Btn, reader_Btn};
             borrowBook_viewForm.setVisible(true);
-            searchBook_viewForm.setVisible(false);
-            status_viewForm.setVisible(false);
-            returnBook_viewForm.setVisible(false);
-            readerStatus_viewForm.setVisible(false);
-            loanslip_viewForm.setVisible(false);
-            bookList_viewForm.setVisible(false);
-
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
+            for (Button allButton : allButtons) {
+                allButton.setStyle("");
+            }
+            borrowBook_Btn.setStyle(style);
         }
         if (event.getSource() == searchBook_Btn) {
-            borrowBook_viewForm.setVisible(false);
             searchBook_viewForm.setVisible(true);
-            status_viewForm.setVisible(false);
-            returnBook_viewForm.setVisible(false);
-            readerStatus_viewForm.setVisible(false);
-            loanslip_viewForm.setVisible(false);
-            bookList_viewForm.setVisible(false);
-
+            searchBook_Btn.setStyle(style);
+            AnchorPane[] allForms = {borrowBook_viewForm, status_viewForm, returnBook_viewForm, readerStatus_viewForm, loanslip_viewForm, bookList_viewForm};
+            Button[] allButtons = {borrowBook_Btn, status_Btn, returnBook_Btn, reader_Btn};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
+            for (Button allButton : allButtons) {
+                allButton.setStyle("");
+            }
         }
         if (event.getSource() == status_Btn) {
             loadLoanslipInfo(statusBookTB);
-            borrowBook_viewForm.setVisible(false);
-            searchBook_viewForm.setVisible(false);
             status_viewForm.setVisible(true);
-            returnBook_viewForm.setVisible(false);
-            readerStatus_viewForm.setVisible(false);
-            loanslip_viewForm.setVisible(false);
-            bookList_viewForm.setVisible(false);
-
+            status_Btn.setStyle(style);
+            AnchorPane[] allForms = {borrowBook_viewForm, searchBook_viewForm, returnBook_viewForm, readerStatus_viewForm, loanslip_viewForm, bookList_viewForm};
+            Button[] allButtons = {borrowBook_Btn, searchBook_Btn, returnBook_Btn, reader_Btn};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
+            for (Button allButton : allButtons) {
+                allButton.setStyle("");
+            }
         }
         if (event.getSource() == createLoanslipBtn) {
-            borrowBook_viewForm.setVisible(false);
-            searchBook_viewForm.setVisible(false);
-            status_viewForm.setVisible(false);
-            returnBook_viewForm.setVisible(false);
-            readerStatus_viewForm.setVisible(false);
             loanslip_viewForm.setVisible(true);
-            bookList_viewForm.setVisible(false);
+            AnchorPane[] allForms = {borrowBook_viewForm, searchBook_viewForm, returnBook_viewForm, readerStatus_viewForm, status_viewForm, bookList_viewForm};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
         }
         if (event.getSource() == returnBook_Btn) {
             loadReaderInfo(null, returnReaderTB);
             loadLoanslipInfo(returnLoanslipTB);
-            borrowBook_viewForm.setVisible(false);
-            searchBook_viewForm.setVisible(false);
-            status_viewForm.setVisible(false);
             returnBook_viewForm.setVisible(true);
-            readerStatus_viewForm.setVisible(false);
-            loanslip_viewForm.setVisible(false);
-            bookList_viewForm.setVisible(false);
-
+            returnBook_Btn.setStyle(style);
+            AnchorPane[] allForms = {borrowBook_viewForm, searchBook_viewForm, status_viewForm, readerStatus_viewForm, loanslip_viewForm, bookList_viewForm};
+            Button[] allButtons = {borrowBook_Btn, searchBook_Btn, status_Btn, reader_Btn};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
+            for (Button allButton : allButtons) {
+                allButton.setStyle("");
+            }
         }
         if (event.getSource() == reader_Btn) {
             loadReaderStatusInfo();
-            borrowBook_viewForm.setVisible(false);
-            searchBook_viewForm.setVisible(false);
-            status_viewForm.setVisible(false);
-            returnBook_viewForm.setVisible(false);
             readerStatus_viewForm.setVisible(true);
-            loanslip_viewForm.setVisible(false);
-            bookList_viewForm.setVisible(false);
-
+            reader_Btn.setStyle(style);
+            AnchorPane[] allForms = {borrowBook_viewForm, searchBook_viewForm, status_viewForm, returnBook_viewForm, loanslip_viewForm, bookList_viewForm};
+            Button[] allButtons = {borrowBook_Btn, searchBook_Btn, status_Btn, returnBook_Btn};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
+            for (Button allButton : allButtons) {
+                allButton.setStyle("");
+            }
         }
         if (event.getSource() == loanslip_exitBtn) {
             borrowBook_viewForm.setVisible(true);
-            searchBook_viewForm.setVisible(false);
-            status_viewForm.setVisible(false);
-            returnBook_viewForm.setVisible(false);
-            readerStatus_viewForm.setVisible(false);
-            loanslip_viewForm.setVisible(false);
-            bookList_viewForm.setVisible(false);
+            AnchorPane[] allForms = {loanslip_viewForm, searchBook_viewForm, returnBook_viewForm, readerStatus_viewForm, status_viewForm, bookList_viewForm};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
         }
         if (event.getSource() == LsBookList) {
-            borrowBook_viewForm.setVisible(false);
-            searchBook_viewForm.setVisible(false);
-            status_viewForm.setVisible(false);
-            returnBook_viewForm.setVisible(false);
-            readerStatus_viewForm.setVisible(false);
-            loanslip_viewForm.setVisible(false);
             bookList_viewForm.setVisible(true);
+            AnchorPane[] allForms = {loanslip_viewForm, searchBook_viewForm, returnBook_viewForm, readerStatus_viewForm, status_viewForm, borrowBook_viewForm};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
         }
         if (event.getSource() == exitBookListBtn) {
-            borrowBook_viewForm.setVisible(false);
-            searchBook_viewForm.setVisible(false);
-            status_viewForm.setVisible(false);
-            returnBook_viewForm.setVisible(false);
-            readerStatus_viewForm.setVisible(false);
             loanslip_viewForm.setVisible(true);
-            bookList_viewForm.setVisible(false);
+            AnchorPane[] allForms = {bookList_viewForm, searchBook_viewForm, returnBook_viewForm, readerStatus_viewForm, status_viewForm, borrowBook_viewForm};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
         }
     }
 
@@ -943,7 +960,9 @@ public class EmployeeController implements Initializable {
         loadLoanslipColumn(returnLoanslipTB);
         loadLoanslipColumn(statusBookTB);
         loadReaderStatusColumn();
-
+        loadBookColumn(tbBook);
+        searchBook_Btn.requestFocus();
+        searchBook_Btn.fire();
     }
 
 }
