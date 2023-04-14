@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 com\bros\quanlythuvien\model\SearchBookModel.class
 com\bros\quanlythuvien\App.class
 com\bros\quanlythuvien\entity\BorrowDetailsEntity.class
@@ -61,3 +63,4 @@ com\bros\quanlythuvien\utils\QueryBuilderUtils.class
 com\bros\quanlythuvien\entity\ReaderEntity.class
 com\bros\quanlythuvien\repository\impl\ReaderRepositoryImpl.class
 com\bros\quanlythuvien\repository\BorrowCardRepository.class
+>>>>>>> 77ee3cbf3091dc2c0f58723e26c058d6acc13a23
