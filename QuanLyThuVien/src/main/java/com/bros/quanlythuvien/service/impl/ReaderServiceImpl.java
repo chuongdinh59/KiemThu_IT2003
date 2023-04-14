@@ -67,7 +67,7 @@ public class ReaderServiceImpl implements ReaderService {
                 }
                 return 1;
             case 2: {
-                MessageBoxUtils.AlertBox("ERROR", "Người dùng chưa tạo thẻ thư viện", Alert.AlertType.ERROR);
+                MessageBoxUtils.AlertBox("ERROR", "Người dùng chưa tạo thẻ thư viện hoặc không tồn tại", Alert.AlertType.ERROR);
                 return 0;
             }
             case 3: {
