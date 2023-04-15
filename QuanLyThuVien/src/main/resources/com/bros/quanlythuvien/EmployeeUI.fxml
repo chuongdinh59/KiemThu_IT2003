@@ -239,7 +239,7 @@
                               <String fx:value="shadow" />
                            </styleClass>
                         </AnchorPane>
-                        <AnchorPane fx:id="status_viewForm" prefHeight="554.4" prefWidth="898.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="status_viewForm" prefHeight="554.4" prefWidth="898.4" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <styleClass>
                               <String fx:value="whiteBg" />
                               <String fx:value="shadow" />
@@ -284,7 +284,7 @@
                                  </children>
                               </AnchorPane>
                            </children></AnchorPane>
-                        <AnchorPane fx:id="loanslip_viewForm" layoutX="285.0" layoutY="14.0" prefHeight="518.0" prefWidth="414.0" visible="false">
+                        <AnchorPane fx:id="loanslip_viewForm" layoutX="285.0" layoutY="14.0" prefHeight="518.0" prefWidth="414.0">
                            <styleClass>
                               <String fx:value="whiteBg" />
                               <String fx:value="shadow" />
@@ -295,7 +295,7 @@
                                     <Font size="30.0" />
                                  </font>
                               </Text>
-                              <Text layoutX="15.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer ID:">
+                              <Text layoutX="37.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reader ID:">
                                  <font>
                                     <Font size="17.0" />
                                  </font>
