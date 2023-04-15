@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.animation.ScaleTransition;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -47,6 +48,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionModel;
@@ -359,7 +361,7 @@ public class EmployeeController implements Initializable {
         List<BookModel> searchBookList = bookService.findBooks(searchMap, page);
         this.tb_SearchBook.setItems(FXCollections.observableList(searchBookList));
     }
-    
+
     //    Bắt sự kiện nhấn enter tìm kiếm
     @FXML
     private void onEnterPressed(KeyEvent event) {
@@ -427,9 +429,21 @@ public class EmployeeController implements Initializable {
         SelectionModel<LoanSlipModel> selectionModel = returnLoanslipTB.getSelectionModel();
         LoanSlipModel selectedLoanSlip = selectionModel.getSelectedItem();
         if (selectedLoanSlip != null) {
-            loanSlipService.updateBook(selectedLoanSlip);
-            loadLoanslipInfo(returnLoanslipTB);
-            returnLoanslipTB.refresh();
+            if (selectedLoanSlip.getIsOnline() == 0) {
+//                Alert confirm = MessageBoxUtils.AlertBox("Thông báo",
+//                        "Khách hàng chưa nhận sách, nếu tiếp tục sẽ hủy đơn", );
+
+                Alert confirm = new Alert(AlertType.CONFIRMATION);
+                confirm.setTitle("Thông báo");
+                confirm.setContentText("Khách hàng chưa nhận sách, nếu tiếp tục sẽ hủy đơn");
+                Optional<ButtonType> result = confirm.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    loanSlipService.updateBook(selectedLoanSlip);
+                    loadLoanslipInfo(returnLoanslipTB);
+                    returnLoanslipTB.refresh();
+                }
+            }
+
         }
     }
 
@@ -503,7 +517,6 @@ public class EmployeeController implements Initializable {
 //            }
 //        }
 //    }
-
     //xử lý nút tìm kiếm book trang status
     @FXML
     private void loadStatusBook() {
@@ -514,11 +527,11 @@ public class EmployeeController implements Initializable {
             try {
                 Integer bookID = null;
                 Integer readerID = null;
-                if (ValidateUtils.isNotBlank(statusBookTF.getText())){
-                        bookID = Integer.parseInt(statusBookTF.getText());
+                if (ValidateUtils.isNotBlank(statusBookTF.getText())) {
+                    bookID = Integer.parseInt(statusBookTF.getText());
                 }
-                if (ValidateUtils.isNotBlank(statusReaderTF.getText())){
-                        readerID = Integer.parseInt(statusReaderTF.getText());
+                if (ValidateUtils.isNotBlank(statusReaderTF.getText())) {
+                    readerID = Integer.parseInt(statusReaderTF.getText());
                 }
                 loanSlipList = loanSlipService.findByBookIDAndReaderID(bookID, readerID);
                 this.statusBookTB.setItems(FXCollections.observableList(loanSlipList));

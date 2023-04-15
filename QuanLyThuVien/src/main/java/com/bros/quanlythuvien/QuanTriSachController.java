@@ -804,13 +804,17 @@ public class QuanTriSachController implements Initializable {
                 List<BookModel> searchBookList = new ArrayList<>();
                 if (targetID != null) {
                     System.out.print(targetID);
-                    System.out.print(bookService.findById(targetID).getTitle());
-                    searchBookList.add(bookService.findById(targetID));
+                    BookModel bookModel =  bookService.findById(targetID);
+                    if (bookModel != null)
+                        searchBookList.add(bookModel);
                 } else {
                     searchBookList.addAll(bookService.findAll(null));
                 }
                 if (searchBookList.size() > 0) {
                     this.tbBook.setItems(FXCollections.observableList(searchBookList));
+                }
+                else {
+                    MessageBoxUtils.AlertBox("Thông báo", "Không tìm thấy sách", AlertType.WARNING);
                 }
             } catch (Exception ex) {
                 MessageBoxUtils.AlertBox("Error", "Bạn cần phải nhập số", AlertType.ERROR);

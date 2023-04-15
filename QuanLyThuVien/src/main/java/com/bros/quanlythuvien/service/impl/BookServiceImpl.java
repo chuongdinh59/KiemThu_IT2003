@@ -46,8 +46,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookModel findById(Integer id) {
         BookEntity bookEntiry = bookRepository.findById(id);
-        CategoryEntity categoryEntity = categoryRepository.findById(bookEntiry.getCategoryID());
-        return bookConverter.entityToModel(categoryEntity ,bookRepository.findById(id), BookModel.class);
+        if (bookEntiry != null) {
+            CategoryEntity categoryEntity = categoryRepository.findById(bookEntiry.getCategoryID());
+            return bookConverter.entityToModel(categoryEntity ,bookRepository.findById(id), BookModel.class);
+        }
+        return null;
     }
 
     @Override
