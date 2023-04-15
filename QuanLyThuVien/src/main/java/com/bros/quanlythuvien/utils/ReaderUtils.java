@@ -36,20 +36,20 @@ public class ReaderUtils {
 
     }
 
-//    public static void load_reader_columns(TableView<ReaderModel> infoCustomerTB) {
-//        TableColumn colId = new TableColumn("ReaderId");
-//        colId.setCellValueFactory(new PropertyValueFactory("id"));
-//        TableColumn colName = new TableColumn("Fullname");
-//        colName.setCellValueFactory(new PropertyValueFactory("fullname"));
-//        TableColumn colGender = new TableColumn("Gender");
-//        colGender.setCellValueFactory(new PropertyValueFactory("gender"));
-//        TableColumn colDateOfBirth = new TableColumn("BirthDay");
-//        colDateOfBirth.setCellValueFactory(new PropertyValueFactory("dateOfBirth"));
-//        TableColumn colPhone = new TableColumn("Phone");
-//        colPhone.setCellValueFactory(new PropertyValueFactory("phone"));
-//
-//        infoCustomerTB.getColumns().addAll(colId, colName, colGender, colDateOfBirth,colPhone);
-//    }
+    public static void load_reader_columns(TableView<ReaderModel> infoCustomerTB) {
+        TableColumn colId = new TableColumn("ReaderId");
+        colId.setCellValueFactory(new PropertyValueFactory("id"));
+        TableColumn colName = new TableColumn("Fullname");
+        colName.setCellValueFactory(new PropertyValueFactory("fullname"));
+        TableColumn colGender = new TableColumn("Gender");
+        colGender.setCellValueFactory(new PropertyValueFactory("gender"));
+        TableColumn colDateOfBirth = new TableColumn("BirthDay");
+        colDateOfBirth.setCellValueFactory(new PropertyValueFactory("dateOfBirth"));
+        TableColumn colPhone = new TableColumn("Phone");
+        colPhone.setCellValueFactory(new PropertyValueFactory("phone"));
+
+        infoCustomerTB.getColumns().addAll(colId, colName, colGender, colDateOfBirth,colPhone);
+    }
 
     public static void load_gender(ComboBox<String> infomation_gender) {
         infomation_gender.setPromptText("Chọn giới tính");
