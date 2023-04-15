@@ -79,14 +79,9 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
         }
 
         try {
-//            String sql = "UPDATE loanslip SET isReturned = '1', ExpirationDate = ? WHERE (id = ?);";
-            String sql = "UPDATE loanslip SET isReturned = '1' WHERE (id = ?);";
+            String sql = "UPDATE loanslip SET isReturned = '1',isOnline ='1' WHERE (id = ?);";
 
             statement = connect.prepareStatement(sql);
-//            // Sử dụng java.util.Date
-//            LocalDate today = LocalDate.now();
-//            java.sql.Date sqlDate = java.sql.Date.valueOf(today);
-//            statement.setDate(1, sqlDate);
 
             statement.setInt(1, loanSlip.getId());
 

@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import javafx.collections.FXCollections;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
@@ -23,7 +24,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 public class ReaderUtils {
 
-
     public static void load_info_cart(List<BookModel> bookListCart, TableView<BookModel> tb_Cart, Integer page) {
         tb_Cart.setItems(FXCollections.observableList(bookListCart));
         tb_Cart.refresh();
@@ -32,30 +32,31 @@ public class ReaderUtils {
     public static void load_cate(ComboBox<String> RsearchBook_category, Map<Integer, String> categoriesMap) {
         RsearchBook_category.setPromptText("Chọn thể loại");
         RsearchBook_category.getItems().add(0, "Chọn thể loại");
-//        Map<Integer, String> cateMap = readerRepository.loadCate(categoriesMap);
         RsearchBook_category.getItems().addAll(categoriesMap.values());
 
     }
 
-    public static void load_reader_columns(TableView<ReaderModel> infoCustomerTB) {
-        TableColumn colId = new TableColumn("ReaderId");
-        colId.setCellValueFactory(new PropertyValueFactory("id"));
-        TableColumn colName = new TableColumn("Fullname");
-        colName.setCellValueFactory(new PropertyValueFactory("fullname"));
-        TableColumn colGender = new TableColumn("Gender");
-        colGender.setCellValueFactory(new PropertyValueFactory("gender"));
-        TableColumn colDateOfBirth = new TableColumn("BirthDay");
-        colDateOfBirth.setCellValueFactory(new PropertyValueFactory("dateOfBirth"));
-
-        infoCustomerTB.getColumns().addAll(colId, colName, colGender, colDateOfBirth);
-    }
+//    public static void load_reader_columns(TableView<ReaderModel> infoCustomerTB) {
+//        TableColumn colId = new TableColumn("ReaderId");
+//        colId.setCellValueFactory(new PropertyValueFactory("id"));
+//        TableColumn colName = new TableColumn("Fullname");
+//        colName.setCellValueFactory(new PropertyValueFactory("fullname"));
+//        TableColumn colGender = new TableColumn("Gender");
+//        colGender.setCellValueFactory(new PropertyValueFactory("gender"));
+//        TableColumn colDateOfBirth = new TableColumn("BirthDay");
+//        colDateOfBirth.setCellValueFactory(new PropertyValueFactory("dateOfBirth"));
+//        TableColumn colPhone = new TableColumn("Phone");
+//        colPhone.setCellValueFactory(new PropertyValueFactory("phone"));
+//
+//        infoCustomerTB.getColumns().addAll(colId, colName, colGender, colDateOfBirth,colPhone);
+//    }
 
     public static void load_gender(ComboBox<String> infomation_gender) {
         infomation_gender.setPromptText("Chọn giới tính");
         infomation_gender.getItems().addAll("Chọn giới tính", "Nam", "Nữ");
     }
 
-    public static ReaderModel create_readerModel(Integer readerId, TextField infomation_name, ComboBox<String> infomation_gender, DatePicker infomation_birthDay) {
+    public static ReaderModel create_readerModel(Integer readerId, TextField infomation_name, ComboBox<String> infomation_gender, DatePicker infomation_birthDay, TextField infomation_phone) {
         ReaderModel reader = new ReaderModel();
         reader.setId(readerId);
         reader.setFullname(infomation_name.getText());
@@ -68,7 +69,7 @@ public class ReaderUtils {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedBirthDay = infomation_birthDay.getValue().format(formatter);
         reader.setDateOfBirth(formattedBirthDay);
-//        reader.setFullname(infomation_birthDay.toString());
+        reader.setPhone(infomation_phone.getText());
         return reader;
     }
 }

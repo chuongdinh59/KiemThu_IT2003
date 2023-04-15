@@ -4,6 +4,7 @@
  */
 package com.bros.quanlythuvien.service;
 
+import com.bros.quanlythuvien.model.AccountModel;
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import java.util.List;
@@ -29,5 +30,7 @@ public interface ReaderService {
     public boolean updateReader(ReaderModel reader);
 
     public List<ReaderModel> findReaderNotHaveBorrowCard();
+
+    public AccountModel findAccountByRId(Integer id);
 
 }
