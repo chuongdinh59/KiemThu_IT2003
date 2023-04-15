@@ -211,10 +211,12 @@ public class QuanTriSachController implements Initializable {
     private AnchorPane report_viewForm;
     @FXML
     private ComboBox<String> ComboBoxYear;
-    
+
     @FXML
     private Button btnReport;
-    
+
+    @FXML
+    private TextField customer_phone;
 
     @FXML
     private LineChart<String, Number> YearChart;
@@ -294,12 +296,13 @@ public class QuanTriSachController implements Initializable {
         }
     }
 
-    public void info_reader_admin(TableView<ReaderModel> tbReader, TextField customer_id, TextField customer_name, ComboBox<String> customer_gender, DatePicker customer_birthDay) {
+    public void info_reader_admin(TableView<ReaderModel> tbReader, TextField customer_id, TextField customer_name, ComboBox<String> customer_gender, DatePicker customer_birthDay, TextField customer_phone) {
         ReaderModel rowData = tbReader.getSelectionModel().getSelectedItem();
         if (rowData != null) {
             customer_id.setText(rowData.getId().toString());
             customer_name.setText(rowData.getFullname());
-            if (null == rowData.getGender()||"".equals(rowData.getGender()) ) {
+            customer_phone.setText(rowData.getPhone());
+            if (null == rowData.getGender() || "".equals(rowData.getGender())) {
                 customer_gender.setValue("Chọn giới tính");
             } else {
                 customer_gender.setValue(rowData.getGender());
@@ -323,6 +326,21 @@ public class QuanTriSachController implements Initializable {
         addBook_category.setValue("Chọn thể loại");
         addBook_location.setText("");
         addBook_quantity.setText("");
+    }
+    
+     public static void load_reader_columns(TableView<ReaderModel> infoCustomerTB) {
+        TableColumn colId = new TableColumn("ReaderId");
+        colId.setCellValueFactory(new PropertyValueFactory("id"));
+        TableColumn colName = new TableColumn("Fullname");
+        colName.setCellValueFactory(new PropertyValueFactory("fullname"));
+        TableColumn colGender = new TableColumn("Gender");
+        colGender.setCellValueFactory(new PropertyValueFactory("gender"));
+        TableColumn colDateOfBirth = new TableColumn("BirthDay");
+        colDateOfBirth.setCellValueFactory(new PropertyValueFactory("dateOfBirth"));
+        TableColumn colPhone = new TableColumn("Phone");
+        colPhone.setCellValueFactory(new PropertyValueFactory("phone"));
+
+        infoCustomerTB.getColumns().addAll(colId, colName, colGender, colDateOfBirth,colPhone);
     }
 //    ----------------------------------------
 
@@ -483,7 +501,7 @@ public class QuanTriSachController implements Initializable {
     //hiển thị cột trong bảng reader
     @FXML
     private void loadReaderColumn() {
-        ReaderUtils.load_reader_columns(tbReader);
+        load_reader_columns(tbReader);
     }
 
     //hiển thị dữ liệu bảng reader
@@ -557,21 +575,25 @@ public class QuanTriSachController implements Initializable {
     //nhấn vào table reader xuất ra thông tin tương ứng
     @FXML
     private void InforReader() {
-        info_reader_admin(tbReader, customer_id, customer_name, customer_gender, customer_birthDay);
+        info_reader_admin(tbReader, customer_id, customer_name, customer_gender, customer_birthDay, customer_phone);
     }
 
     //Update thông tin reader
     @FXML
     private void updateReader() {
         Integer id = Integer.valueOf(customer_id.getText());
-        ReaderModel reader = ReaderUtils.create_readerModel(id, customer_name, customer_gender, customer_birthDay);
-        boolean rs = readerService.updateReader(reader);
-        if (rs) {
-            MessageBoxUtils.AlertBox("INFORMATION", "Sửa đổi thành công", AlertType.INFORMATION);
-            loadReaderInfo();
-            tbReader.refresh();
+        String phone = customer_phone.getText();
+        if (phone.matches("\\d{11}") && phone.startsWith("0")) {
+            ReaderModel reader = ReaderUtils.create_readerModel(id, customer_name, customer_gender, customer_birthDay, customer_phone);
+            boolean rs = readerService.updateReader(reader);
+            if (rs) {
+                MessageBoxUtils.AlertBox("INFORMATION", "Sửa đổi thành công", AlertType.INFORMATION);
+                loadReaderInfo();
+            } else {
+                MessageBoxUtils.AlertBox("ERROR", "Sửa đổi thất bại", AlertType.ERROR);
+            }
         } else {
-            MessageBoxUtils.AlertBox("ERROR", "Sửa đổi thất bại", AlertType.ERROR);
+            MessageBoxUtils.AlertBox("ERROR", "Vui lòng nhập đủ 11 số và bắt đầu phải là số 0", Alert.AlertType.ERROR);
         }
     }
 
@@ -615,7 +637,6 @@ public class QuanTriSachController implements Initializable {
             showPieChartDialog(selectedValue);
         });
     }
-
 
     private Map<Integer, Integer> mapReportYearQuantiry(List<ReportModel> reportModels) {
         Map<Integer, Integer> result = new HashMap<>();
@@ -694,7 +715,6 @@ public class QuanTriSachController implements Initializable {
         return years;
     }
 
-    
     public void handlerExportBtn(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         List<ReportModel> borrowReports = loanSlipService.getReportBorrow();
@@ -755,8 +775,6 @@ public class QuanTriSachController implements Initializable {
         }
     }
 
-
-
     public void exportToExcel(List<?> list, String filePath) throws IOException, IllegalAccessException {
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             XSSFSheet sheet = workbook.createSheet("Sheet1");
@@ -787,11 +805,12 @@ public class QuanTriSachController implements Initializable {
             outputStream.close();
         }
     }
+
     @FXML
     public void handleSeachInAvailableBooks(KeyEvent event) {
-          if (event.getCode() == KeyCode.ENTER) {
+        if (event.getCode() == KeyCode.ENTER) {
             String id = availableBooks_search.getText();
-            try{
+            try {
                 Integer targetID = null;
                 if (ValidateUtils.isNotBlank(id)) {
                     targetID = Integer.valueOf(id);
@@ -801,15 +820,14 @@ public class QuanTriSachController implements Initializable {
                     System.out.print(targetID);
                     System.out.print(bookService.findById(targetID).getTitle());
                     searchBookList.add(bookService.findById(targetID));
+                } else {
+                    searchBookList.addAll(bookService.findAll(null));
                 }
-                else {
-                    searchBookList.addAll( bookService.findAll(null));
-                }
-                if(searchBookList.size() > 0)
+                if (searchBookList.size() > 0) {
                     this.tbBook.setItems(FXCollections.observableList(searchBookList));
-            }
-            catch(Exception ex) {
-                MessageBoxUtils.AlertBox("Error", "Bạn cần phải nhập số", AlertType.ERROR); 
+                }
+            } catch (Exception ex) {
+                MessageBoxUtils.AlertBox("Error", "Bạn cần phải nhập số", AlertType.ERROR);
             }
         }
     }

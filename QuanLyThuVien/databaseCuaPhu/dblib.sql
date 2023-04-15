@@ -106,7 +106,7 @@ CREATE TABLE `books` (
 
 LOCK TABLES `books` WRITE;
 /*!40000 ALTER TABLE `books` DISABLE KEYS */;
-INSERT INTO `books` VALUES (1,'Sách A','Tác giả A','Mô Tả A',2020,'A','A',1,'2023-03-14 19:03:42',100),(2,'Sách B ','Tác giả B','Mô tả B',2021,'B','B',2,'2023-03-14 19:04:46',200),(3,'Sách C','Tác giả C','Mô tả C',2022,'C','C',1,'2023-04-03 19:02:28',459),(6,'sách d','tác giả d','mô tả d',2022,'d','d',1,'2023-04-03 21:53:02',328),(7,'sachcuabang','bang','',2021,'','day a',1,'2023-04-13 12:27:52',21),(8,'sachcuabang','bang','bang',2021,'bangcho','day a',1,'2023-04-13 14:06:44',21);
+INSERT INTO `books` VALUES (1,'Sách A','Tác giả A','Mô Tả A',2020,'A','A',1,'2023-03-14 19:03:42',100),(2,'Sách B ','Tác giả B','Mô tả B',2021,'B','B',2,'2023-03-14 19:04:46',200),(3,'Sách C','Tác giả C','Mô tả C',2022,'C','C',1,'2023-04-03 19:02:28',465),(6,'sách d','tác giả d','mô tả d',2022,'d','d',1,'2023-04-03 21:53:02',330),(7,'sachcuabang','bang','abc',2021,'ab','day a',1,'2023-04-13 12:27:52',21),(8,'sachcuabang','bang','bang',2021,'bangcho','day a',1,'2023-04-13 14:06:44',21);
 /*!40000 ALTER TABLE `books` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -125,7 +125,7 @@ CREATE TABLE `borrowcards` (
   PRIMARY KEY (`id`),
   KEY `ReaderID` (`ReaderID`),
   CONSTRAINT `borrowcards_ibfk_1` FOREIGN KEY (`ReaderID`) REFERENCES `readers` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,7 +134,7 @@ CREATE TABLE `borrowcards` (
 
 LOCK TABLES `borrowcards` WRITE;
 /*!40000 ALTER TABLE `borrowcards` DISABLE KEYS */;
-INSERT INTO `borrowcards` VALUES (1,2,'2022-11-12','2023-01-02'),(2,1,'2021-08-09','2024-03-04'),(3,3,'2023-03-20','2023-06-23');
+INSERT INTO `borrowcards` VALUES (2,1,'2021-08-09','2024-03-04'),(3,3,'2023-03-20','2023-06-23'),(4,8,'2023-04-14','2024-04-14'),(5,7,'2023-04-14','2024-04-14'),(10,2,'2023-04-14','2024-04-14');
 /*!40000 ALTER TABLE `borrowcards` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,7 +222,7 @@ CREATE TABLE `loanslip` (
 
 LOCK TABLES `loanslip` WRITE;
 /*!40000 ALTER TABLE `loanslip` DISABLE KEYS */;
-INSERT INTO `loanslip` VALUES (4,2,1,'Sách A','Tác giả A','2023-03-28 00:00:00','2023-04-05 00:00:00',1,1,1),(6,2,2,'Sách B ','Tác giả B','2022-03-28 00:00:00','2022-04-05 00:00:00',3,1,1),(7,1,1,'Sách A','Tác giả A','2023-03-29 00:00:00','2023-04-05 00:00:00',2,1,1),(8,1,2,'Sách B ','Tác giả B','2023-03-29 00:00:00','2023-04-28 00:00:00',4,0,1),(9,3,1,'Sách A','Tác giả A','2023-03-29 00:00:00','2023-04-28 00:00:00',2,0,1),(10,3,3,'Sách C','Tác giả C','2023-11-05 00:00:00','2023-12-05 00:00:00',3,1,1),(11,3,6,'sách d','tác giả d','2022-04-05 00:00:00','2022-05-05 00:00:00',2,1,1);
+INSERT INTO `loanslip` VALUES (4,2,1,'Sách A','Tác giả A','2023-03-28 00:00:00','2023-04-05 00:00:00',1,1,1),(6,2,2,'Sách B ','Tác giả B','2022-03-28 00:00:00','2022-04-05 00:00:00',3,1,1),(7,1,1,'Sách A','Tác giả A','2023-03-29 00:00:00','2023-04-05 00:00:00',2,1,1),(8,1,2,'Sách B ','Tác giả B','2023-03-29 00:00:00','2023-04-28 00:00:00',4,1,1),(9,3,1,'Sách A','Tác giả A','2023-03-29 00:00:00','2023-04-28 00:00:00',2,1,1),(10,3,3,'Sách C','Tác giả C','2023-11-05 00:00:00','2023-12-05 00:00:00',3,1,1),(11,3,6,'sách d','tác giả d','2022-04-05 00:00:00','2022-05-05 00:00:00',2,1,1);
 /*!40000 ALTER TABLE `loanslip` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -238,6 +238,7 @@ CREATE TABLE `readers` (
   `FullName` varchar(255) DEFAULT NULL,
   `Gender` varchar(10) DEFAULT NULL,
   `DateOfBirth` date DEFAULT NULL,
+  `Phone` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -248,7 +249,7 @@ CREATE TABLE `readers` (
 
 LOCK TABLES `readers` WRITE;
 /*!40000 ALTER TABLE `readers` DISABLE KEYS */;
-INSERT INTO `readers` VALUES (1,'phu','nam','2003-09-08'),(2,'chuong','nu','2003-09-08'),(3,'phan','nu','2004-02-01'),(4,'Đình Chương ',NULL,NULL),(5,'Gia Heo',NULL,NULL),(6,'MeoH',NULL,NULL),(7,'chuot',NULL,NULL),(8,'ab',NULL,NULL);
+INSERT INTO `readers` VALUES (1,'phu','Nam','2003-09-08',NULL),(2,'chuong','Nữ','2003-09-08','02324627482'),(3,'phan','Nam','2004-02-25','01312312234'),(4,'Đình Chương ','Nữ','2004-02-14','01234567892'),(5,'Gia Heo',NULL,NULL,NULL),(6,'MeoH',NULL,NULL,NULL),(7,'chuot',NULL,NULL,NULL),(8,'ab',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `readers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -261,4 +262,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-13 14:10:54
+-- Dump completed on 2023-04-15 12:13:45

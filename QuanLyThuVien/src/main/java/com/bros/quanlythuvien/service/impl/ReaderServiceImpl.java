@@ -4,8 +4,11 @@
  */
 package com.bros.quanlythuvien.service.impl;
 
+import com.bros.quanlythuvien.converter.AccountConverter;
 import com.bros.quanlythuvien.converter.ReaderConverter;
+import com.bros.quanlythuvien.entity.AccountEntity;
 import com.bros.quanlythuvien.entity.ReaderEntity;
+import com.bros.quanlythuvien.model.AccountModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.repository.ReaderRepository;
 import com.bros.quanlythuvien.repository.impl.ReaderRepositoryImpl;
@@ -24,11 +27,18 @@ public class ReaderServiceImpl implements ReaderService {
 
     ReaderRepository readerRepository = new ReaderRepositoryImpl();
     ReaderConverter readerConverter = new ReaderConverter();
+    AccountConverter accountConverter = new AccountConverter();
 
     @Override
     public ReaderModel findById(Integer id) {
         ReaderEntity readerEntity = readerRepository.findById(id);
         return readerConverter.entityToModel(readerEntity, ReaderModel.class);
+    }
+
+    @Override
+    public AccountModel findAccountByRId(Integer id) {
+        AccountEntity accountEntity = readerRepository.findAccountByRId(id);
+        return accountConverter.entityToModel(accountEntity, AccountModel.class);
     }
 
     @Override
@@ -40,7 +50,7 @@ public class ReaderServiceImpl implements ReaderService {
         }
         return resultsBorrowCardModel;
     }
-    
+
     @Override
     public List<ReaderModel> findReaderNotHaveBorrowCard() {
         List<ReaderEntity> readerList = readerRepository.findReaderNotHaveBorrowCard();
