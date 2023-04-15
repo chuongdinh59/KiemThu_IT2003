@@ -1,6 +1,7 @@
 module com.bros.quanlythuvien {
     requires java.sql;
     requires commons.beanutils;
+    requires java.mail;
     requires lombok;
     requires modelmapper;
     requires org.apache.poi.ooxml;
