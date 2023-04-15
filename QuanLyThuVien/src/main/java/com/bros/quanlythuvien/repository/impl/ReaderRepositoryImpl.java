@@ -4,6 +4,7 @@
  */
 package com.bros.quanlythuvien.repository.impl;
 
+import com.bros.quanlythuvien.entity.AccountEntity;
 import com.bros.quanlythuvien.entity.ReaderEntity;
 import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.repository.BorrowCardRepository;
@@ -33,7 +34,7 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
     public List<ReaderEntity> findReaderNotHaveBorrowCard() {
         List<ReaderEntity> readers = new ArrayList<>();
         List<Integer> myList = borrowCardRepository.findreaderId();
-        List<Integer> idList = findreaderId();
+        List<Integer> idList = findReaderId();
         List<Integer> myReaderList = new ArrayList<>();
         for (Integer id : idList) {
             if (!myList.contains(id)) {
@@ -49,7 +50,7 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
     }
 
     @Override
-    public List<Integer> findreaderId() {
+    public List<Integer> findReaderId() {
         Connection connect = getConnection();
         PreparedStatement statement = null;
         ResultSet result = null;
@@ -80,6 +81,49 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
             }
         }
         return idList;
+    }
+
+    @Override
+    public AccountEntity findAccountByRId(Integer id) {
+        Connection connect = getConnection();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        AccountEntity account = new AccountEntity();
+        try {
+            String sql = "SELECT * FROM account WHERE ReaderID = ?";
+            statement = connect.prepareStatement(sql);
+            statement.setInt(1, id);
+            result = statement.executeQuery();
+            if (result.next()) {
+                account.setId(result.getInt("id"));
+                account.setUserName(result.getString("user_name"));
+                account.setPassword(result.getString("password"));
+                account.setFullName(result.getString("full_name"));
+                account.setEmail(result.getString("email"));
+                account.setType(result.getString("type"));
+                account.setReaderID(id);
+                return account;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) {
+                    result.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return account;
     }
 
     @Override
@@ -321,12 +365,13 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
         Connection connect = getConnection();
         PreparedStatement statement = null;
         try {
-            String sql = "UPDATE readers SET FullName = ? , Gender = ? ,DateOfBirth = ? WHERE id = ?;";
+            String sql = "UPDATE readers SET FullName = ? , Gender = ? ,DateOfBirth = ?,Phone =? WHERE id = ?;";
             statement = connect.prepareStatement(sql);
             statement.setString(1, reader.getFullname());
             statement.setString(2, reader.getGender());
             statement.setString(3, reader.getDateOfBirth());
-            statement.setInt(4, reader.getId());
+            statement.setString(4, reader.getPhone());
+            statement.setInt(5, reader.getId());
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {

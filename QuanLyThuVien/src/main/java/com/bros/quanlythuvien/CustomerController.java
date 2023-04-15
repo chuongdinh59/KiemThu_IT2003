@@ -4,6 +4,7 @@
  */
 package com.bros.quanlythuvien;
 
+import com.bros.quanlythuvien.model.AccountModel;
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.LoanSlipModel;
 import com.bros.quanlythuvien.model.ReaderModel;
@@ -36,6 +37,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -143,10 +145,10 @@ public class CustomerController implements Initializable {
     private Button clear_Btn;
 
     @FXML
-    private TableView<ReaderModel> infoCustomerTB;
+    private TableView<LoanSlipModel> infoLoanSlipTB;
 
     @FXML
-    private TableView<LoanSlipModel> infoLoanSlipTB;
+    private TextField infomation_phone;
 
     @FXML
     public void minimize() {
@@ -279,26 +281,7 @@ public class CustomerController implements Initializable {
         tb_Cart.refresh();
     }
 
-    public void info_reader(TableView<ReaderModel> infoCustomerTB, TextField infomation_name, ComboBox<String> infomation_gender, DatePicker infomation_birthDay) {
-        ReaderModel rowData = infoCustomerTB.getSelectionModel().getSelectedItem();
-        if (rowData != null) {
-            infomation_name.setText(rowData.getFullname());
-            if (null == rowData.getGender() || "".equals(rowData.getGender())) {
-                infomation_gender.setValue("Chọn giới tính");
-            } else {
-                infomation_gender.setValue(rowData.getGender());
-            }
-            if (rowData.getDateOfBirth() != null) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                LocalDate birthDay = LocalDate.parse(rowData.getDateOfBirth(), formatter);
-                infomation_birthDay.setValue(birthDay);
-            } else {
-                infomation_birthDay.setValue(null);
-            }
-        }
-    }
 //    -------------------------------------------------
-
     private int LScheckReader = 0;
 
     @Override
@@ -310,7 +293,6 @@ public class CustomerController implements Initializable {
         loadRSearchBookInfo(null, null);
         loadSearchCategory();
         loadCartColumn(tb_Cart, bookListCart);
-        loadReaderColumn(infoCustomerTB);
         loadLoanslipColumn(infoLoanSlipTB);
         loadGender();
         countQuantityOnCart();
@@ -328,40 +310,29 @@ public class CustomerController implements Initializable {
         this.readerId = id;
     }
 
-//    @FXML
-//    public void checkReader() {
-//        int check = readerService.checkReader(readerId);
-//        if (check == 0) {
-//            LScheckReader = 0;
-//        } else {
-//            LScheckReader = 1;
-//        }
-//
-//    }
     //Hiển thị combobox gender
     @FXML
     private void loadGender() {
         ReaderUtils.load_gender(infomation_gender);
     }
 
-    //nhấn vào table reader xuất ra thông tin tương ứng
-    @FXML
-    private void InforReader() {
-        info_reader(infoCustomerTB, infomation_name, infomation_gender, infomation_birthDay);
-    }
-
     //Update thông tin reader
     @FXML
     private void updateReader() {
-        ReaderModel reader = ReaderUtils.create_readerModel(readerId, infomation_name, infomation_gender, infomation_birthDay);
-        boolean rs = readerService.updateReader(reader);
-        if (rs) {
-            MessageBoxUtils.AlertBox("INFORMATION", "Sửa đổi thành công", AlertType.INFORMATION);
-            loadReaderInfo();
-            infoCustomerTB.refresh();
+        String phone = infomation_phone.getText();
+        if (phone.matches("\\d{11}") && phone.startsWith("0")) {
+            ReaderModel reader = ReaderUtils.create_readerModel(readerId, infomation_name, infomation_gender, infomation_birthDay, infomation_phone);
+            boolean rs = readerService.updateReader(reader);
+            if (rs) {
+                MessageBoxUtils.AlertBox("INFORMATION", "Sửa đổi thành công", AlertType.INFORMATION);
+                loadReaderInfo();
+            } else {
+                MessageBoxUtils.AlertBox("ERROR", "Sửa đổi thất bại", AlertType.ERROR);
+            }
         } else {
-            MessageBoxUtils.AlertBox("ERROR", "Sửa đổi thất bại", AlertType.ERROR);
+            MessageBoxUtils.AlertBox("ERROR", "Vui lòng nhập đủ 11 số và bắt đầu phải là số 0", Alert.AlertType.ERROR);
         }
+
     }
 
     @FXML
@@ -391,19 +362,26 @@ public class CustomerController implements Initializable {
         totalQuantity = 0;
     }
 
-    //hiển thị cột trong bảng reader
-    @FXML
-    private void loadReaderColumn(TableView<ReaderModel> infoCustomerTB) {
-        ReaderUtils.load_reader_columns(infoCustomerTB);
-    }
-
-    //hiển thị dữ liệu bảng reader
+    //hiển thị dữ liệu reader
     @FXML
     private void loadReaderInfo() {
         ReaderModel reader = readerService.findById(readerId);
-        List<ReaderModel> readerList = new ArrayList<>();
-        readerList.add(reader);
-        this.infoCustomerTB.setItems(FXCollections.observableList(readerList));
+        AccountModel readerEmail = readerService.findAccountByRId(readerId);
+        infomation_name.setText(reader.getFullname());
+        infomation_email.setText(readerEmail.getEmail());
+        infomation_phone.setText(reader.getPhone());
+        if (null == reader.getGender() || "".equals(reader.getGender())) {
+            infomation_gender.setValue("Chọn giới tính");
+        } else {
+            infomation_gender.setValue(reader.getGender());
+        }
+        if (reader.getDateOfBirth() != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate birthDay = LocalDate.parse(reader.getDateOfBirth(), formatter);
+            infomation_birthDay.setValue(birthDay);
+        } else {
+            infomation_birthDay.setValue(null);
+        }
     }
 
     @FXML

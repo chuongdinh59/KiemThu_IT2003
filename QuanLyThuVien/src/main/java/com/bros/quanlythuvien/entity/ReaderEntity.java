@@ -31,6 +31,8 @@ public class ReaderEntity {
     private Date dateOfBirth;
     @Column(name = "ReaderType")
     private String readerType;
+    @Column(name = "Phone")
+    private String phone;
 
     public Integer getId() {
         return id;
@@ -47,7 +49,15 @@ public class ReaderEntity {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-    
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getGender() {
         return gender;
     }

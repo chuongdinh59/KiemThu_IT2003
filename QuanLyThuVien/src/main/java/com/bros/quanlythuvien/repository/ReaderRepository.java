@@ -4,13 +4,11 @@
  */
 package com.bros.quanlythuvien.repository;
 
+import com.bros.quanlythuvien.entity.AccountEntity;
 import com.bros.quanlythuvien.entity.ReaderEntity;
 import com.bros.quanlythuvien.model.ReaderModel;
 import java.util.List;
 import java.util.Map;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 
 /**
  *
@@ -34,6 +32,8 @@ public interface ReaderRepository extends CommonRepository<ReaderEntity> {
 
     public List<ReaderEntity> findReaderNotHaveBorrowCard();
 
-    public List<Integer> findreaderId();
+    public List<Integer> findReaderId();
+    
+    public AccountEntity findAccountByRId(Integer id);
 
 }
