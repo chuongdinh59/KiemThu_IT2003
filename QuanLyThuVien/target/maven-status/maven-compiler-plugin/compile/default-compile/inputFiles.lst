@@ -1,71 +1,70 @@
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\constant\QueryConstant.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\impl\LoanSlipServiceImpl.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\impl\CategoryServiceImpl.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\annotation\Column.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\LoanSlipUtils.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\annotation\Entity.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\App.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\BcryptUtils.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\ConnectionUtils.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\BorrowCardEntity.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\BookEntity.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\converter\ReaderConverter.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\BookReservationEntity.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\impl\BorrowCardServiceImpl.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\LoanSlipModel.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\BorrowDetailsModel.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\constant\DatabaseConstant.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\BookRepositoryImpl.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\LoanSlipEntity.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\converter\CategoryConverter.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\CommonRepository.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\CustomerController.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\ReaderRepository.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\ReportEntity.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\QueryBuilderUtils.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\BorrowCardModel.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\CategoryRepositoryImpl.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\converter\BorrowCardConverter.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\LoanSlipService.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\converter\BaseConverter.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\enums\RoleEnums.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\DateUtils.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\ReaderModel.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\BookService.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\ReaderBorrowCardModel.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\mapper\ResultSetMapper.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\converter\BookConverter.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\impl\BookServiceImpl.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\converter\LoanslipConverter.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\BorrowCardRepositoryImpl.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\MessageBoxUtils.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\ReaderRepositoryImpl.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\ReaderUtils.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\CategoryModel.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\converter\AccountConverter.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\BorrowDetailsEntity.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\BookReservationModel.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\impl\ReaderServiceImpl.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\BorrowCardService.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\BookRepository.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\AccountEntity.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\EmployeeController.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\CommonRepositoryImpl.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\LoanSlipRepositoryImpl.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\annotation\Table.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\CategoryService.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\ReportModel.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\ValidateUtils.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\CategoryRepository.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\CategoryEntity.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\LoanSlipRepository.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\ReaderEntity.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\LoginController.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\AccountModel.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\SearchBookModel.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\QuanTriSachController.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\BookModel.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\enums\GenderEnums.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\module-info.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\BorrowCardRepository.java
-C:\Users\ADMIN\OneDrive\Máy tính\hoc\Nam 3\HK2\Kiemthu\demo\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\ReaderService.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\CategoryService.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\converter\ReaderConverter.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\annotation\Entity.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\CategoryRepository.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\BorrowCardRepository.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\QueryBuilderUtils.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\BorrowDetailsEntity.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\BookReservationModel.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\CategoryEntity.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\LoanSlipUtils.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\ReportEntity.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\BcryptUtils.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\CommonRepositoryImpl.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\ReaderModel.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\mapper\ResultSetMapper.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\BookRepository.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\BorrowCardRepositoryImpl.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\MessageBoxUtils.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\BookEntity.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\ReaderRepositoryImpl.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\BookReservationEntity.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\LoanSlipModel.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\BorrowCardEntity.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\constant\DatabaseConstant.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\LoanSlipRepository.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\BorrowCardModel.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\impl\BorrowCardServiceImpl.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\converter\BookConverter.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\annotation\Column.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\BookModel.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\enums\RoleEnums.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\LoginController.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\BorrowDetailsModel.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\CommonRepository.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\converter\CategoryConverter.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\LoanSlipEntity.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\BookService.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\impl\EmailService.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\annotation\Table.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\impl\CategoryServiceImpl.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\enums\GenderEnums.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\LoanSlipService.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\converter\BorrowCardConverter.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\ConnectionUtils.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\ReaderBorrowCardModel.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\ReaderRepository.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\impl\LoanSlipServiceImpl.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\ValidateUtils.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\CategoryModel.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\LoanSlipRepositoryImpl.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\ReportModel.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\QuanTriSachController.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\impl\BookServiceImpl.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\DateUtils.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\constant\QueryConstant.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\BorrowCardService.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\model\SearchBookModel.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\CategoryRepositoryImpl.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\converter\LoanslipConverter.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\CustomerController.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\ReaderService.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\module-info.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\repository\impl\BookRepositoryImpl.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\App.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\service\impl\ReaderServiceImpl.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\utils\ReaderUtils.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\EmployeeController.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\converter\BaseConverter.java
+C:\Users\chuon\Desktop\CODE\KiemThu_IT2003\QuanLyThuVien\src\main\java\com\bros\quanlythuvien\entity\ReaderEntity.java
+

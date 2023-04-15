@@ -39,7 +39,6 @@ com\bros\quanlythuvien\repository\CategoryRepository.class
 com\bros\quanlythuvien\model\ReaderBorrowCardModel.class
 com\bros\quanlythuvien\converter\LoanslipConverter.class
 com\bros\quanlythuvien\repository\BookRepository.class
-module-info.class
 com\bros\quanlythuvien\repository\impl\BorrowCardRepositoryImpl.class
 com\bros\quanlythuvien\constant\DatabaseConstant.class
 com\bros\quanlythuvien\service\impl\ReaderServiceImpl.class
