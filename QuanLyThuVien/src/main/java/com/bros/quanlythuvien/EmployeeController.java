@@ -4,6 +4,7 @@
  */
 package com.bros.quanlythuvien;
 
+import com.bros.quanlythuvien.model.AccountModel;
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.BorrowCardModel;
 import com.bros.quanlythuvien.model.LoanSlipModel;
@@ -17,6 +18,7 @@ import com.bros.quanlythuvien.service.LoanSlipService;
 import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
 import com.bros.quanlythuvien.service.impl.BorrowCardServiceImpl;
+import com.bros.quanlythuvien.service.impl.EmailService;
 import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
 import com.bros.quanlythuvien.utils.LoanSlipUtils;
@@ -24,6 +26,7 @@ import com.bros.quanlythuvien.utils.MessageBoxUtils;
 import com.bros.quanlythuvien.utils.ReaderUtils;
 import com.bros.quanlythuvien.utils.ValidateUtils;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.text.Normalizer.Form;
 import java.time.LocalDate;
@@ -62,6 +65,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javax.mail.MessagingException;
 
 /**
  *
@@ -451,13 +455,27 @@ public class EmployeeController implements Initializable {
     @FXML
     private void CreateBorrowCard() {
         SelectionModel<ReaderModel> selectionModel = readerStatusTB.getSelectionModel();
-        ReaderModel selectedBorrowCard = selectionModel.getSelectedItem();
-        if (selectedBorrowCard != null) {
-            Integer id = selectedBorrowCard.getId();
+        ReaderModel reader = selectionModel.getSelectedItem();
+        if (reader != null) {
+            Integer id = reader.getId();
+            AccountModel account = readerService.findAccountByRId(id);
+            System.out.print("account email: " + account.getEmail());
             boolean rs = borrowCardService.createBorrowCard(id);
             if (rs) {
-                MessageBoxUtils.AlertBox("INFORMATION", "Tạo thẻ thư viện thành công", AlertType.INFORMATION);
                 loadReaderStatusInfo();
+                String content = "Duyệt thẻ thư viện: " + reader.getFullname() + "\n"
+                                + "Nếu có thắc mắt liên hệ hoianhemlambaitapkiemthu@gmail.com hoặc hotline 113";
+                MessageBoxUtils.AlertBox("INFORMATION", "Tạo thẻ thư viện thành công", AlertType.INFORMATION);
+                // Run email service in a new thread
+                new Thread(() -> {
+                    try {
+                        EmailService sm = new EmailService();
+                        sm.sendEmail(account.getEmail(),
+                                "Thư viện đại học Mở - Thông báo duyệt thẻ thư viện thành công", content );
+                    } catch (MessagingException | UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
             } else {
                 MessageBoxUtils.AlertBox("ERROR", "Tạo thẻ thư viện thất bại", AlertType.ERROR);
             }
