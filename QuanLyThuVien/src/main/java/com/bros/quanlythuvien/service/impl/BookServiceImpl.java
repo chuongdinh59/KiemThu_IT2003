@@ -120,4 +120,9 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    @Override
+    public boolean saveImage(Integer id, String url) {
+        return bookRepository.saveImage(id, url);
+    }
+
 }

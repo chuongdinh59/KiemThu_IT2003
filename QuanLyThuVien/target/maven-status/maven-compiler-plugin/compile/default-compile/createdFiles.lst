@@ -7,14 +7,12 @@ com\bros\quanlythuvien\service\ReaderService.class
 com\bros\quanlythuvien\service\LoanSlipService.class
 com\bros\quanlythuvien\model\LoanSlipModel.class
 com\bros\quanlythuvien\repository\impl\CategoryRepositoryImpl.class
-com\bros\quanlythuvien\EmployeeController$DeleteButtonTableCell.class
 com\bros\quanlythuvien\model\ReportModel.class
 com\bros\quanlythuvien\service\impl\CategoryServiceImpl.class
 com\bros\quanlythuvien\utils\ConnectionUtils.class
 com\bros\quanlythuvien\CustomerController.class
 com\bros\quanlythuvien\entity\BookEntity.class
 com\bros\quanlythuvien\converter\ReaderConverter.class
-com\bros\quanlythuvien\QuanTriSachController.class
 com\bros\quanlythuvien\mapper\ResultSetMapper.class
 com\bros\quanlythuvien\entity\CategoryEntity.class
 com\bros\quanlythuvien\converter\BookConverter.class
@@ -42,7 +40,6 @@ com\bros\quanlythuvien\repository\CategoryRepository.class
 com\bros\quanlythuvien\model\ReaderBorrowCardModel.class
 com\bros\quanlythuvien\converter\LoanslipConverter.class
 com\bros\quanlythuvien\repository\BookRepository.class
-module-info.class
 com\bros\quanlythuvien\repository\impl\BorrowCardRepositoryImpl.class
 com\bros\quanlythuvien\constant\DatabaseConstant.class
 com\bros\quanlythuvien\service\impl\ReaderServiceImpl.class

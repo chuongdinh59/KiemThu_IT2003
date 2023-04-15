@@ -41,7 +41,18 @@ public class BookEntity {
     private String location;
     @Column(name = "Quantity")
     private Integer quantity;
+    @Column(name = "Image")
+    private String image;
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+    
+    
     public Integer getQuantity() {
         return quantity;
     }

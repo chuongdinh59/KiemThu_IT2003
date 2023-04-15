@@ -14,6 +14,7 @@ import com.bros.quanlythuvien.service.LoanSlipService;
 import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
 import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
+import com.bros.quanlythuvien.service.impl.CloudinaryService;
 import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
 import com.bros.quanlythuvien.utils.MessageBoxUtils;
@@ -36,6 +37,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -58,6 +60,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -218,6 +221,8 @@ public class QuanTriSachController implements Initializable {
     @FXML
     private TextField customer_phone;
 
+    private CloudinaryService cloudinaryService;
+
     @FXML
     private LineChart<String, Number> YearChart;
 
@@ -327,9 +332,8 @@ public class QuanTriSachController implements Initializable {
         addBook_location.setText("");
         addBook_quantity.setText("");
     }
-    
-//    ----------------------------------------
 
+//    ----------------------------------------
     @FXML
     public void minimize() {
         Stage stage = (Stage) mainForm.getScene().getWindow();
@@ -411,6 +415,7 @@ public class QuanTriSachController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.bookService = new BookServiceImpl();
+        this.cloudinaryService = new CloudinaryService();
         availableBooks_Btn.requestFocus();
         availableBooks_Btn.fire();
         loadGender();
@@ -473,6 +478,7 @@ public class QuanTriSachController implements Initializable {
 
     @FXML
     private void clear() {
+        availableBooks_importView.setImage(null);
         availableBooks_bookID.setText("");
         availableBooks_title.setText("");
         availableBooks_author.setText("");
@@ -508,6 +514,7 @@ public class QuanTriSachController implements Initializable {
         List<CategoryModel> categories = categoryService.findAll();
         load_cate(addBook_category, categoriesMap, categories);
     }
+    File selectedFile;
 
     @FXML
     private void updateBook() {
@@ -515,9 +522,22 @@ public class QuanTriSachController implements Initializable {
                 availableBooks_author, availableBooks_description, availableBooks_publishedPlace,
                 availableBooks_publishedYear, availableBooks_category, availableBooks_location, availableBooks_quantity, categoriesMap);
         bookService.updateBook(book);
+
+        // If an image has been selected, upload the image in the background
+        if (availableBooks_importView.getImage() != null) {
+            new Thread(() -> {
+                 int bookID = Integer.parseInt(availableBooks_bookID.getText());
+            String imageUrl = cloudinaryService.upload(selectedFile
+            );
+            if (imageUrl != null) {
+                // Update the book model with the image URL
+                bookService.saveImage(bookID, imageUrl);
+            }
+            }).start();
+        }
+
         loadBookInfo(null, null);
         clear();
-
     }
 
     @FXML
@@ -804,21 +824,56 @@ public class QuanTriSachController implements Initializable {
                 List<BookModel> searchBookList = new ArrayList<>();
                 if (targetID != null) {
                     System.out.print(targetID);
-                    BookModel bookModel =  bookService.findById(targetID);
-                    if (bookModel != null)
+                    BookModel bookModel = bookService.findById(targetID);
+                    if (bookModel != null) {
                         searchBookList.add(bookModel);
+                    }
                 } else {
                     searchBookList.addAll(bookService.findAll(null));
                 }
                 if (searchBookList.size() > 0) {
                     this.tbBook.setItems(FXCollections.observableList(searchBookList));
-                }
-                else {
+                } else {
                     MessageBoxUtils.AlertBox("Thông báo", "Không tìm thấy sách", AlertType.WARNING);
                 }
             } catch (Exception ex) {
                 MessageBoxUtils.AlertBox("Error", "Bạn cần phải nhập số", AlertType.ERROR);
             }
         }
+    }
+    @FXML
+    ImageView availableBooks_importViewAdd;
+
+    @FXML
+    public void handleImportImage() {
+        // open file chooser dialog
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.jpg");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // show the file chooser dialog and get the selected file
+        this.selectedFile = fileChooser.showOpenDialog(null);
+        // check if a file was selected
+        if (selectedFile != null) {
+            try {
+                // create an Image object from the selected file
+                Image image = new Image(selectedFile.toURI().toString());
+                // set the Image as the image for the ImageView control
+                availableBooks_importView.setImage(image);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+//        Thread uploadThread = new Thread(() -> {
+//            String url = cloudinaryService.upload(selectedFile);
+//            if (url != null) {
+//                // update the UI with the uploaded image
+//                Platform.runLater(() -> {
+//                    Image image = new Image(url);
+//                    customer_importView.setImage(image);
+//                });
+//            }
+//        });
+//        uploadThread.start();
     }
 }

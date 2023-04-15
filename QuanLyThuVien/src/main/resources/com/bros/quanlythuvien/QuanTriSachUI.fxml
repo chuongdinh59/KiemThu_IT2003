@@ -114,7 +114,7 @@
                                        </styleClass>
                                        <children>
                                           <ImageView fx:id="availableBooks_importView" fitHeight="137.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" />
-                                          <Button fx:id="availableBooks_importBtn" layoutY="112.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="112.0" styleClass="addBtn" stylesheets="@style/QuanTriSachStyle.css" text="Import" />
+                                          <Button fx:id="availableBooks_importBtn" layoutY="112.0" mnemonicParsing="false" onAction="#handleImportImage" prefHeight="16.0" prefWidth="112.0" styleClass="addBtn" stylesheets="@style/QuanTriSachStyle.css" text="Import" />
                                        </children>
                                     </AnchorPane>
                                     <Label layoutX="7.0" layoutY="171.0" text="Book ID:">
@@ -198,7 +198,7 @@
                               <String fx:value="shadow" />
                            </styleClass>
                         </AnchorPane>
-                            <AnchorPane fx:id="customer_viewForm" layoutX="14.0" layoutY="14.0" prefHeight="554.4" prefWidth="898.4" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="14.0">
+                            <AnchorPane fx:id="customer_viewForm" layoutX="14.0" layoutY="14.0" prefHeight="554.4" prefWidth="898.4" visible="false" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="14.0">
                            <children>
                               <AnchorPane layoutX="-3.0" layoutY="-7.0" prefHeight="551.0" prefWidth="287.0" stylesheets="@style/CustomerStyle.css">
                                  <styleClass>
@@ -264,22 +264,12 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="add_viewForm" layoutX="377.0" layoutY="7.0" prefHeight="546.0" prefWidth="283.0" stylesheets="@style/QuanTriSachStyle.css" visible="false">
+                        <AnchorPane fx:id="add_viewForm" layoutX="377.0" layoutY="7.0" prefHeight="546.0" prefWidth="283.0" stylesheets="@style/QuanTriSachStyle.css">
                            <styleClass>
                               <String fx:value="whiteBg" />
                               <String fx:value="shadow" />
                            </styleClass>
                            <children>
-                              <AnchorPane layoutX="86.0" layoutY="14.0" prefHeight="137.0" prefWidth="112.0" stylesheets="@style/QuanTriSachStyle.css">
-                                 <styleClass>
-                                    <String fx:value="whiteBg" />
-                                    <String fx:value="shadow" />
-                                 </styleClass>
-                                 <children>
-                                    <ImageView fx:id="availableBooks_importView1" fitHeight="137.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Button fx:id="availableBooks_importBtn1" layoutY="112.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="112.0" styleClass="addBtn" stylesheets="@style/QuanTriSachStyle.css" text="Import" />
-                                 </children>
-                              </AnchorPane>
                               <Label layoutX="8.0" layoutY="183.0" text="Title: ">
                                  <font>
                                     <Font name="Arial" size="14.0" />

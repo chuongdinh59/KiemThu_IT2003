@@ -32,6 +32,8 @@ public interface BookService {
     public void inserBook(BookModel book);
     
     public void deleteBook(Integer id);
+    
+    public boolean saveImage(Integer id, String url);
 
 }
     

@@ -2,6 +2,8 @@ module com.bros.quanlythuvien {
     requires java.sql;
     requires commons.beanutils;
     requires java.mail;
+    requires cloudinary.core;
+    requires cloudinary.http44;
     requires lombok;
     requires modelmapper;
     requires org.apache.poi.ooxml;

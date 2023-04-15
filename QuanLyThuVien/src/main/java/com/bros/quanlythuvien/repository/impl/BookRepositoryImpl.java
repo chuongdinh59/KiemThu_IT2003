@@ -94,9 +94,9 @@ public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> impleme
         }
         return false;
     }
-    
+
     @Override
-     public boolean deleteBook(Integer id) {
+    public boolean deleteBook(Integer id) {
 
         if (id == null) {
             return false;
@@ -164,4 +164,16 @@ public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> impleme
 //        System.out.println(bookRepository.buildWhereStatementSearchBook(g).toString());
 //        System.out.println(bookRepository.findBooks(g, null).get(0).getTitle());
 //    }
+    @Override
+    public boolean saveImage(Integer id, String url) {
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement("UPDATE Books SET image = ? WHERE id = ?")) {
+            stmt.setString(1, url);
+            stmt.setInt(2, id);
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
