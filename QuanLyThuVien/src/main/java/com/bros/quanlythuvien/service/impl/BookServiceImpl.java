@@ -37,14 +37,17 @@ public class BookServiceImpl implements BookService {
         List<BookModel> resultsBookModel = new ArrayList<>();
 
         for (BookEntity entity : bookList) {
-            resultsBookModel.add(bookConverter.entityToModel(entity, BookModel.class));
+            CategoryEntity categoryEntity = categoryRepository.findById(entity.getCategoryID());
+            resultsBookModel.add(bookConverter.entityToModel(categoryEntity,entity, BookModel.class));
         }
         return resultsBookModel;
     }
 
     @Override
     public BookModel findById(Integer id) {
-        return bookConverter.entityToModel( bookRepository.findById(id), BookModel.class);
+        BookEntity bookEntiry = bookRepository.findById(id);
+        CategoryEntity categoryEntity = categoryRepository.findById(bookEntiry.getCategoryID());
+        return bookConverter.entityToModel(categoryEntity ,bookRepository.findById(id), BookModel.class);
     }
 
     @Override
