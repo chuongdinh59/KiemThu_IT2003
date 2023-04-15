@@ -89,7 +89,6 @@ public class LoginController implements Initializable {
         String u = username.getText();
         String p = password.getText();
         Map<String, Object> resultMap = readerRepository.login(u, p);
-        loginBtn.getScene().getWindow().hide();
         return resultMap;
     }
 
@@ -135,6 +134,7 @@ public class LoginController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("Admin");
+            loginBtn.getScene().getWindow().hide();
             stage.show();
         } else if (resultMap.get("type").equals("Employee")) {
             Parent root = FXMLLoader.load(getClass().getResource("EmployeeUI.fxml"));
@@ -142,6 +142,7 @@ public class LoginController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("Employee");
+            loginBtn.getScene().getWindow().hide();
             stage.show();
         } else if (resultMap.get("type").equals("Customer")) {
             Integer reader = (Integer) resultMap.get("readerId");
@@ -152,9 +153,9 @@ public class LoginController implements Initializable {
             // Truyền readerId cho trang CustomerUI
             CustomerController customerController = loader.getController();
             customerController.setReaderId(reader);
-
             stage.setScene(scene);
             stage.setTitle("Customer");
+            loginBtn.getScene().getWindow().hide();
             stage.show();
         } else if (resultMap.get("type").equals("Error")) {
             MessageBoxUtils.AlertBox("Error", "Sai tài khoản hoặc mật khẩu", Alert.AlertType.ERROR);
