@@ -342,7 +342,7 @@ public class EmployeeController implements Initializable {
     //hiển thị cột trong bảng reader trang reader
     @FXML
     private void loadReaderStatusColumn() {
-        load_reader_columns(readerStatusTB);
+        ReaderUtils.load_reader_columns(readerStatusTB);
     }
 
     //hiển thị dữ liệu bảng reader trang reader
