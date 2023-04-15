@@ -434,9 +434,6 @@ public class EmployeeController implements Initializable {
         LoanSlipModel selectedLoanSlip = selectionModel.getSelectedItem();
         if (selectedLoanSlip != null) {
             if (selectedLoanSlip.getIsOnline() == 0) {
-//                Alert confirm = MessageBoxUtils.AlertBox("Thông báo",
-//                        "Khách hàng chưa nhận sách, nếu tiếp tục sẽ hủy đơn", );
-
                 Alert confirm = new Alert(AlertType.CONFIRMATION);
                 confirm.setTitle("Thông báo");
                 confirm.setContentText("Khách hàng chưa nhận sách, nếu tiếp tục sẽ hủy đơn");
@@ -446,6 +443,10 @@ public class EmployeeController implements Initializable {
                     loadLoanslipInfo(returnLoanslipTB);
                     returnLoanslipTB.refresh();
                 }
+            } else {
+                loanSlipService.updateBook(selectedLoanSlip);
+                loadLoanslipInfo(returnLoanslipTB);
+                returnLoanslipTB.refresh();
             }
 
         }
@@ -779,47 +780,45 @@ public class EmployeeController implements Initializable {
             }
 
         } else {
-            MessageBoxUtils.AlertBox("ERROR", "Vui lòng kiểm tra sách và người dùng trước khi thêm", AlertType.ERROR);
+            MessageBoxUtils.AlertBox("ERROR", "Vui lòng kiểm tra sách và khách hàng trước khi thêm", AlertType.ERROR);
         }
         LScheckBook = 0;
     }
 
-    //xử lý nút xóa trong trang loanslip
-    public class DeleteButtonTableCell<S> extends TableCell<S, Boolean> {
-
-        private final Button deleteButton;
-        private final List<S> itemList;
-
-        public DeleteButtonTableCell(List<S> itemList) {
-            this.deleteButton = new Button("Delete");
-            this.itemList = itemList;
-
-            this.deleteButton.setOnAction(event -> {
-                S currentItem = (S) getTableRow().getItem();
-                if (currentItem != null) {
-                    itemList.remove(currentItem);
-                    loadLSBookListInfo();
-                    LSTBBookList.refresh();
-                }
-            });
-        }
-
-        @Override
-        protected void updateItem(Boolean item, boolean empty) {
-            super.updateItem(item, empty);
-
-            if (empty) {
-                setGraphic(null);
-                setText(null);
-            } else {
-                setGraphic(deleteButton);
-                setText(null);
-            }
-        }
-    }
-
+//    //xử lý nút xóa trong trang loanslip
+//    public class DeleteButtonTableCell<S> extends TableCell<S, Boolean> {
+//
+//        private final Button deleteButton;
+//        private final List<S> itemList;
+//
+//        public DeleteButtonTableCell(List<S> itemList) {
+//            this.deleteButton = new Button("Delete");
+//            this.itemList = itemList;
+//
+//            this.deleteButton.setOnAction(event -> {
+//                S currentItem = (S) getTableRow().getItem();
+//                if (currentItem != null) {
+//                    itemList.remove(currentItem);
+//                    loadLSBookListInfo();
+//                    LSTBBookList.refresh();
+//                }
+//            });
+//        }
+//
+//        @Override
+//        protected void updateItem(Boolean item, boolean empty) {
+//            super.updateItem(item, empty);
+//
+//            if (empty) {
+//                setGraphic(null);
+//                setText(null);
+//            } else {
+//                setGraphic(deleteButton);
+//                setText(null);
+//            }
+//        }
+//    }
     // xử lý cột trong trang loanslip
-    @FXML
     public void loadLSBookListColumn() {
         TableColumn<BookModel, Integer> bookIdColumn = new TableColumn<>("Book ID");
         bookIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -835,7 +834,37 @@ public class EmployeeController implements Initializable {
 
         TableColumn<BookModel, Boolean> deleteColumn = new TableColumn<>("Delete");
         deleteColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(true));
-        deleteColumn.setCellFactory(column -> new DeleteButtonTableCell<BookModel>(LSbookList));
+        deleteColumn.setCellFactory(column -> {
+            return new TableCell<BookModel, Boolean>() {
+                private final Button deleteButton = new Button("Delete");
+
+                {
+                    deleteButton.setOnAction(event -> {
+                        BookModel book = getTableView().getItems().get(getIndex());
+                        int currentQuantity = book.getQuantity();
+                        if (currentQuantity > 1) {
+                            book.setQuantity(currentQuantity - 1);
+                            getTableView().refresh();
+                            countQuantity--;
+                        } else {
+                            countQuantity--;
+                            getTableView().getItems().remove(book);
+                            LSbookList.remove(book);
+                        }
+                    });
+                }
+
+                @Override
+                protected void updateItem(Boolean item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (!empty) {
+                        setGraphic(deleteButton);
+                    } else {
+                        setGraphic(null);
+                    }
+                }
+            };
+        });
 
         LSTBBookList.getColumns().addAll(bookIdColumn, nameColumn, authorColumn, quantityColumn, deleteColumn);
     }
@@ -865,11 +894,13 @@ public class EmployeeController implements Initializable {
     public void creatLoanSlip() {
         String strId = LSCustomerID.getText();
         loanSlipService.creatLoanSlip(LSbookList, LScheckReader, strId, 1);
+        clearArray();
     }
 
     @FXML
     public void clearArray() {
         LSbookList.clear();
+        countQuantity=0;
     }
 
     @FXML
