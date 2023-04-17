@@ -491,10 +491,13 @@ public class QuanTriSachController implements Initializable {
 
     private void loadImageOfBook(BookModel rowData) {
         availableBooks_importView.setImage(null);
-        String imageUrl = bookService.getImageById(rowData.getId());
+        String imageUrl = rowData.getImage();
         if (imageUrl != null) {
-            Image img = new Image(imageUrl);
-            availableBooks_importView.setImage(img);
+            Thread thread = new Thread(() -> {
+                Image img = new Image(imageUrl);
+                availableBooks_importView.setImage(img);
+            });
+            thread.start();
         }
     }
 
