@@ -8,7 +8,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
@@ -99,16 +98,6 @@
                            <children>
                               <AnchorPane layoutX="-10.0" layoutY="-12.0" prefHeight="554.4" prefWidth="898.4" stylesheets="@style/CustomerStyle.css" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="-10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="-12.0">
                                  <children>
-                                    <AnchorPane layoutX="24.0" layoutY="12.0" prefHeight="137.0" prefWidth="112.0" stylesheets="@style/CustomerStyle.css">
-                                       <styleClass>
-                                          <String fx:value="whiteBg" />
-                                          <String fx:value="shadow" />
-                                       </styleClass>
-                                       <children>
-                                          <ImageView fx:id="infomation_importView" fitHeight="137.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" />
-                                          <Button fx:id="availableBooks_importBtn" layoutY="112.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="112.0" styleClass="addBtn" stylesheets="@style/CustomerStyle.css" text="Import" />
-                                       </children>
-                                    </AnchorPane>
                                     <Label layoutX="160.0" layoutY="61.0" text="Name:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
@@ -145,6 +134,11 @@
                                        </font>
                                     </Label>
                                     <TextField fx:id="infomation_email" editable="false" layoutX="712.0" layoutY="56.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <FontAwesomeIconView glyphName="USER" layoutX="41.0" layoutY="122.0" selectionFill="BLACK" size="7EM" wrappingWidth="79.99993133544922">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </FontAwesomeIconView>
                                  </children>
                                  <styleClass>
                                     <String fx:value="whiteBg" />
