@@ -50,10 +50,11 @@ public class LoanSlipServiceImpl implements LoanSlipService {
     }
 
     @Override
-    public void updateBookGive(LoanSlipModel loanSlip) {
+    public Boolean updateBookGive(LoanSlipModel loanSlip) {
 
         if (loanSlip.getIsOnline() == 1) {
             MessageBoxUtils.AlertBox("ERROR", "Sách đã được lấy!!", Alert.AlertType.ERROR);
+            return false;
         } else {
             boolean rs = loanSlipRepository.updateBookGive(loanSlip);
             if (rs) {
@@ -61,6 +62,7 @@ public class LoanSlipServiceImpl implements LoanSlipService {
             } else {
                 MessageBoxUtils.AlertBox("ERROR", "Trao sách thất bại", Alert.AlertType.ERROR);
             }
+            return rs;
         }
     }
 
@@ -86,10 +88,11 @@ public class LoanSlipServiceImpl implements LoanSlipService {
     }
 
     @Override
-    public void updateBook(LoanSlipModel loanSlip) {
+    public Boolean updateBook(LoanSlipModel loanSlip) {
 
         if (loanSlip.getIsReturned() == 1) {
             MessageBoxUtils.AlertBox("ERROR", "Sách đã được trả!!", Alert.AlertType.ERROR);
+            return false;
         } else {
             boolean rs = loanSlipRepository.updateBook(loanSlip);
             if (rs) {
@@ -97,6 +100,7 @@ public class LoanSlipServiceImpl implements LoanSlipService {
             } else {
                 MessageBoxUtils.AlertBox("ERROR", "Trả sách thất bại", Alert.AlertType.ERROR);
             }
+            return rs;
         }
     }
 

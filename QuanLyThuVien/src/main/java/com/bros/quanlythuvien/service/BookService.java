@@ -26,11 +26,11 @@ public interface BookService {
 
     public Map<String,Object> getSearchMap(String strTitle, String strAuthor, Integer strCate, String strPublish);
     
-    public void updateBook(BookModel book);
+    public Boolean updateBook(BookModel book);
     
     public BookModel insertBook(BookModel book);
     
-    public void deleteBook(Integer id);
+    public Boolean deleteBook(Integer id);
     
     public boolean saveImage(Integer id, String url);
     
