@@ -326,7 +326,10 @@ public class QuanTriSachController implements Initializable {
         }
     }
 
-    public void clear_add_book(TextField addBook_title, TextField addBook_author, TextField addBook_description, TextField addBook_publishedPlace, TextField addBook_publishedYear, ComboBox<String> addBook_category, TextField addBook_location, TextField addBook_quantity) {
+    public void clear_add_book(TextField addBook_title, TextField addBook_author,
+            TextField addBook_description, TextField addBook_publishedPlace, TextField addBook_publishedYear, ComboBox<String> addBook_category,
+            TextField addBook_location, TextField addBook_quantity,
+            ImageView imgViewAdd) {
         addBook_title.setText("");
         addBook_author.setText("");
         addBook_description.setText("");
@@ -335,6 +338,7 @@ public class QuanTriSachController implements Initializable {
         addBook_category.setValue("Chọn thể loại");
         addBook_location.setText("");
         addBook_quantity.setText("");
+        imgViewAdd.setImage(null);
     }
 
 //    ----------------------------------------
@@ -403,6 +407,10 @@ public class QuanTriSachController implements Initializable {
                 allButton.setStyle("");
             }
         }
+        // Mỗi lần switch form clear selectFile 
+        this.selectedFile = null;
+        this.availableBooks_importView.setImage(null);
+        this.availableBooks_importViewAdd.setImage(null);
     }
 
     @FXML
@@ -502,6 +510,8 @@ public class QuanTriSachController implements Initializable {
         availableBooks_category.setValue("Chọn thể loại");
         availableBooks_location.setText("");
         availableBooks_quantity.setText("");
+        availableBooks_importView.setImage(null);
+
     }
 
     //hiển thị cột trong bảng reader
@@ -528,15 +538,18 @@ public class QuanTriSachController implements Initializable {
         List<CategoryModel> categories = categoryService.findAll();
         load_cate(addBook_category, categoriesMap, categories);
     }
-    private File selectedFile;
     @FXML
+    private File selectedFile;
+
+    @FXML
+
     private void updateBook() {
         BookModel book = get_book(availableBooks_bookID, availableBooks_title,
                 availableBooks_author, availableBooks_description, availableBooks_publishedPlace,
                 availableBooks_publishedYear, availableBooks_category, availableBooks_location, availableBooks_quantity, categoriesMap);
         bookService.updateBook(book);
         // If an image has been selected, upload the image and update the book model
-        if (selectedFile != null) {
+        if (this.selectedFile != null) {
             new Thread(() -> {
                 int bookID = Integer.parseInt(availableBooks_bookID.getText());
                 String imageUrl = cloudinaryService.upload(selectedFile);
@@ -551,7 +564,7 @@ public class QuanTriSachController implements Initializable {
                     bookService.saveImage(bookID, imageUrl);
                 }
             }).start();
-            
+
             loadBookInfo(null, null);
             clear();
         }
@@ -566,8 +579,21 @@ public class QuanTriSachController implements Initializable {
                 addBook_author, addBook_description, addBook_publishedPlace,
                 addBook_publishedYear, addBook_category, addBook_location, addBook_quantity, categoriesMap);
         if (book != null) {
-            bookService.inserBook(book);
-            clear_add_book(addBook_title, addBook_author, addBook_description, addBook_publishedPlace, addBook_publishedYear, addBook_category, addBook_location, addBook_quantity);
+            BookModel model = bookService.insertBook(book);
+            if (this.selectedFile != null) {
+                Integer bookID = model.getId();
+                // create a thread to upload and save the image
+                new Thread(() -> {
+                    String imageUrl = cloudinaryService.upload(selectedFile);
+                    if (imageUrl != null) {
+                        bookService.saveImage(bookID, imageUrl);
+                    }
+                }).start();
+            }
+
+            clear_add_book(addBook_title, addBook_author, addBook_description,
+                    addBook_publishedPlace, addBook_publishedYear, addBook_category,
+                    addBook_location, addBook_quantity, availableBooks_importViewAdd);
         } else {
             MessageBoxUtils.AlertBox("ERROR", "Sửa đổi dữ liệu thất bại", AlertType.ERROR);
         }
@@ -879,10 +905,14 @@ public class QuanTriSachController implements Initializable {
             }
         }
     }
-    @FXML void handleImportImageInUpdateBookView() {
-        handleImportImage(availableBooks_importView );
+
+    @FXML
+    void handleImportImageInUpdateBookView() {
+        handleImportImage(availableBooks_importView);
     }
-    @FXML void handleImportImageInCreateBookView() {
+
+    @FXML
+    void handleImportImageInCreateBookView() {
         handleImportImage(availableBooks_importViewAdd);
     }
 }

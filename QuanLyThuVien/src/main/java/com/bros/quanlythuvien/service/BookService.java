@@ -28,7 +28,7 @@ public interface BookService {
     
     public void updateBook(BookModel book);
     
-    public void inserBook(BookModel book);
+    public BookModel insertBook(BookModel book);
     
     public void deleteBook(Integer id);
     

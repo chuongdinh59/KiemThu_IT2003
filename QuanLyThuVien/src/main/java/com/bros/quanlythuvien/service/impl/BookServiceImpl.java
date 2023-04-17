@@ -101,13 +101,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void inserBook(BookModel book) {
+    public BookModel insertBook(BookModel book) {
         BookModel rs = bookRepository.insertBook(book);
         if (rs != null) {
             MessageBoxUtils.AlertBox("INFORMATION", "Thêm dữ liệu thành công", Alert.AlertType.INFORMATION);
         } else {
             MessageBoxUtils.AlertBox("ERROR", "Thêm dữ liệu thất bại", Alert.AlertType.ERROR);
         }
+        return rs;
     }
 
     @Override
