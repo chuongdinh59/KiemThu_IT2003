@@ -519,23 +519,6 @@ public class EmployeeController implements Initializable {
         loadLoanslipInfo(returnLoanslipTB);
     }
 
-    //xử lý nút tìm kiếm reader trang status
-//    @FXML
-//    private void loadStatusReader() {
-//        List<LoanSlipModel> loanSlipList = new ArrayList<>();
-//        if ("".equals(statusReaderTF.getText())) {
-//            loadLoanslipInfo(statusBookTB);
-//
-//        } else {
-//            try {
-//                Integer id = Integer.valueOf(statusReaderTF.getText());
-//                loanSlipList = loanSlipService.findByCId(id);
-//                this.statusBookTB.setItems(FXCollections.observableList(loanSlipList));
-//            } catch (NumberFormatException e) {
-//                MessageBoxUtils.AlertBox("Error", "Bạn cần phải nhập số", AlertType.ERROR);
-//            }
-//        }
-//    }
     //xử lý nút tìm kiếm book trang status
     @FXML
     private void loadStatusBook() {
@@ -751,7 +734,7 @@ public class EmployeeController implements Initializable {
             String strquantity = LSBookQuantity.getText();
             Integer quantity = Integer.valueOf(strquantity);
 
-            if (quantity <= 5) {
+            if (quantity <= 5 && quantity >0) {
 
                 countQuantity += quantity;
                 if (countQuantity <= 5) {
@@ -776,7 +759,7 @@ public class EmployeeController implements Initializable {
                     MessageBoxUtils.AlertBox("ERROR", "Tổng số lượng mượn đã lớn hơn 5", AlertType.ERROR);
                 }
             } else {
-                MessageBoxUtils.AlertBox("ERROR", "Số lượng không được lớn hơn 5", AlertType.ERROR);
+                MessageBoxUtils.AlertBox("ERROR", "Số lượng không được lớn hơn 5 hoặc bé hơn 1", AlertType.ERROR);
             }
 
         } else {
@@ -784,40 +767,6 @@ public class EmployeeController implements Initializable {
         }
         LScheckBook = 0;
     }
-
-//    //xử lý nút xóa trong trang loanslip
-//    public class DeleteButtonTableCell<S> extends TableCell<S, Boolean> {
-//
-//        private final Button deleteButton;
-//        private final List<S> itemList;
-//
-//        public DeleteButtonTableCell(List<S> itemList) {
-//            this.deleteButton = new Button("Delete");
-//            this.itemList = itemList;
-//
-//            this.deleteButton.setOnAction(event -> {
-//                S currentItem = (S) getTableRow().getItem();
-//                if (currentItem != null) {
-//                    itemList.remove(currentItem);
-//                    loadLSBookListInfo();
-//                    LSTBBookList.refresh();
-//                }
-//            });
-//        }
-//
-//        @Override
-//        protected void updateItem(Boolean item, boolean empty) {
-//            super.updateItem(item, empty);
-//
-//            if (empty) {
-//                setGraphic(null);
-//                setText(null);
-//            } else {
-//                setGraphic(deleteButton);
-//                setText(null);
-//            }
-//        }
-//    }
     // xử lý cột trong trang loanslip
     public void loadLSBookListColumn() {
         TableColumn<BookModel, Integer> bookIdColumn = new TableColumn<>("Book ID");
