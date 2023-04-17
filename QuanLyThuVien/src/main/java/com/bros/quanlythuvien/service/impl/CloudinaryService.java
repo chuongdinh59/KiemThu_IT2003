@@ -31,4 +31,25 @@ public class CloudinaryService {
             return null;
         }
     }
+
+    public boolean delete(String imageUrl) {
+        try {
+            // extract public ID from image URL
+            String publicId = extractPublicId(imageUrl);
+            // delete image from Cloudinary
+            Map<String, Object> deleteResult = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+            return deleteResult.get("result").equals("ok");
+        } catch (Exception e) {
+            System.err.println("Error deleting file from Cloudinary");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private String extractPublicId(String imageUrl) {
+        // extract public ID from image URL
+        int startIndex = imageUrl.lastIndexOf("/") + 1;
+        int endIndex = imageUrl.lastIndexOf(".");
+        return imageUrl.substring(startIndex, endIndex);
+    }
 }

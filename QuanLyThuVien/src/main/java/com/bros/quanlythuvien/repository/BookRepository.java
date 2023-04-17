@@ -20,10 +20,11 @@ public interface BookRepository extends CommonRepository<BookEntity>{
 
     public boolean updateBook(BookModel book);
     
-    public boolean insertBook(BookModel book);
+    public BookModel insertBook(BookModel book);
     
     public boolean deleteBook(Integer id);
     
     public boolean saveImage(Integer id, String url);
     
+    public String getImageById(Integer id);
 }

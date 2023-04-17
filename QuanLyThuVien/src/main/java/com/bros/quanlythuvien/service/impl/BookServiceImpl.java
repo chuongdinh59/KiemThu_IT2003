@@ -102,8 +102,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void inserBook(BookModel book) {
-        boolean rs = bookRepository.insertBook(book);
-        if (rs) {
+        BookModel rs = bookRepository.insertBook(book);
+        if (rs != null) {
             MessageBoxUtils.AlertBox("INFORMATION", "Thêm dữ liệu thành công", Alert.AlertType.INFORMATION);
         } else {
             MessageBoxUtils.AlertBox("ERROR", "Thêm dữ liệu thất bại", Alert.AlertType.ERROR);
@@ -123,6 +123,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public boolean saveImage(Integer id, String url) {
         return bookRepository.saveImage(id, url);
+    }
+
+    @Override
+    public String getImageById(Integer id) {
+        return bookRepository.getImageById(id);
     }
 
 }

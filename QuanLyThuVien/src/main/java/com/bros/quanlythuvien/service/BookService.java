@@ -7,8 +7,7 @@ package com.bros.quanlythuvien.service;
 import com.bros.quanlythuvien.model.BookModel;
 import java.util.List;
 import java.util.Map;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+
 
 /**
  *
@@ -34,6 +33,8 @@ public interface BookService {
     public void deleteBook(Integer id);
     
     public boolean saveImage(Integer id, String url);
+    
+    public String getImageById(Integer id);
 
 }
     

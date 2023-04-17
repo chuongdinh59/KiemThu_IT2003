@@ -99,7 +99,7 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="availableBooks_viewForm" layoutX="14.0" layoutY="14.0" prefHeight="554.4" prefWidth="898.4" stylesheets="@style/CustomerStyle.css" visible="false" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="14.0">
+                        <AnchorPane fx:id="availableBooks_viewForm" layoutX="14.0" layoutY="14.0" prefHeight="554.4" prefWidth="898.4" stylesheets="@style/CustomerStyle.css" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="14.0">
                            <children>
                               <AnchorPane layoutX="-3.0" layoutY="-7.0" prefHeight="546.0" prefWidth="283.0" stylesheets="@style/QuanTriSachStyle.css">
                                  <styleClass>
@@ -114,7 +114,7 @@
                                        </styleClass>
                                        <children>
                                           <ImageView fx:id="availableBooks_importView" fitHeight="137.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" />
-                                          <Button fx:id="availableBooks_importBtn" layoutY="112.0" mnemonicParsing="false" onAction="#handleImportImage" prefHeight="16.0" prefWidth="112.0" styleClass="addBtn" stylesheets="@style/QuanTriSachStyle.css" text="Import" />
+                                          <Button fx:id="availableBooks_importBtn" layoutY="112.0" mnemonicParsing="false" onAction="#handleImportImageInUpdateBookView" prefHeight="16.0" prefWidth="112.0" styleClass="addBtn" stylesheets="@style/QuanTriSachStyle.css" text="Import" />
                                        </children>
                                     </AnchorPane>
                                     <Label layoutX="7.0" layoutY="171.0" text="Book ID:">
@@ -264,7 +264,7 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="add_viewForm" layoutX="377.0" layoutY="7.0" prefHeight="546.0" prefWidth="283.0" stylesheets="@style/QuanTriSachStyle.css">
+                        <AnchorPane fx:id="add_viewForm" layoutX="377.0" layoutY="7.0" prefHeight="546.0" prefWidth="283.0" stylesheets="@style/QuanTriSachStyle.css" visible="false">
                            <styleClass>
                               <String fx:value="whiteBg" />
                               <String fx:value="shadow" />
@@ -320,6 +320,16 @@
                               <TextField fx:id="addBook_quantity" layoutX="120.0" layoutY="452.0" styleClass="textField" stylesheets="@style/QuanTriSachStyle.css" />
                               <Button fx:id="addBook_addBtn" layoutX="172.0" layoutY="501.0" mnemonicParsing="false" onMouseClicked="#insertBook" prefHeight="30.0" prefWidth="90.0" styleClass="addBtn" stylesheets="@style/QuanTriSachStyle.css" text="Add" />
                               <Button fx:id="addBook_exitBtn" layoutX="22.0" layoutY="501.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="30.0" prefWidth="90.0" styleClass="deleteBtn" stylesheets="@style/QuanTriSachStyle.css" text="Exit" />
+                              <AnchorPane layoutX="90.0" layoutY="4.0" prefHeight="137.0" prefWidth="112.0" stylesheets="@style/QuanTriSachStyle.css">
+                                 <styleClass>
+                                    <String fx:value="whiteBg" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                                 <children>
+                                    <ImageView fx:id="availableBooks_importViewAdd" fitHeight="137.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" />
+                                    <Button fx:id="availableBooks_importBtnAdd" layoutY="112.0" mnemonicParsing="false" onAction="#handleImportImageInCreateBookView" prefHeight="16.0" prefWidth="112.0" styleClass="addBtn" stylesheets="@style/QuanTriSachStyle.css" text="Import" />
+                                 </children>
+                              </AnchorPane>
                            </children>
                         </AnchorPane>
                         <AnchorPane fx:id="report_viewForm" layoutX="310.0" layoutY="122.0" prefHeight="560.0" prefWidth="898.4" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

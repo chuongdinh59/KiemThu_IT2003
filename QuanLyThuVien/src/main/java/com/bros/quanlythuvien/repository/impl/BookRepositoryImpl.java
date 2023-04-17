@@ -13,7 +13,9 @@ import com.bros.quanlythuvien.utils.QueryBuilderUtils;
 import com.bros.quanlythuvien.utils.ValidateUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 
@@ -30,12 +32,10 @@ public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> impleme
         return b;
     }
 
-    private PreparedStatement statement;
-    Connection connect = getConnection();
-
     @Override
     public boolean updateBook(BookModel book) {
-
+        Connection connect = getConnection();
+        PreparedStatement statement;
         if (book == null) {
             return false;
         }
@@ -65,16 +65,15 @@ public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> impleme
     }
 
     @Override
-    public boolean insertBook(BookModel book) {
-//        INSERT INTO `librarymanagement`.`books` (`BookTitle`, `Author`, `Description`, `PublicationYear`, `PublicationPlace`, `Location`, `CategoryID`) VALUES ('c', 'c', 'c', '2132', 'c', 'c', '2');
-
+    public BookModel insertBook(BookModel book) {
+        Connection connect = getConnection();
         if (book == null) {
-            return false;
+            return null;
         }
 
         try {
-            String sql = "INSERT INTO books (BookTitle, Author, Description, PublicationYear, PublicationPlace, Location, CategoryID,Quantity) VALUES (?, ?, ?, ?, ?, ?, ?,?)";
-            statement = connect.prepareStatement(sql);
+            String sql = "INSERT INTO books (BookTitle, Author, Description, PublicationYear, PublicationPlace, Location, CategoryID, Quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement statement = connect.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, book.getTitle());
             statement.setString(2, book.getAuthor());
             statement.setString(3, book.getDescription());
@@ -86,18 +85,23 @@ public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> impleme
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
-                return true;
+                ResultSet rs = statement.getGeneratedKeys();
+                if (rs.next()) {
+                    int id = rs.getInt(1);
+                    book.setId(id);
+                }
+                return book;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
-        return false;
+        return null;
     }
 
     @Override
     public boolean deleteBook(Integer id) {
-
+        Connection connect = getConnection();
+        PreparedStatement statement;
         if (id == null) {
             return false;
         }
@@ -176,4 +180,23 @@ public class BookRepositoryImpl extends CommonRepositoryImpl<BookEntity> impleme
             return false;
         }
     }
+
+    @Override
+    public String getImageById(Integer id) {
+        Connection connect = getConnection();
+        String imageUrl = null;
+        try {
+            String sql = "SELECT Image FROM books WHERE id = ?";
+            PreparedStatement statement = connect.prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                imageUrl = result.getString("Image");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return imageUrl;
+    }
+
 }

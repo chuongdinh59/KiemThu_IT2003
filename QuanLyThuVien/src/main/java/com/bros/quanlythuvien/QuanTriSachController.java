@@ -219,6 +219,8 @@ public class QuanTriSachController implements Initializable {
     private Button btnReport;
 
     @FXML
+    ImageView availableBooks_importViewAdd;
+    @FXML
     private TextField customer_phone;
 
     private CloudinaryService cloudinaryService;
@@ -226,6 +228,8 @@ public class QuanTriSachController implements Initializable {
     @FXML
     private LineChart<String, Number> YearChart;
 
+    @FXML
+    private Button availableBooks_importBtnAdd;
     BookService bookService;
     private Map<Integer, String> categoriesMap = new HashMap<>();
     private ReaderService readerService = new ReaderServiceImpl();
@@ -462,6 +466,7 @@ public class QuanTriSachController implements Initializable {
     @FXML
     private void TBInfor() {
         BookModel rowData = tbBook.getSelectionModel().getSelectedItem();
+
         if (rowData != null) {
             availableBooks_bookID.setText(rowData.getId().toString());
             availableBooks_title.setText(rowData.getTitle());
@@ -472,7 +477,16 @@ public class QuanTriSachController implements Initializable {
             availableBooks_category.setValue(rowData.getCategoryValue());
             availableBooks_location.setText(rowData.getLocation());
             availableBooks_quantity.setText(rowData.getQuantity().toString());
+            loadImageOfBook(rowData);
+        }
+    }
 
+    private void loadImageOfBook(BookModel rowData) {
+        availableBooks_importView.setImage(null);
+        String imageUrl = bookService.getImageById(rowData.getId());
+        if (imageUrl != null) {
+            Image img = new Image(imageUrl);
+            availableBooks_importView.setImage(img);
         }
     }
 
@@ -514,30 +528,33 @@ public class QuanTriSachController implements Initializable {
         List<CategoryModel> categories = categoryService.findAll();
         load_cate(addBook_category, categoriesMap, categories);
     }
-    File selectedFile;
-
+    private File selectedFile;
     @FXML
     private void updateBook() {
         BookModel book = get_book(availableBooks_bookID, availableBooks_title,
                 availableBooks_author, availableBooks_description, availableBooks_publishedPlace,
                 availableBooks_publishedYear, availableBooks_category, availableBooks_location, availableBooks_quantity, categoriesMap);
         bookService.updateBook(book);
-
-        // If an image has been selected, upload the image in the background
-        if (availableBooks_importView.getImage() != null) {
+        // If an image has been selected, upload the image and update the book model
+        if (selectedFile != null) {
             new Thread(() -> {
-                 int bookID = Integer.parseInt(availableBooks_bookID.getText());
-            String imageUrl = cloudinaryService.upload(selectedFile
-            );
-            if (imageUrl != null) {
-                // Update the book model with the image URL
-                bookService.saveImage(bookID, imageUrl);
-            }
-            }).start();
-        }
+                int bookID = Integer.parseInt(availableBooks_bookID.getText());
+                String imageUrl = cloudinaryService.upload(selectedFile);
+                if (imageUrl != null) {
+                    // Delete the old image if it exists --> Cân nhắc xóa ảnh củ thì app lâu 
+//                    String oldImageUrl = bookService.getImageById(bookID);
+//                    if (oldImageUrl != null) {
+//                        cloudinaryService.delete(oldImageUrl);
+//                    }
 
-        loadBookInfo(null, null);
-        clear();
+                    // Update the book model with the new image URL
+                    bookService.saveImage(bookID, imageUrl);
+                }
+            }).start();
+            
+            loadBookInfo(null, null);
+            clear();
+        }
     }
 
     @FXML
@@ -602,8 +619,7 @@ public class QuanTriSachController implements Initializable {
             MessageBoxUtils.AlertBox("ERROR", "Vui lòng nhập đủ 11 số và bắt đầu phải là số 0", Alert.AlertType.ERROR);
         }
     }
-
-//    report----------------------------------------------------------
+    //    report----------------------------------------------------------
     private LoanSlipService loanSlipService;
     private List<ReportModel> reportBorrowModels;
     private List<ReportModel> reportReturnModels;
@@ -841,11 +857,9 @@ public class QuanTriSachController implements Initializable {
             }
         }
     }
-    @FXML
-    ImageView availableBooks_importViewAdd;
 
     @FXML
-    public void handleImportImage() {
+    public void handleImportImage(ImageView imgView) {
         // open file chooser dialog
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.jpg");
@@ -859,21 +873,16 @@ public class QuanTriSachController implements Initializable {
                 // create an Image object from the selected file
                 Image image = new Image(selectedFile.toURI().toString());
                 // set the Image as the image for the ImageView control
-                availableBooks_importView.setImage(image);
+                imgView.setImage(image);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-//        Thread uploadThread = new Thread(() -> {
-//            String url = cloudinaryService.upload(selectedFile);
-//            if (url != null) {
-//                // update the UI with the uploaded image
-//                Platform.runLater(() -> {
-//                    Image image = new Image(url);
-//                    customer_importView.setImage(image);
-//                });
-//            }
-//        });
-//        uploadThread.start();
+    }
+    @FXML void handleImportImageInUpdateBookView() {
+        handleImportImage(availableBooks_importView );
+    }
+    @FXML void handleImportImageInCreateBookView() {
+        handleImportImage(availableBooks_importViewAdd);
     }
 }
