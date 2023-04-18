@@ -16,6 +16,7 @@ import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.utils.MessageBoxUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import javafx.scene.control.Alert;
 
@@ -95,5 +96,16 @@ public class ReaderServiceImpl implements ReaderService {
         boolean rs = readerRepository.updateReader(reader);
         return rs;
     }
+
+    @Override
+    public Map<String, Object> login(String username, String password) {
+        return readerRepository.login(username, password);
+    }
+
+    @Override
+    public int register(String register_username, String register_password, String register_fullname, String register_email) {
+        return readerRepository.register(register_username, register_password, register_fullname, register_email);
+    }
+    
 
 }

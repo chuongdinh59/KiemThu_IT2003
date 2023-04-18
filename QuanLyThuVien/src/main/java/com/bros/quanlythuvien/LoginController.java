@@ -87,7 +87,7 @@ public class LoginController implements Initializable {
     public Map<String, Object> login(TextField username, TextField password, Button loginBtn) {
         String u = username.getText();
         String p = password.getText();
-        Map<String, Object> resultMap = readerRepository.login(u, p);
+        Map<String, Object> resultMap = readerService.login(u, p);
         return resultMap;
     }
 

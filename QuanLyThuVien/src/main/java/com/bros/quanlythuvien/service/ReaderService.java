@@ -32,5 +32,9 @@ public interface ReaderService {
     public List<ReaderModel> findReaderNotHaveBorrowCard();
 
     public AccountModel findAccountByRId(Integer id);
+    
+    public Map<String, Object> login(String username, String password);
+    
+        public int register(String register_username, String register_password, String register_fullname, String register_email);
 
 }
