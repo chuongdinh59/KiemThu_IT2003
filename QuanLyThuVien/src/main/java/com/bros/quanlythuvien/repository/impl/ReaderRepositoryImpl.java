@@ -6,6 +6,7 @@ package com.bros.quanlythuvien.repository.impl;
 
 import com.bros.quanlythuvien.entity.AccountEntity;
 import com.bros.quanlythuvien.entity.ReaderEntity;
+import com.bros.quanlythuvien.model.AccountModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.repository.BorrowCardRepository;
 import com.bros.quanlythuvien.repository.ReaderRepository;
@@ -373,6 +374,37 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
             statement.setString(4, reader.getPhone());
             statement.setInt(5, reader.getId());
 
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+    
+     @Override
+    public boolean updateRoleAccount(String role,Integer id) {
+        Connection connect = getConnection();
+        PreparedStatement statement = null;
+        try {
+            String sql = "UPDATE account SET type = ? WHERE ReaderID = ?;";
+            statement = connect.prepareStatement(sql);
+            statement.setString(1, role);
+            statement.setInt(2, id);
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
                 return true;

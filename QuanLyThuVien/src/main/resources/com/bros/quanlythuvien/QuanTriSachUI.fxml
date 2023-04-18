@@ -206,6 +206,11 @@
                                     <String fx:value="shadow" />
                                  </styleClass>
                                  <children>
+                                    <FontAwesomeIconView glyphName="USER" layoutX="104.0" layoutY="130.0" selectionFill="BLACK" size="7EM" wrappingWidth="79.99993133544922">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </FontAwesomeIconView>
                                     <Label layoutX="37.0" layoutY="191.0" text="Reader ID:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
@@ -218,6 +223,12 @@
                                        </font>
                                     </Label>
                                     <TextField fx:id="customer_name" layoutX="114.0" layoutY="241.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
+                                    <Label layoutX="64.0" layoutY="301.0" text="Phone:">
+                                       <font>
+                                          <Font name="Arial" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="customer_phone" layoutX="114.0" layoutY="297.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
                                     <Label layoutX="55.0" layoutY="354.0" text="Gender:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
@@ -230,18 +241,13 @@
                                        </font>
                                     </Label>
                                     <DatePicker fx:id="customer_birthDay" layoutX="112.0" layoutY="408.0" prefHeight="26.0" prefWidth="146.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
-                                    <Button fx:id="customer_updateBtn" layoutX="99.0" layoutY="485.0" mnemonicParsing="false" onMouseClicked="#updateReader" prefHeight="43.0" prefWidth="90.0" styleClass="updateBtn" stylesheets="@style/CustomerStyle.css" text="Update" />
-                                    <Label layoutX="64.0" layoutY="301.0" text="Phone:">
+                                    <Label layoutX="68.0" layoutY="456.0" text="Role:">
                                        <font>
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="customer_phone" layoutX="114.0" layoutY="297.0" styleClass="textField" stylesheets="@style/CustomerStyle.css" />
-                                    <FontAwesomeIconView glyphName="USER" layoutX="104.0" layoutY="130.0" selectionFill="BLACK" size="7EM" wrappingWidth="79.99993133544922">
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font>
-                                    </FontAwesomeIconView>
+                                    <ComboBox fx:id="customer_role" layoutX="112.0" layoutY="451.0" prefHeight="26.0" prefWidth="145.0" />
+                                    <Button fx:id="customer_updateBtn" layoutX="99.0" layoutY="500.0" mnemonicParsing="false" onMouseClicked="#updateReader" prefHeight="43.0" prefWidth="90.0" styleClass="updateBtn" stylesheets="@style/CustomerStyle.css" text="Update" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane fx:id="availableBooks_form" layoutX="296.0" layoutY="-7.0" prefHeight="548.0" prefWidth="581.0" stylesheets="@style/CustomerStyle.css">

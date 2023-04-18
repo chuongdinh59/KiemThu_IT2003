@@ -6,6 +6,7 @@ package com.bros.quanlythuvien.repository;
 
 import com.bros.quanlythuvien.entity.AccountEntity;
 import com.bros.quanlythuvien.entity.ReaderEntity;
+import com.bros.quanlythuvien.model.AccountModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import java.util.List;
 import java.util.Map;
@@ -35,5 +36,6 @@ public interface ReaderRepository extends CommonRepository<ReaderEntity> {
     public List<Integer> findReaderId();
     
     public AccountEntity findAccountByRId(Integer id);
+    public boolean updateRoleAccount(String role,Integer id);
 
 }
