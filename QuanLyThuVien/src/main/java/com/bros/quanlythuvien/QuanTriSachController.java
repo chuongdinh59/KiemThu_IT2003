@@ -4,6 +4,7 @@
  */
 package com.bros.quanlythuvien;
 
+import com.bros.quanlythuvien.model.AccountModel;
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.CategoryModel;
 import com.bros.quanlythuvien.model.ReaderModel;
@@ -204,6 +205,9 @@ public class QuanTriSachController implements Initializable {
     private ComboBox<String> customer_gender;
 
     @FXML
+    private ComboBox<String> customer_role;
+
+    @FXML
     private Button customer_updateBtn;
     @FXML
     private TextField customer_id;
@@ -217,6 +221,7 @@ public class QuanTriSachController implements Initializable {
 
     @FXML
     private Button btnReport;
+    
 
     @FXML
     ImageView availableBooks_importViewAdd;
@@ -305,12 +310,18 @@ public class QuanTriSachController implements Initializable {
         }
     }
 
-    public void info_reader_admin(TableView<ReaderModel> tbReader, TextField customer_id, TextField customer_name, ComboBox<String> customer_gender, DatePicker customer_birthDay, TextField customer_phone) {
+    public void info_reader_admin(TableView<ReaderModel> tbReader, TextField customer_id, TextField customer_name, ComboBox<String> customer_gender, DatePicker customer_birthDay, TextField customer_phone, ComboBox<String> customer_role) {
         ReaderModel rowData = tbReader.getSelectionModel().getSelectedItem();
+        AccountModel Account = readerService.findAccountByRId(rowData.getId());
         if (rowData != null) {
             customer_id.setText(rowData.getId().toString());
             customer_name.setText(rowData.getFullname());
             customer_phone.setText(rowData.getPhone());
+            if (null == Account.getType()) {
+                customer_role.setValue("Chọn chức năng");
+            } else {
+                customer_role.setValue(Account.getType());
+            }
             if (null == rowData.getGender() || "".equals(rowData.getGender())) {
                 customer_gender.setValue("Chọn giới tính");
             } else {
@@ -370,6 +381,7 @@ public class QuanTriSachController implements Initializable {
         }
         if (event.getSource() == customer_btn) {
             loadReaderInfo();
+            loadComboBoxRole();
             customer_viewForm.setVisible(true);
             customer_btn.setStyle(style);
             AnchorPane[] allForms = {availableBooks_viewForm, report_viewForm, add_viewForm};
@@ -632,7 +644,7 @@ public class QuanTriSachController implements Initializable {
     //nhấn vào table reader xuất ra thông tin tương ứng
     @FXML
     private void InforReader() {
-        info_reader_admin(tbReader, customer_id, customer_name, customer_gender, customer_birthDay, customer_phone);
+        info_reader_admin(tbReader, customer_id, customer_name, customer_gender, customer_birthDay, customer_phone, customer_role);
     }
 
     //Update thông tin reader
@@ -643,7 +655,9 @@ public class QuanTriSachController implements Initializable {
         if (phone.matches("\\d{11}") && phone.startsWith("0")) {
             ReaderModel reader = ReaderUtils.create_readerModel(id, customer_name, customer_gender, customer_birthDay, customer_phone);
             boolean rs = readerService.updateReader(reader);
-            if (rs) {
+            String role = customer_role.getValue().toString();
+            boolean rsAccount = readerService.updateRoleAccount(role,id);
+            if (rs && rsAccount) {
                 MessageBoxUtils.AlertBox("INFORMATION", "Sửa đổi thành công", AlertType.INFORMATION);
                 loadReaderInfo();
             } else {
@@ -922,5 +936,14 @@ public class QuanTriSachController implements Initializable {
     @FXML
     void handleImportImageInCreateBookView() {
         handleImportImage(availableBooks_importViewAdd);
+    }
+
+//    Tải dữ liệu cho comboBox customer_role (trang customer trong Admin)
+    @FXML
+    public void loadComboBoxRole() {
+        customer_role.setPromptText("Chọn chức năng");
+        customer_role.getItems().add(0, "Admin");
+        customer_role.getItems().add(1, "Employee");
+        customer_role.getItems().add(2, "Customer");
     }
 }

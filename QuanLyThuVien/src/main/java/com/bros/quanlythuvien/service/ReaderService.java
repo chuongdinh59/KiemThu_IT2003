@@ -5,15 +5,9 @@
 package com.bros.quanlythuvien.service;
 
 import com.bros.quanlythuvien.model.AccountModel;
-import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import java.util.List;
 import java.util.Map;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 
 /**
  *
@@ -32,9 +26,11 @@ public interface ReaderService {
     public List<ReaderModel> findReaderNotHaveBorrowCard();
 
     public AccountModel findAccountByRId(Integer id);
-    
+
     public Map<String, Object> login(String username, String password);
-    
-        public int register(String register_username, String register_password, String register_fullname, String register_email);
+
+    public int register(String register_username, String register_password, String register_fullname, String register_email);
+
+    public boolean updateRoleAccount(String role, Integer id);
 
 }

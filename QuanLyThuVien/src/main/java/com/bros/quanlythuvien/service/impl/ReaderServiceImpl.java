@@ -96,6 +96,11 @@ public class ReaderServiceImpl implements ReaderService {
         boolean rs = readerRepository.updateReader(reader);
         return rs;
     }
+    
+    public boolean updateRoleAccount(String role,Integer id){
+        boolean rs = readerRepository.updateRoleAccount(role,id);
+        return rs;
+    }
 
     @Override
     public Map<String, Object> login(String username, String password) {

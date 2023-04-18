@@ -147,14 +147,16 @@ public class LoginController implements Initializable {
             Integer reader = (Integer) resultMap.get("readerId");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CustomerUI.fxml"));
             Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
             // Truyền readerId cho trang CustomerUI
             CustomerController customerController = loader.getController();
             customerController.setReaderId(reader);
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("Customer");
             loginBtn.getScene().getWindow().hide();
+            customerController.checkBorrowCard();
+            customerController.loadUserName();
             stage.show();
         } else if (resultMap.get("type").equals("Error")) {
             MessageBoxUtils.AlertBox("Error", "Sai tài khoản hoặc mật khẩu", Alert.AlertType.ERROR);
