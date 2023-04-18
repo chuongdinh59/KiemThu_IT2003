@@ -25,6 +25,4 @@ public class CategoryRepositoryImpl extends CommonRepositoryImpl<CategoryEntity>
         CategoryEntity c = super.findById(id);
         return c;
     }
-
-
 }

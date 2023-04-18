@@ -24,9 +24,13 @@ import com.bros.quanlythuvien.utils.MessageBoxUtils;
 import com.bros.quanlythuvien.utils.ReaderUtils;
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -167,9 +171,6 @@ public class CustomerController implements Initializable {
 
     @FXML
     private AnchorPane borrowCard_viewForm;
-
-
-
 
     @FXML
     public void minimize() {
@@ -390,22 +391,39 @@ public class CustomerController implements Initializable {
         int totalQuantity = 0;
 //        Kiểm tra người dùng có hợp lệ hay không
         int check = readerService.checkReader(readerId);
-        if (check == 0) {
-            LScheckReader = 0;
-        } else {
-            LScheckReader = 1;
-//            Lấy số lượng sách đã có trong Cart
-            for (BookModel book : bookListCart) {
-                totalQuantity += book.getQuantity();
-            }
-//            Kiểm tra số lượng sách trong Cart
-            if (totalQuantity <= 5) {
-                String strReaderId = Integer.toString(readerId);
-                loanSlipService.creatLoanSlip(bookListCart, LScheckReader, strReaderId, 0);
-                clearCart();
-            } else {
-                MessageBoxUtils.AlertBox("Error", "Không thể mượn quá 5 cuốn sách", AlertType.ERROR);
-            }
+        switch (check) {
+            case 0:
+                MessageBoxUtils.AlertBox("ERROR", "Thẻ thư viện đã hết hạn", Alert.AlertType.ERROR);
+                LScheckReader = 0;
+                break;
+            case 2:
+                MessageBoxUtils.AlertBox("ERROR", "Người dùng chưa tạo thẻ thư viện hoặc không tồn tại", Alert.AlertType.ERROR);
+                LScheckReader = 0;
+                break;
+            case 3:
+                MessageBoxUtils.AlertBox("ERROR", "Người dùng chưa trả sách", Alert.AlertType.ERROR);
+                LScheckReader = 0;
+                break;
+            case 1:
+                List<ReaderModel> readerList = readerService.findAll();
+                for (ReaderModel reader : readerList) {
+                    if (Objects.equals(reader.getId(), readerId)) {
+                        MessageBoxUtils.AlertBox("INFORMATION", "Người dùng hợp lệ", Alert.AlertType.INFORMATION);
+                    }
+                }   LScheckReader = 1;
+                //            Lấy số lượng sách đã có trong Cart
+                for (BookModel book : bookListCart) {
+                    totalQuantity += book.getQuantity();
+                }   //            Kiểm tra số lượng sách trong Cart
+                if (totalQuantity <= 5) {
+                    String strReaderId = Integer.toString(readerId);
+                    loanSlipService.creatLoanSlip(bookListCart, LScheckReader, strReaderId, 0);
+                    clearCart();
+                } else {
+                    MessageBoxUtils.AlertBox("Error", "Không thể mượn quá 5 cuốn sách", AlertType.ERROR);
+                }   break;
+            default:
+                break;
         }
         totalQuantity = 0;
     }
@@ -616,17 +634,30 @@ public class CustomerController implements Initializable {
 
     public void checkBorrowCard() {
         BorrowCardModel borrowCard = borrowCardService.findBorrowCardByRID(readerId);
-        System.out.println("day ne" + borrowCard);
         if (borrowCard == null) {
             BorrowCard_Btn.setDisable(true);
             BorrowCard_Btn.setStyle("-fx-background-color: #a19e9e; -fx-text-fill: #fff;");
         } else {
-            BorrowCard_Btn.setDisable(false);
-            BorrowCard_Btn.setStyle("-fx-background-color: #08bc08; -fx-text-fill: #fff;");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate expiredDate;
+            LocalDate now = LocalDate.now();
+            try {
+                expiredDate = LocalDate.parse(borrowCard.getExpiredDate(), formatter);
+            } catch (DateTimeParseException e) {
+                return;
+            }
+
+            if (expiredDate.isBefore(now)) {
+                BorrowCard_Btn.setDisable(true);
+                BorrowCard_Btn.setStyle("-fx-background-color: #a19e9e; -fx-text-fill: #fff;");
+            } else {
+                BorrowCard_Btn.setDisable(false);
+                BorrowCard_Btn.setStyle("-fx-background-color: #08bc08; -fx-text-fill: #fff;");
+            }
         }
     }
-    
-    public void loadUserName(){
+
+    public void loadUserName() {
         ReaderModel reader = readerService.findById(readerId);
         username.setText(reader.getFullname());
     }

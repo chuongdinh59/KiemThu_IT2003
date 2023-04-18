@@ -465,14 +465,14 @@ public class EmployeeController implements Initializable {
             if (rs) {
                 loadReaderStatusInfo();
                 String content = "Duyệt thẻ thư viện: " + reader.getFullname() + "\n"
-                                + "Nếu có thắc mắt liên hệ hoianhemlambaitapkiemthu@gmail.com hoặc hotline 113";
+                        + "Nếu có thắc mắt liên hệ hoianhemlambaitapkiemthu@gmail.com hoặc hotline 113";
                 MessageBoxUtils.AlertBox("INFORMATION", "Tạo thẻ thư viện thành công", AlertType.INFORMATION);
                 // Run email service in a new thread
                 new Thread(() -> {
                     try {
                         EmailService sm = new EmailService();
                         sm.sendEmail(account.getEmail(),
-                                "Thư viện đại học Mở - Thông báo duyệt thẻ thư viện thành công", content );
+                                "Thư viện đại học Mở - Thông báo duyệt thẻ thư viện thành công", content);
                     } catch (MessagingException | UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
@@ -662,10 +662,30 @@ public class EmployeeController implements Initializable {
             try {
                 Integer id = Integer.valueOf(sid);
                 int check = readerService.checkReader(id);
-                if (check == 0) {
-                    LScheckReader = 0;
-                } else {
-                    LScheckReader = 1;
+                switch (check) {
+                    case 0:
+                        MessageBoxUtils.AlertBox("ERROR", "Thẻ thư viện đã hết hạn", Alert.AlertType.ERROR);
+                        LScheckReader = 0;
+                        break;
+                    case 2:
+                        MessageBoxUtils.AlertBox("ERROR", "Người dùng chưa tạo thẻ thư viện hoặc không tồn tại", Alert.AlertType.ERROR);
+                        LScheckReader = 0;
+                        break;
+                    case 3:
+                        MessageBoxUtils.AlertBox("ERROR", "Người dùng chưa trả sách", Alert.AlertType.ERROR);
+                        LScheckReader = 0;
+                        break;
+                    case 1:
+                        List<ReaderModel> readerList = readerService.findAll();
+                        for (ReaderModel reader : readerList) {
+                            if (Objects.equals(reader.getId(), id)) {
+                                MessageBoxUtils.AlertBox("INFORMATION", "Người dùng hợp lệ", Alert.AlertType.INFORMATION);
+                            }
+                        }
+                        LScheckReader = 1;
+                        break;
+                    default:
+                        break;
                 }
 
             } catch (NumberFormatException e) {
@@ -734,7 +754,7 @@ public class EmployeeController implements Initializable {
             String strquantity = LSBookQuantity.getText();
             Integer quantity = Integer.valueOf(strquantity);
 
-            if (quantity <= 5 && quantity >0) {
+            if (quantity <= 5 && quantity > 0) {
 
                 countQuantity += quantity;
                 if (countQuantity <= 5) {
@@ -767,6 +787,7 @@ public class EmployeeController implements Initializable {
         }
         LScheckBook = 0;
     }
+
     // xử lý cột trong trang loanslip
     public void loadLSBookListColumn() {
         TableColumn<BookModel, Integer> bookIdColumn = new TableColumn<>("Book ID");
@@ -849,7 +870,7 @@ public class EmployeeController implements Initializable {
     @FXML
     public void clearArray() {
         LSbookList.clear();
-        countQuantity=0;
+        countQuantity = 0;
     }
 
     @FXML
