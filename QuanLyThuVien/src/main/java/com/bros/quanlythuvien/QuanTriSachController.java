@@ -221,7 +221,6 @@ public class QuanTriSachController implements Initializable {
 
     @FXML
     private Button btnReport;
-    
 
     @FXML
     ImageView availableBooks_importViewAdd;
@@ -561,7 +560,12 @@ public class QuanTriSachController implements Initializable {
         BookModel book = get_book(availableBooks_bookID, availableBooks_title,
                 availableBooks_author, availableBooks_description, availableBooks_publishedPlace,
                 availableBooks_publishedYear, availableBooks_category, availableBooks_location, availableBooks_quantity, categoriesMap);
-        bookService.updateBook(book);
+        boolean rs = bookService.updateBook(book);
+        if (rs) {
+            MessageBoxUtils.AlertBox("INFORMATION", "Sửa đổi dữ liệu thành công", Alert.AlertType.INFORMATION);
+        } else {
+            MessageBoxUtils.AlertBox("ERROR", "Sửa đổi dữ liệu thất bại", Alert.AlertType.ERROR);
+        }
         // If an image has been selected, upload the image and update the book model
         if (this.selectedFile != null) {
             new Thread(() -> {
@@ -598,6 +602,13 @@ public class QuanTriSachController implements Initializable {
                 addBook_publishedYear, addBook_category, addBook_location, addBook_quantity, categoriesMap);
         if (book != null) {
             BookModel model = bookService.insertBook(book);
+            // notify
+            if (model != null) {
+                MessageBoxUtils.AlertBox("INFORMATION", "Thêm dữ liệu thành công", Alert.AlertType.INFORMATION);
+            } else {
+                MessageBoxUtils.AlertBox("ERROR", "Thêm dữ liệu thất bại", Alert.AlertType.ERROR);
+            }
+
             if (this.selectedFile != null) {
                 Integer bookID = model.getId();
                 // create a thread to upload and save the image
@@ -628,7 +639,12 @@ public class QuanTriSachController implements Initializable {
                 availableBooks_author, availableBooks_description, availableBooks_publishedPlace,
                 availableBooks_publishedYear, availableBooks_category, availableBooks_location, availableBooks_quantity, categoriesMap);
         if (book != null) {
-            bookService.deleteBook(book.getId());
+            Boolean rs = bookService.deleteBook(book.getId());
+            if (rs) {
+                MessageBoxUtils.AlertBox("INFORMATION", "Xóa dữ liệu thành công", Alert.AlertType.INFORMATION);
+            } else {
+                MessageBoxUtils.AlertBox("ERROR", "Xóa dữ liệu thất bại", Alert.AlertType.ERROR);
+            }
         }
         loadBookInfo(null, null);
         clear();
@@ -656,7 +672,7 @@ public class QuanTriSachController implements Initializable {
             ReaderModel reader = ReaderUtils.create_readerModel(id, customer_name, customer_gender, customer_birthDay, customer_phone);
             boolean rs = readerService.updateReader(reader);
             String role = customer_role.getValue().toString();
-            boolean rsAccount = readerService.updateRoleAccount(role,id);
+            boolean rsAccount = readerService.updateRoleAccount(role, id);
             if (rs && rsAccount) {
                 MessageBoxUtils.AlertBox("INFORMATION", "Sửa đổi thành công", AlertType.INFORMATION);
                 loadReaderInfo();

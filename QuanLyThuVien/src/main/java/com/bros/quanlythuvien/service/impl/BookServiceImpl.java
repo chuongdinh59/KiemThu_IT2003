@@ -93,33 +93,19 @@ public class BookServiceImpl implements BookService {
     @Override
     public Boolean updateBook(BookModel book) {
         boolean rs = bookRepository.updateBook(book);
-        if (rs) {
-            MessageBoxUtils.AlertBox("INFORMATION", "Sửa đổi dữ liệu thành công", Alert.AlertType.INFORMATION);
-        } else {
-            MessageBoxUtils.AlertBox("ERROR", "Sửa đổi dữ liệu thất bại", Alert.AlertType.ERROR);
-        }
+       
         return rs;
     }
 
     @Override
     public BookModel insertBook(BookModel book) {
         BookModel rs = bookRepository.insertBook(book);
-        if (rs != null) {
-            MessageBoxUtils.AlertBox("INFORMATION", "Thêm dữ liệu thành công", Alert.AlertType.INFORMATION);
-        } else {
-            MessageBoxUtils.AlertBox("ERROR", "Thêm dữ liệu thất bại", Alert.AlertType.ERROR);
-        }
         return rs;
     }
 
     @Override
     public Boolean deleteBook(Integer id) {
         boolean rs = bookRepository.deleteBook(id);
-        if (rs) {
-            MessageBoxUtils.AlertBox("INFORMATION", "Xóa dữ liệu thành công", Alert.AlertType.INFORMATION);
-        } else {
-            MessageBoxUtils.AlertBox("ERROR", "Xóa dữ liệu thất bại", Alert.AlertType.ERROR);
-        }
         return rs;
     }
 

@@ -19,5 +19,7 @@ module com.bros.quanlythuvien {
     exports com.bros.quanlythuvien;
     exports com.bros.quanlythuvien.model;
     exports com.bros.quanlythuvien.entity;
+    exports com.bros.quanlythuvien.service.impl;
+    exports com.bros.quanlythuvien.service;
 
 }
