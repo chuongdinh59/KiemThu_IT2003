@@ -17,6 +17,9 @@ import javafx.util.Callback;
  * @author ADMIN
  */
 public class LoanSlipUtils {
+     // @Param: TableView<LoanSlipModel> table muốn hiển thị thông tin các phiếu mượn
+    // @Return: không
+    // @Description: Hiển thị các cột cho table mà muốn hiển thị phiếu mượn
       public static void load_loanslip_columns(TableView<LoanSlipModel> returnLoanslipTB) {
         TableColumn colId = new TableColumn("LoanSlipId");
         colId.setCellValueFactory(new PropertyValueFactory("id"));

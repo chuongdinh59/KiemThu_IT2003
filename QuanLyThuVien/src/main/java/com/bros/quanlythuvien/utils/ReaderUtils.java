@@ -29,6 +29,9 @@ public class ReaderUtils {
         tb_Cart.refresh();
     }
 
+    // @Param: ComboBox<String> ComboBox cần hiển thị các category 
+    // @Return: không
+    // @Description: Tải dữ liệu( Map<Integer, String> categoriesMap) cho các combobox cần hiển thị category
     public static void load_cate(ComboBox<String> RsearchBook_category, Map<Integer, String> categoriesMap) {
         RsearchBook_category.setPromptText("Chọn thể loại");
         RsearchBook_category.getItems().add(0, "Chọn thể loại");
@@ -51,6 +54,9 @@ public class ReaderUtils {
         infoCustomerTB.getColumns().addAll(colId, colName, colGender, colDateOfBirth,colPhone);
     }
 
+    // @Param: ComboBox<String> ComboBox cần hiển thị các gender 
+    // @Return: không
+    // @Description: Tải dữ liệu cho các combobox cần hiển thị gender
     public static void load_gender(ComboBox<String> infomation_gender) {
         infomation_gender.setPromptText("Chọn giới tính");
         infomation_gender.getItems().addAll("Chọn giới tính", "Nam", "Nữ");
