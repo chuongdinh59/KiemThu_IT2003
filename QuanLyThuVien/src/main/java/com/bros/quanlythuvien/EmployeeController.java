@@ -439,7 +439,19 @@ public class EmployeeController implements Initializable {
                 confirm.setContentText("Khách hàng chưa nhận sách, nếu tiếp tục sẽ hủy đơn");
                 Optional<ButtonType> result = confirm.showAndWait();
                 if (result.get() == ButtonType.OK) {
-                    loanSlipService.updateBook(selectedLoanSlip);
+                    Integer rs = loanSlipService.updateBook(selectedLoanSlip);
+                    if (rs > 0) {
+                        MessageBoxUtils.AlertBox("ERROR", "Bạn đã trễ hạn " + rs + " ngày và tiền phạt là: " + 5000 * rs + " VNĐ", Alert.AlertType.ERROR);
+                    } else if (rs == -2) {
+                        MessageBoxUtils.AlertBox("ERROR", "Sách đã được trả!!", Alert.AlertType.ERROR);
+                    }
+                    else if (rs == 0) {
+                        MessageBoxUtils.AlertBox("INFORMATION", "Trả sách thành công", Alert.AlertType.INFORMATION);
+                    }
+                    else {
+                        MessageBoxUtils.AlertBox("ERROR", "Trả sách thất bại", Alert.AlertType.ERROR);
+                    }
+
                     loadLoanslipInfo(returnLoanslipTB);
                     returnLoanslipTB.refresh();
                 }
@@ -465,14 +477,14 @@ public class EmployeeController implements Initializable {
             if (rs) {
                 loadReaderStatusInfo();
                 String content = "Duyệt thẻ thư viện: " + reader.getFullname() + "\n"
-                                + "Nếu có thắc mắt liên hệ hoianhemlambaitapkiemthu@gmail.com hoặc hotline 113";
+                        + "Nếu có thắc mắt liên hệ hoianhemlambaitapkiemthu@gmail.com hoặc hotline 113";
                 MessageBoxUtils.AlertBox("INFORMATION", "Tạo thẻ thư viện thành công", AlertType.INFORMATION);
                 // Run email service in a new thread
                 new Thread(() -> {
                     try {
                         EmailService sm = new EmailService();
                         sm.sendEmail(account.getEmail(),
-                                "Thư viện đại học Mở - Thông báo duyệt thẻ thư viện thành công", content );
+                                "Thư viện đại học Mở - Thông báo duyệt thẻ thư viện thành công", content);
                     } catch (MessagingException | UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
@@ -489,7 +501,16 @@ public class EmployeeController implements Initializable {
         SelectionModel<LoanSlipModel> selectionModel = returnLoanslipTB.getSelectionModel();
         LoanSlipModel selectedLoanSlip = selectionModel.getSelectedItem();
         if (selectedLoanSlip != null) {
-            loanSlipService.updateBookGive(selectedLoanSlip);
+            int rs = loanSlipService.updateBookGive(selectedLoanSlip);
+            if (rs == 0) {
+                MessageBoxUtils.AlertBox("ERROR", "Sách đã được lấy!!", Alert.AlertType.ERROR);
+            } else if (rs == 1) {
+                MessageBoxUtils.AlertBox("INFORMATION", "Trao sách thành công", Alert.AlertType.INFORMATION);
+
+            } else {
+                MessageBoxUtils.AlertBox("ERROR", "Trao sách thất bại", Alert.AlertType.ERROR);
+
+            }
             loadLoanslipInfo(returnLoanslipTB);
             returnLoanslipTB.refresh();
         }
@@ -734,7 +755,7 @@ public class EmployeeController implements Initializable {
             String strquantity = LSBookQuantity.getText();
             Integer quantity = Integer.valueOf(strquantity);
 
-            if (quantity <= 5 && quantity >0) {
+            if (quantity <= 5 && quantity > 0) {
 
                 countQuantity += quantity;
                 if (countQuantity <= 5) {
@@ -767,6 +788,7 @@ public class EmployeeController implements Initializable {
         }
         LScheckBook = 0;
     }
+
     // xử lý cột trong trang loanslip
     public void loadLSBookListColumn() {
         TableColumn<BookModel, Integer> bookIdColumn = new TableColumn<>("Book ID");
@@ -849,7 +871,7 @@ public class EmployeeController implements Initializable {
     @FXML
     public void clearArray() {
         LSbookList.clear();
-        countQuantity=0;
+        countQuantity = 0;
     }
 
     @FXML

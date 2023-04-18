@@ -8,8 +8,8 @@ package com.bros.quanlythuvien.utils;
  *
  * @author Dinh Chuong
  */
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
-
 
 public class MessageBoxUtils {
 

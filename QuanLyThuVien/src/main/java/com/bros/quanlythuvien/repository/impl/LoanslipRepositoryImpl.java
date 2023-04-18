@@ -46,14 +46,10 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     }
 
     @Override
-    public boolean updateBook(LoanSlipModel loanSlip) {
+    public Integer updateBook(LoanSlipModel loanSlip) {
         Connection connect = getConnection();
         PreparedStatement statement = null;
         ResultSet result = null;
-        if (loanSlip == null) {
-            return false;
-        }
-
         try {
             String sql = "SELECT * FROM loanslip WHERE id = ?;";
             statement = connect.prepareStatement(sql);
@@ -67,9 +63,11 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
                 Date expirationDate = dateFormat.parse(date);
                 java.sql.Timestamp sqlTimestamp = new java.sql.Timestamp(expirationDate.getTime());
 
-                long daysBetween = (sqlDate.getTime() - sqlTimestamp.getTime()) / (1000 * 60 * 60 * 24);
+                Long daysBetween = (sqlDate.getTime() - sqlTimestamp.getTime()) / (1000 * 60 * 60 * 24);
                 if (daysBetween > 0) {
-                    MessageBoxUtils.AlertBox("ERROR", "Bạn đã trễ hạn " + daysBetween + " ngày và tiền phạt là: " + 5000 * daysBetween + " VNĐ", Alert.AlertType.ERROR);
+                    // Tối thiểu là 1
+                    return Integer.valueOf(daysBetween.toString());
+//                    MessageBoxUtils.AlertBox("ERROR", "Bạn đã trễ hạn " + daysBetween + " ngày và tiền phạt là: " + 5000 * daysBetween + " VNĐ", Alert.AlertType.ERROR);
                 }
             }
         } catch (SQLException e) {
@@ -88,11 +86,11 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
                 insertQuantity(loanSlip.getQuantity(), loanSlip.getBookID());
-                return true;
+                return 0;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return -1;
         } finally {
             try {
                 if (result != null) {
@@ -108,7 +106,7 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
                 e.printStackTrace();
             }
         }
-        return false;
+        return -1;
     }
 
     @Override
@@ -121,7 +119,7 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
         }
 
         try {
-            String sql = "UPDATE loanslip SET isOnline = '1'WHERE (id = ?);";
+            String sql = "UPDATE loanslip SET isOnline = '1' WHERE (id = ?);";
             statement = connect.prepareStatement(sql);
             statement.setInt(1, loanSlip.getId());
 
@@ -241,8 +239,7 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     }
 
     @Override
-    public Boolean creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online) {
-
+    public Integer creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online) {
         if (LScheckReader == 1 && !LSbookList.isEmpty()) {
             for (BookModel book : LSbookList) {
                 if (checkQuantity(book.getQuantity(), book.getId())) {
@@ -267,11 +264,13 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
                         int rowsInserted = statement.executeUpdate();
                         if (rowsInserted > 0) {
                             deleteQuantity(book.getQuantity(), book.getId());
-                            MessageBoxUtils.AlertBox("INFORMATION", "Thêm thành công", Alert.AlertType.INFORMATION);
-                            return true;
+                            return 1;
+//                            MessageBoxUtils.AlertBox("INFORMATION", "Thêm thành công", Alert.AlertType.INFORMATION);
+//                            return true;
                         } else {
-                            MessageBoxUtils.AlertBox("ERROR", "Thêm thất bạii", Alert.AlertType.ERROR);
-                            return false;
+                            return -1;
+//                            MessageBoxUtils.AlertBox("ERROR", "Thêm thất bạii", Alert.AlertType.ERROR);
+//                            return false;
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -291,14 +290,18 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
                         }
                     }
                 } else {
-                    MessageBoxUtils.AlertBox("ERROR", "Thư viện không đủ sách", Alert.AlertType.ERROR);
+                    return 2;
+
+//                    MessageBoxUtils.AlertBox("ERROR", "Thư viện không đủ sách", Alert.AlertType.ERROR);
                 }
 
             }
         } else {
-            MessageBoxUtils.AlertBox("ERROR", "Khách hàng không tồn tại hoặc bạn chưa thêm sách để tạo phiếu mượn", Alert.AlertType.ERROR);
+            return 3;
+//            MessageBoxUtils.AlertBox("ERROR", "Khách hàng không tồn tại hoặc bạn chưa thêm sách để tạo phiếu mượn", Alert.AlertType.ERROR);
         }
-        return false;
+//        return false;
+        return -1;
     }
 
     @Override
@@ -408,7 +411,6 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
         return false;
     }
 
-    
     @Override
     public int checkOnlineLoanSlip() {
         PreparedStatement statement = null;

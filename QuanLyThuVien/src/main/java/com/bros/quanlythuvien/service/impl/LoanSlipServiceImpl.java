@@ -46,25 +46,22 @@ public class LoanSlipServiceImpl implements LoanSlipService {
     }
 
     @Override
-
-    public Boolean creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online) {
+    public Integer creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online) {
         return loanSlipRepository.creatLoanSlip(LSbookList, LScheckReader, LSCustomerID, online);
     }
 
     @Override
-    public Boolean updateBookGive(LoanSlipModel loanSlip) {
+    public Integer updateBookGive(LoanSlipModel loanSlip) {
 
         if (loanSlip.getIsOnline() == 1) {
-            MessageBoxUtils.AlertBox("ERROR", "Sách đã được lấy!!", Alert.AlertType.ERROR);
-            return false;
+            return 0;
         } else {
             boolean rs = loanSlipRepository.updateBookGive(loanSlip);
             if (rs) {
-                MessageBoxUtils.AlertBox("INFORMATION", "Trao sách thành công", Alert.AlertType.INFORMATION);
+                return 1;
             } else {
-                MessageBoxUtils.AlertBox("ERROR", "Trao sách thất bại", Alert.AlertType.ERROR);
+                return -1;
             }
-            return rs;
         }
     }
 
@@ -90,18 +87,20 @@ public class LoanSlipServiceImpl implements LoanSlipService {
     }
 
     @Override
-    public Boolean updateBook(LoanSlipModel loanSlip) {
-
-        if (loanSlip.getIsReturned() == 1) {
-            MessageBoxUtils.AlertBox("ERROR", "Sách đã được trả!!", Alert.AlertType.ERROR);
-            return false;
+    public Integer updateBook(LoanSlipModel loanSlip) {
+        if (loanSlip == null) {
+            return -1;
+        }
+        else if (loanSlip.getIsReturned() == 1) {
+//            MessageBoxUtils.AlertBox("ERROR", "Sách đã được trả!!", Alert.AlertType.ERROR);
+            return -2;
         } else {
-            boolean rs = loanSlipRepository.updateBook(loanSlip);
-            if (rs) {
-                MessageBoxUtils.AlertBox("INFORMATION", "Trả sách thành công", Alert.AlertType.INFORMATION);
-            } else {
-                MessageBoxUtils.AlertBox("ERROR", "Trả sách thất bại", Alert.AlertType.ERROR);
-            }
+            Integer rs = loanSlipRepository.updateBook(loanSlip);
+//            if (rs) {
+//                MessageBoxUtils.AlertBox("INFORMATION", "Trả sách thành công", Alert.AlertType.INFORMATION);
+//            } else {
+//                MessageBoxUtils.AlertBox("ERROR", "Trả sách thất bại", Alert.AlertType.ERROR);
+//            }
             return rs;
         }
     }
@@ -112,7 +111,6 @@ public class LoanSlipServiceImpl implements LoanSlipService {
     @Override
     public Integer checkOnlineLoanSlip() {
         int rs = loanSlipRepository.checkOnlineLoanSlip();
-
         return rs;
     }
 
