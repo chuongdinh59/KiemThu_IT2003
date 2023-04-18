@@ -28,7 +28,6 @@ import com.bros.quanlythuvien.utils.ValidateUtils;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.text.Normalizer.Form;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -38,7 +37,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.animation.ScaleTransition;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -64,7 +62,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import javax.mail.MessagingException;
 
 /**
@@ -263,6 +260,9 @@ public class EmployeeController implements Initializable {
     private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
     private ReaderRepository readerRepository = new ReaderRepositoryImpl();
 
+    // @params tableview search book
+    // @return khong return 
+    // @description ham render giao dien nao 
     //    Hàm
     public void load_book_columns(TableView<BookModel> tb_SearchBook) {
         TableColumn colId = new TableColumn("BookID");

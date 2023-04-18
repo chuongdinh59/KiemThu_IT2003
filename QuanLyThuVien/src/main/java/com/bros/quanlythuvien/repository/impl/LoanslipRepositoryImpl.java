@@ -406,15 +406,20 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
         return false;
     }
 
+    
     @Override
-    public void checkOnlineLoanSlip() {
-        Connection connect = getConnection();
+    public int checkOnlineLoanSlip() {
         PreparedStatement statement = null;
         ResultSet result = null;
+        Connection connect = null;
         try {
+            connect = getConnection();
             String sql = "SELECT * FROM loanslip WHERE isOnline = 0 AND DATEDIFF(NOW(), BorrowedDate) >= 2;";
             statement = connect.prepareStatement(sql);
             result = statement.executeQuery();
+            if (result != null) {
+                return 0;
+            }
             while (result.next()) {
                 int id = result.getInt("id");
                 insertQuantity(result.getInt("Quantity"), result.getInt("BookID"));
@@ -423,6 +428,7 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
                 pstmt.setInt(1, id);
                 pstmt.executeUpdate();
             }
+            return 1;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -440,6 +446,7 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
                 e.printStackTrace();
             }
         }
+        return -1;
 
     }
 

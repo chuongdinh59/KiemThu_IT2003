@@ -28,7 +28,8 @@ public interface LoanSlipRepository extends CommonRepository<LoanSlipEntity> {
 
     public boolean updateBookGive(LoanSlipModel loanSlip);
 
-    public void checkOnlineLoanSlip();
+    // Check 24h
+    public int checkOnlineLoanSlip();
 
     public List<LoanSlipEntity> findByBId(Integer id);
 

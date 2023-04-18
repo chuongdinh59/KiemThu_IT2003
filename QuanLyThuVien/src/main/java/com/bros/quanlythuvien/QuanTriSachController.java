@@ -474,28 +474,27 @@ public class QuanTriSachController implements Initializable {
     @FXML
     private void TBInfor() {
         BookModel rowData = tbBook.getSelectionModel().getSelectedItem();
-
-        if (rowData != null) {
-            availableBooks_bookID.setText(rowData.getId().toString());
-            availableBooks_title.setText(rowData.getTitle());
-            availableBooks_author.setText(rowData.getAuthor());
-            availableBooks_description.setText(rowData.getDescription());
-            availableBooks_publishedPlace.setText(rowData.getPublicationPlace());
-            availableBooks_publishedYear.setText(rowData.getPublicationYear().toString());
-            availableBooks_category.setValue(rowData.getCategoryValue());
-            availableBooks_location.setText(rowData.getLocation());
-            availableBooks_quantity.setText(rowData.getQuantity().toString());
-            loadImageOfBook(rowData);
-        }
+        availableBooks_importView.setImage(null);
+        loadImageOfBook(rowData);
+        availableBooks_bookID.setText(rowData.getId().toString());
+        availableBooks_title.setText(rowData.getTitle());
+        availableBooks_author.setText(rowData.getAuthor());
+        availableBooks_description.setText(rowData.getDescription());
+        availableBooks_publishedPlace.setText(rowData.getPublicationPlace());
+        availableBooks_publishedYear.setText(rowData.getPublicationYear().toString());
+        availableBooks_category.setValue(rowData.getCategoryValue());
+        availableBooks_location.setText(rowData.getLocation());
+        availableBooks_quantity.setText(rowData.getQuantity().toString());
     }
 
     private void loadImageOfBook(BookModel rowData) {
-        availableBooks_importView.setImage(null);
-        String imageUrl = rowData.getImage();
-        if (imageUrl != null) {
+        if (rowData != null) {
             Thread thread = new Thread(() -> {
-                Image img = new Image(imageUrl);
-                availableBooks_importView.setImage(img);
+                String imageUrl = rowData.getImage();
+                if (imageUrl != null && !imageUrl.isEmpty()) {
+                    Image img = new Image(imageUrl);
+                    availableBooks_importView.setImage(img);
+                }
             });
             thread.start();
         }
@@ -565,12 +564,16 @@ public class QuanTriSachController implements Initializable {
 
                     // Update the book model with the new image URL
                     bookService.saveImage(bookID, imageUrl);
+                    loadBookInfo(null, null);
+                    tbBook.refresh();
+
                 }
             }).start();
-
-            loadBookInfo(null, null);
-            clear();
         }
+        loadBookInfo(null, null);
+        tbBook.refresh();
+        clear();
+
     }
 
     @FXML
@@ -590,6 +593,8 @@ public class QuanTriSachController implements Initializable {
                     String imageUrl = cloudinaryService.upload(selectedFile);
                     if (imageUrl != null) {
                         bookService.saveImage(bookID, imageUrl);
+                        loadBookInfo(null, null);
+                        tbBook.refresh();
                     }
                 }).start();
             }
