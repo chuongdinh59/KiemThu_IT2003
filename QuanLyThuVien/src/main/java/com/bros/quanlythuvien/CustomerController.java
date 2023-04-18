@@ -164,9 +164,19 @@ public class CustomerController implements Initializable {
     private ReaderService readerService = new ReaderServiceImpl();
     private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
     private ReaderRepository readerRepository = new ReaderRepositoryImpl();
+    private Map<Integer, String> categoriesMap = new HashMap<>();
+    List<BookModel> bookListCart = new ArrayList<>();
+    private Integer readerId;
     private int totalQuan = 0;
+    private int LScheckReader = 0;
 
+    // @Param
+    // @Return
+    // @Description
 //    Hàm
+    // @Param: TableView TBRSearchBook (trang Search Book của Reader), List<BookModel> bookListCart (danh sách sách mà Reader muốn mua (nhấn vào nút Add to Cart))
+    // @Return: Không
+    // @Description: hàm load các cột trong TableView TBRSearchBook (trang Search Book của Reader),khi người dùng nhấn nút Add to Cart thì sẽ thêm sách vào màng bookListCart
     public void load_searchBook_column(TableView<BookModel> TBRSearchBook, List<BookModel> bookListCart) {
         TableColumn colId = new TableColumn("BookID");
         colId.setCellValueFactory(new PropertyValueFactory("id"));
@@ -225,6 +235,9 @@ public class CustomerController implements Initializable {
         TBRSearchBook.getColumns().addAll(colId, colName, colAuthor, colDescription, colPublishedYear, colPublishedPlace, colCategory, colLocation, buyColumn);
     }
 
+    // @Param: TableView tb_Cart (trang Cart của Reader), List<BookModel> bookListCart (danh sách sách mà Reader muốn mua (đã nhấn vào nút Add to Cart ở trang Search Book))
+    // @Return: Không
+    // @Description: hàm load các cột trong TableView tb_Cart (trang Cart của Reader)
     public void load_cart_column(TableView<BookModel> tb_Cart, List<BookModel> bookListCart) {
         TableColumn colName = new TableColumn("Title");
         colName.setCellValueFactory(new PropertyValueFactory("title"));
@@ -276,14 +289,15 @@ public class CustomerController implements Initializable {
         tb_Cart.getColumns().addAll(colName, colAuthor, colDescription, colPublishedYear, colPublishedPlace, colCategory, colQuantity, colDelete);
     }
 
+    // @Param: TableView tb_Cart (trang Cart của Reader), List<BookModel> bookListCart (danh sách sách mà Reader muốn mua (đã nhấn vào nút Add to Cart ở trang Search Book)), Integer page phân trang
+    // @Return: Không
+    // @Description: Lấy các sách được lưu trong mảng bookListCart danh sách sách mà Reader muốn mua (đã nhấn vào nút Add to Cart ở trang Search Book) truyền vào TableView<BookModel> tb_Cart (trang Cart của Reader)
     public void load_info_cart(List<BookModel> bookListCart, TableView<BookModel> tb_Cart, Integer page) {
         tb_Cart.setItems(FXCollections.observableList(bookListCart));
         tb_Cart.refresh();
     }
 
 //    -------------------------------------------------
-    private int LScheckReader = 0;
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         bookService = new BookServiceImpl();
@@ -300,26 +314,29 @@ public class CustomerController implements Initializable {
         searchBook_Btn.fire();
     }
 
-    private Map<Integer, String> categoriesMap = new HashMap<>();
-    List<BookModel> bookListCart = new ArrayList<>();
-
-    private Integer readerId; // Thuộc tính readerId
-
+    // @Param: Integer id được lấy từ ReaderID khi login được dò trong account trong database 
+    // @Return: không
+    // @Description: Gán biến toàn cục readerId bằng đúng ReaderID trong account mà ta đăng nhập
     @FXML
     public void setReaderId(Integer id) {
         this.readerId = id;
     }
 
-    //Hiển thị combobox gender
+    // @Param: Không
+    // @Return: không
+    // @Description: Gọi hàm load_gender trong ReaderUtils để truyền dữ liệu gender vào ComboBox infomation_gender(trang infomation của Reader) 
     @FXML
     private void loadGender() {
         ReaderUtils.load_gender(infomation_gender);
     }
 
-    //Update thông tin reader
+    // @Param: không
+    // @Return: không
+    // @Description: Nhấn nút Update thông tin reader (trang infomation của Reader)
     @FXML
     private void updateReader() {
         String phone = infomation_phone.getText();
+//        Số điện thoại bắt buộc phải 11 số và bắt đầu bằng số 0
         if (phone.matches("\\d{11}") && phone.startsWith("0")) {
             ReaderModel reader = ReaderUtils.create_readerModel(readerId, infomation_name, infomation_gender, infomation_birthDay, infomation_phone);
             boolean rs = readerService.updateReader(reader);
@@ -335,22 +352,31 @@ public class CustomerController implements Initializable {
 
     }
 
+    // @Param: không
+    // @Return: không
+    // @Description: Hiển thị số lượng sách người dùng đã thêm vào Cart (hiển thị ở Cart_Btn(nút nhấn chuyển trang Cart))
     @FXML
     public void countQuantityOnCart() {
         Cart_Btn.setText("Cart  " + totalQuan);
     }
 
+    // @Param: không
+    // @Return: không
+    // @Description: Nhấn nút Submit trang Cart của Reader để tạo phiếu mượn
     @FXML
     public void createOnlineBook() {
         int totalQuantity = 0;
+//        Kiểm tra người dùng có hợp lệ hay không
         int check = readerService.checkReader(readerId);
         if (check == 0) {
             LScheckReader = 0;
         } else {
             LScheckReader = 1;
+//            Lấy số lượng sách đã có trong Cart
             for (BookModel book : bookListCart) {
                 totalQuantity += book.getQuantity();
             }
+//            Kiểm tra số lượng sách trong Cart
             if (totalQuantity <= 5) {
                 String strReaderId = Integer.toString(readerId);
                 loanSlipService.creatLoanSlip(bookListCart, LScheckReader, strReaderId, 0);
@@ -362,10 +388,14 @@ public class CustomerController implements Initializable {
         totalQuantity = 0;
     }
 
-    //hiển thị dữ liệu reader
+    // @Param: không
+    // @Return: không
+    // @Description: Hiển thị dữ liệu reader tự động vào trang Infomation dựa theo readerId lấy từ lúc login 
     @FXML
     private void loadReaderInfo() {
+//        Tìm reader dựa theo readerId
         ReaderModel reader = readerService.findById(readerId);
+//        Tìm account dựa theo readerId
         AccountModel readerEmail = readerService.findAccountByRId(readerId);
         infomation_name.setText(reader.getFullname());
         infomation_email.setText(readerEmail.getEmail());
@@ -384,18 +414,28 @@ public class CustomerController implements Initializable {
         }
     }
 
+    // @Param: TableView<LoanSlipModel> infoLoanSlipTB (table trong trang Infomation)
+    // @Return: không
+    // @Description: Hiển thị các cột trong TableView<LoanSlipModel> infoLoanSlipTB (table trong trang Infomation)
     @FXML
     private void loadLoanslipColumn(TableView<LoanSlipModel> infoLoanSlipTB) {
         LoanSlipUtils.load_loanslip_columns(infoLoanSlipTB);
     }
 
+    // @Param: không
+    // @Return: không
+    // @Description: Hiển thị các phiếu mượn mà reader này đã mượn dựa theo readerId lấy từ lúc login vào TableView<LoanSlipModel> infoLoanSlipTB (table trong trang Infomation)
     @FXML
     private void loadLoanSlipInfo() {
         List<LoanSlipModel> loanSlipList = new ArrayList<>();
+//        Tìm các phiếu mượn của Reader
         loanSlipList = loanSlipService.findByCId(readerId);
         this.infoLoanSlipTB.setItems(FXCollections.observableList(loanSlipList));
     }
 
+    // @Param: không
+    // @Return: không
+    // @Description: Xóa rỗng bookListCart (danh sách đặt sách của Reader), tải lại tb_Cart (table trang Cart), đặt lại số lượng sách Reader đặt = 0, gọi hàm countQuantityOnCart để tải lại số kế bên Cart_btn
     @FXML
     private void clearCart() {
         bookListCart.clear();
@@ -405,36 +445,56 @@ public class CustomerController implements Initializable {
 
     }
 
+    // @Param: TableView tb_Cart (trang Cart của Reader), List<BookModel> bookListCart (danh sách sách mà Reader muốn mua (đã nhấn vào nút Add to Cart ở trang Search Book))
+    // @Return: Không
+    // @Description: gọi hàm load các cột trong TableView tb_Cart (trang Cart của Reader)
     @FXML
     private void loadCartColumn(TableView<BookModel> tb_Cart, List<BookModel> bookListCart) {
         load_cart_column(tb_Cart, bookListCart);
     }
 
+    // @Param: TableView tb_Cart (trang Cart của Reader), List<BookModel> bookListCart (danh sách sách mà Reader muốn mua (đã nhấn vào nút Add to Cart ở trang Search Book)), Integer page phân trang
+    // @Return: Không
+    // @Description: Lấy các sách được lưu trong mảng bookListCart danh sách sách mà Reader muốn mua (đã nhấn vào nút Add to Cart ở trang Search Book) truyền vào TableView<BookModel> tb_Cart (trang Cart của Reader)
     @FXML
     public void loadInfoCart(List<BookModel> bookListCart, TableView<BookModel> tb_Cart, Integer page) {
         load_info_cart(bookListCart, tb_Cart, page);
     }
 
+    // @Param: Không
+    // @Return: không
+    // @Description: Gọi hàm load_cate trong ReaderUtils để truyền dữ liệu gender vào ComboBox RsearchBook_category(trang Search Book của Reader) 
     @FXML
     private void loadSearchCategory() {
+//        Tìm dữ liệu các category trong database
         Map<Integer, String> cateMap = readerRepository.loadCate(categoriesMap);
+//        Load dữ liệu vào RsearchBook_category
         ReaderUtils.load_cate(RsearchBook_category, cateMap);
     }
 
+    // @Param: TableView<BookModel> TBRSearchBook (trang Search Book của reader),List<BookModel> bookListCart danh sách đặt sách của Reader
+    // @Return: không
+    // @Description: Gọi hàm load_searchBook_column load các cột trong TableView TBRSearchBook (trang Search Book của Reader), khi người dùng nhấn nút Add to Cart thì sẽ thêm sách vào màng bookListCart
     @FXML
     private void loadRSearchBookColumn(TableView<BookModel> TBRSearchBook, List<BookModel> bookListCart
     ) {
         load_searchBook_column(TBRSearchBook, bookListCart);
     }
 
+    // @Param: searchMap chứa thông tin các sách có trong database
+    // @Return: không
+    // @Description: tải tất cả sách lên trang TBRSearchBook (trang Search Book của Reader)
     @FXML
     private void loadRSearchBookInfo(Map<String, Object> searchMap, Integer page
     ) {
+//        Tải dữ liệu tất cả sách có trong database
         List<BookModel> searchBookList = bookService.findBooks(searchMap, page);
         this.TBRSearchBook.setItems(FXCollections.observableList(searchBookList));
     }
 
-//    Bắt sự kiện nhấn enter tìm kiếm
+    // @Param: không
+    // @Return: không
+    // @Description: Bắt sự kiện nhấn enter tìm kiếm trong trang Search Book của Reader
     @FXML
     private void onEnterPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -442,6 +502,9 @@ public class CustomerController implements Initializable {
         }
     }
 
+    // @Param: không
+    // @Return: không
+    // @Description: Nhấn nút Search trong trang Search Book của Reader để gọi hàm getSearchMap tìm kiếm sách
     @FXML
     private void loadRSearch() {
         String strTitle = RsearchBook_name.getText();
@@ -459,6 +522,9 @@ public class CustomerController implements Initializable {
         loadRSearchBookInfo(searchMap, null);
     }
 
+     // @Param: không
+    // @Return: không
+    // @Description: chuyển đổi giữa các trang
     @FXML
     public void switchForm(ActionEvent event) {
         String style = "-fx-background-color: #93773e; -fx-text-fill: #fff; -fx-font-weight: bold; -fx-font-style: italic;";
