@@ -31,7 +31,7 @@ public class BorrowCardModel {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-    
+
     public Integer getId() {
         return id;
     }

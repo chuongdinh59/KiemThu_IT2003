@@ -358,7 +358,7 @@ public class ReaderRepositoryImpl extends CommonRepositoryImpl<ReaderEntity> imp
                 e.printStackTrace();
             }
         }
-        return 0;
+        return 4;
     }
 
     @Override

@@ -36,6 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryModel findById(Integer id){
         CategoryEntity categoryEntity = categoryRepository.findById(id);
+        if(categoryEntity == null) return null;
         return categoryConverter.entityToModel(categoryEntity, CategoryModel.class);
     }
     
