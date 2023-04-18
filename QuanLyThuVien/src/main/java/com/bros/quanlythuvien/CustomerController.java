@@ -6,14 +6,17 @@ package com.bros.quanlythuvien;
 
 import com.bros.quanlythuvien.model.AccountModel;
 import com.bros.quanlythuvien.model.BookModel;
+import com.bros.quanlythuvien.model.BorrowCardModel;
 import com.bros.quanlythuvien.model.LoanSlipModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.repository.ReaderRepository;
 import com.bros.quanlythuvien.repository.impl.ReaderRepositoryImpl;
 import com.bros.quanlythuvien.service.BookService;
+import com.bros.quanlythuvien.service.BorrowCardService;
 import com.bros.quanlythuvien.service.LoanSlipService;
 import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
+import com.bros.quanlythuvien.service.impl.BorrowCardServiceImpl;
 import com.bros.quanlythuvien.service.impl.LoanSlipServiceImpl;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
 import com.bros.quanlythuvien.utils.LoanSlipUtils;
@@ -151,6 +154,24 @@ public class CustomerController implements Initializable {
     private TextField infomation_phone;
 
     @FXML
+    private TextField BorrowCardExpiryDate;
+
+    @FXML
+    private TextField BorrowCardIssuedDate;
+
+    @FXML
+    private TextField BorrowCardName;
+
+    @FXML
+    private Button BorrowCard_Btn;
+
+    @FXML
+    private AnchorPane borrowCard_viewForm;
+
+
+
+
+    @FXML
     public void minimize() {
         Stage stage = (Stage) mainForm.getScene().getWindow();
         stage.setIconified(true);
@@ -164,6 +185,7 @@ public class CustomerController implements Initializable {
     private ReaderService readerService = new ReaderServiceImpl();
     private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
     private ReaderRepository readerRepository = new ReaderRepositoryImpl();
+    private BorrowCardService borrowCardService = new BorrowCardServiceImpl();
     private Map<Integer, String> categoriesMap = new HashMap<>();
     List<BookModel> bookListCart = new ArrayList<>();
     private Integer readerId;
@@ -301,7 +323,6 @@ public class CustomerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         bookService = new BookServiceImpl();
-        setReaderId(readerId);
         loadRSearchBookColumn(TBRSearchBook, bookListCart);
         // Hàm này lỗi chỗ converter --> fix khỏi đóng conn hơi kì :v
         loadRSearchBookInfo(null, null);
@@ -312,6 +333,7 @@ public class CustomerController implements Initializable {
         countQuantityOnCart();
         searchBook_Btn.requestFocus();
         searchBook_Btn.fire();
+
     }
 
     // @Param: Integer id được lấy từ ReaderID khi login được dò trong account trong database 
@@ -522,7 +544,7 @@ public class CustomerController implements Initializable {
         loadRSearchBookInfo(searchMap, null);
     }
 
-     // @Param: không
+    // @Param: không
     // @Return: không
     // @Description: chuyển đổi giữa các trang
     @FXML
@@ -533,7 +555,7 @@ public class CustomerController implements Initializable {
             loadLoanSlipInfo();
             information_viewForm.setVisible(true);
             information_Btn.setStyle(style);
-            AnchorPane[] allForms = {searchBook_viewForm, cart_viewForm};
+            AnchorPane[] allForms = {searchBook_viewForm, cart_viewForm, borrowCard_viewForm};
             Button[] allButtons = {searchBook_Btn, Cart_Btn};
             for (AnchorPane allForm : allForms) {
                 allForm.setVisible(false);
@@ -545,7 +567,7 @@ public class CustomerController implements Initializable {
         if (event.getSource() == searchBook_Btn) {
             searchBook_viewForm.setVisible(true);
             searchBook_Btn.setStyle(style);
-            AnchorPane[] allForms = {information_viewForm, cart_viewForm};
+            AnchorPane[] allForms = {information_viewForm, cart_viewForm, borrowCard_viewForm};
             Button[] allButtons = {information_Btn, Cart_Btn};
             for (AnchorPane allForm : allForms) {
                 allForm.setVisible(false);
@@ -558,7 +580,7 @@ public class CustomerController implements Initializable {
             cart_viewForm.setVisible(true);
             loadInfoCart(bookListCart, tb_Cart, null);
             Cart_Btn.setStyle(style);
-            AnchorPane[] allForms = {information_viewForm, searchBook_viewForm};
+            AnchorPane[] allForms = {information_viewForm, searchBook_viewForm, borrowCard_viewForm};
             Button[] allButtons = {information_Btn, searchBook_Btn};
             for (AnchorPane allForm : allForms) {
                 allForm.setVisible(false);
@@ -567,6 +589,46 @@ public class CustomerController implements Initializable {
                 allButton.setStyle("");
             }
         }
+        if (event.getSource() == BorrowCard_Btn) {
+            loadBorrowCardReader();
+            borrowCard_viewForm.setVisible(true);
+            AnchorPane[] allForms = {information_viewForm, searchBook_viewForm, cart_viewForm};
+            Button[] allButtons = {information_Btn, searchBook_Btn, Cart_Btn};
+            for (AnchorPane allForm : allForms) {
+                allForm.setVisible(false);
+            }
+            for (Button allButton : allButtons) {
+                allButton.setStyle("");
+            }
+        }
+    }
+
+    // @Param: không
+    // @Return: không
+    // @Description: hiển thị dữ liệu cho trang Borrow Card của Reader
+    public void loadBorrowCardReader() {
+        BorrowCardModel borrowCard = borrowCardService.findBorrowCardByRID(readerId);
+        ReaderModel reader = readerService.findById(readerId);
+        BorrowCardName.setText(reader.getFullname());
+        BorrowCardIssuedDate.setText(borrowCard.getIssuedDate());
+        BorrowCardExpiryDate.setText(borrowCard.getExpiredDate());
+    }
+
+    public void checkBorrowCard() {
+        BorrowCardModel borrowCard = borrowCardService.findBorrowCardByRID(readerId);
+        System.out.println("day ne" + borrowCard);
+        if (borrowCard == null) {
+            BorrowCard_Btn.setDisable(true);
+            BorrowCard_Btn.setStyle("-fx-background-color: #a19e9e; -fx-text-fill: #fff;");
+        } else {
+            BorrowCard_Btn.setDisable(false);
+            BorrowCard_Btn.setStyle("-fx-background-color: #08bc08; -fx-text-fill: #fff;");
+        }
+    }
+    
+    public void loadUserName(){
+        ReaderModel reader = readerService.findById(readerId);
+        username.setText(reader.getFullname());
     }
 
     @FXML

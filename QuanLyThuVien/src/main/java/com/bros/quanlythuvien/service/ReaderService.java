@@ -32,5 +32,6 @@ public interface ReaderService {
     public List<ReaderModel> findReaderNotHaveBorrowCard();
 
     public AccountModel findAccountByRId(Integer id);
+    public boolean updateRoleAccount(String role,Integer id);
 
 }
