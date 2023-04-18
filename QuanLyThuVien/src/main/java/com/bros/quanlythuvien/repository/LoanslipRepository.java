@@ -20,9 +20,9 @@ public interface LoanSlipRepository extends CommonRepository<LoanSlipEntity> {
 
     public LoanSlipEntity findReaderById(Integer loanslipId);
 
-    public boolean updateBook(LoanSlipModel loanSlip);
+    public Integer updateBook(LoanSlipModel loanSlip);
 
-    public Boolean creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online);
+    public Integer creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online);
 
     public List<LoanSlipEntity> findByCId(Integer id);
 

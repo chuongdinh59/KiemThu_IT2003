@@ -7,18 +7,11 @@
  *
  * @author Dinh Chuong
  */
-import com.bros.quanlythuvien.model.BookModel;
-import com.bros.quanlythuvien.model.CategoryModel;
 import com.bros.quanlythuvien.service.BookService;
-import com.bros.quanlythuvien.service.CategoryService;
 import com.bros.quanlythuvien.service.impl.BookServiceImpl;
-import com.bros.quanlythuvien.service.impl.CategoryServiceImpl;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -26,7 +19,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 public class BookTestCase {
 
     private BookService bookService = new BookServiceImpl();
-
+//
 //    @Test
 //    @DisplayName("Kiểm tra nạp thành công danh sách sách")
 //    public void testLoadListBook() {
@@ -83,20 +76,22 @@ public class BookTestCase {
 //        Assertions.assertEquals(quantityTest, quantityTest);
 //    }
 //    
+
     static Stream<Map<String, Object>> getMapSearch() {
 // Do trên giao diện đã fix cứng những field search nên em tự cho dữ liệu phù hợp 
         return Stream.of(
                 Map.of("booktitle", "A"),
                 Map.of("publicationyear", 2021),
                 Map.of("author", "A"),
-                Map.of("categoryid", 1)
+                Map.of("categoryid", 1),
+                Map.of("categoryid", 1, "publicationyear", 2021, "author", "A", "booktitle", "A")
         );
     }
 
     @ParameterizedTest
-    @DisplayName("Kiểm tra số không phải là số nguyên tố")
+    @DisplayName("Kiểm tra tìm kiếm sách")
     @MethodSource("getMapSearch")
-    public void testSearchBook(Map<String, Object>  searchMap) {
+    public void testSearchBook(Map<String, Object> searchMap) {
         Assertions.assertTrue(bookService.findBooks(searchMap, null).size() > 0);
     }
 

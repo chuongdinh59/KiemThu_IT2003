@@ -439,7 +439,19 @@ public class EmployeeController implements Initializable {
                 confirm.setContentText("Khách hàng chưa nhận sách, nếu tiếp tục sẽ hủy đơn");
                 Optional<ButtonType> result = confirm.showAndWait();
                 if (result.get() == ButtonType.OK) {
-                    loanSlipService.updateBook(selectedLoanSlip);
+                    Integer rs = loanSlipService.updateBook(selectedLoanSlip);
+                    if (rs > 0) {
+                        MessageBoxUtils.AlertBox("ERROR", "Bạn đã trễ hạn " + rs + " ngày và tiền phạt là: " + 5000 * rs + " VNĐ", Alert.AlertType.ERROR);
+                    } else if (rs == -2) {
+                        MessageBoxUtils.AlertBox("ERROR", "Sách đã được trả!!", Alert.AlertType.ERROR);
+                    }
+                    else if (rs == 0) {
+                        MessageBoxUtils.AlertBox("INFORMATION", "Trả sách thành công", Alert.AlertType.INFORMATION);
+                    }
+                    else {
+                        MessageBoxUtils.AlertBox("ERROR", "Trả sách thất bại", Alert.AlertType.ERROR);
+                    }
+
                     loadLoanslipInfo(returnLoanslipTB);
                     returnLoanslipTB.refresh();
                 }
@@ -489,7 +501,16 @@ public class EmployeeController implements Initializable {
         SelectionModel<LoanSlipModel> selectionModel = returnLoanslipTB.getSelectionModel();
         LoanSlipModel selectedLoanSlip = selectionModel.getSelectedItem();
         if (selectedLoanSlip != null) {
-            loanSlipService.updateBookGive(selectedLoanSlip);
+            int rs = loanSlipService.updateBookGive(selectedLoanSlip);
+            if (rs == 0) {
+                MessageBoxUtils.AlertBox("ERROR", "Sách đã được lấy!!", Alert.AlertType.ERROR);
+            } else if (rs == 1) {
+                MessageBoxUtils.AlertBox("INFORMATION", "Trao sách thành công", Alert.AlertType.INFORMATION);
+
+            } else {
+                MessageBoxUtils.AlertBox("ERROR", "Trao sách thất bại", Alert.AlertType.ERROR);
+
+            }
             loadLoanslipInfo(returnLoanslipTB);
             returnLoanslipTB.refresh();
         }
