@@ -83,7 +83,6 @@ public class LoginController implements Initializable {
     private LoanSlipService loanSlipService = new LoanSlipServiceImpl();
     private ReaderService readerService = new ReaderServiceImpl();
     private ReaderRepository readerRepository = new ReaderRepositoryImpl();
-
 //    Hàm
     public Map<String, Object> login(TextField username, TextField password, Button loginBtn) {
         String u = username.getText();

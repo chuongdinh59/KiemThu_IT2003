@@ -22,7 +22,7 @@ public interface LoanSlipRepository extends CommonRepository<LoanSlipEntity> {
 
     public boolean updateBook(LoanSlipModel loanSlip);
 
-    public void creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online);
+    public Boolean creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online);
 
     public List<LoanSlipEntity> findByCId(Integer id);
 
@@ -37,7 +37,7 @@ public interface LoanSlipRepository extends CommonRepository<LoanSlipEntity> {
 
     public void deleteQuantity(Integer quantity, Integer id);
 
-    public boolean checkQuantity(Integer quantity, Integer id);
+    public Boolean checkQuantity(Integer quantity, Integer id);
 
     public List<ReportModel> getReportBorrow();
 

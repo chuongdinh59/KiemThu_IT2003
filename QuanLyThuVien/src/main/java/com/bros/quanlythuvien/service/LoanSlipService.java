@@ -22,7 +22,7 @@ public interface LoanSlipService {
 
     public Boolean updateBook(LoanSlipModel loanSlip);
 
-    public void checkOnlineLoanSlip();
+    public Integer checkOnlineLoanSlip();
 
     public List<LoanSlipModel> findByBId(Integer id);
 
@@ -30,7 +30,7 @@ public interface LoanSlipService {
 
     public Boolean updateBookGive(LoanSlipModel loanSlip);
 
-    public void creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online);
+    public Boolean creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online);
 
     public List<ReportModel> getReportBorrow();
 

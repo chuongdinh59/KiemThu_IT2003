@@ -241,10 +241,9 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     }
 
     @Override
-    public void creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online) {
+    public Boolean creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online) {
 
         if (LScheckReader == 1 && !LSbookList.isEmpty()) {
-
             for (BookModel book : LSbookList) {
                 if (checkQuantity(book.getQuantity(), book.getId())) {
                     Connection connect = getConnection();
@@ -269,8 +268,10 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
                         if (rowsInserted > 0) {
                             deleteQuantity(book.getQuantity(), book.getId());
                             MessageBoxUtils.AlertBox("INFORMATION", "Thêm thành công", Alert.AlertType.INFORMATION);
+                            return true;
                         } else {
                             MessageBoxUtils.AlertBox("ERROR", "Thêm thất bạii", Alert.AlertType.ERROR);
+                            return false;
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -297,6 +298,7 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
         } else {
             MessageBoxUtils.AlertBox("ERROR", "Khách hàng không tồn tại hoặc bạn chưa thêm sách để tạo phiếu mượn", Alert.AlertType.ERROR);
         }
+        return false;
     }
 
     @Override
@@ -366,7 +368,7 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     }
 
     @Override
-    public boolean checkQuantity(Integer quantity, Integer id
+    public Boolean checkQuantity(Integer quantity, Integer id
     ) {
         Connection connect = getConnection();
         PreparedStatement statement = null;

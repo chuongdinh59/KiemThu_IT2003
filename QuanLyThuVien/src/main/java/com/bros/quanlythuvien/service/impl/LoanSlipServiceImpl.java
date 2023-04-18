@@ -35,7 +35,7 @@ public class LoanSlipServiceImpl implements LoanSlipService {
         }
         return resultsLoanslipModel;
     }
-    
+
     public List<LoanSlipModel> findByBookIDAndReaderID(Integer bookID, Integer readerID) {
         List<LoanSlipModel> resutlt = new ArrayList<>();
         List<LoanSlipEntity> loanslipList = loanSlipRepository.findByBookIDAndReaderID(bookID, readerID);
@@ -44,9 +44,11 @@ public class LoanSlipServiceImpl implements LoanSlipService {
         }
         return resutlt;
     }
+
     @Override
-    public void creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online) {
-        loanSlipRepository.creatLoanSlip(LSbookList, LScheckReader, LSCustomerID, online);
+
+    public Boolean creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online) {
+        return loanSlipRepository.creatLoanSlip(LSbookList, LScheckReader, LSCustomerID, online);
     }
 
     @Override
@@ -104,9 +106,14 @@ public class LoanSlipServiceImpl implements LoanSlipService {
         }
     }
 
+    // return 0 --> không có phần tử để xóa
+    // return 1 --> xóa thành công
+    // return -1 --> xóa thất bại
     @Override
-    public void checkOnlineLoanSlip() {
-        loanSlipRepository.checkOnlineLoanSlip();
+    public Integer checkOnlineLoanSlip() {
+        int rs = loanSlipRepository.checkOnlineLoanSlip();
+
+        return rs;
     }
 
     @Override
