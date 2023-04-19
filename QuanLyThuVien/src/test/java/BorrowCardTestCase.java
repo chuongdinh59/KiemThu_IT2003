@@ -55,8 +55,9 @@ public class BorrowCardTestCase {
 
 //    @Test
 //    @DisplayName("Kiểm tra hàm createBorrowCard True khi tạo cho reader có tồn tại")
+////    Hàm test cẩn thận sinh ra borrowCard trong data base
 //    public void testCreateBorrowCardTrue() {
-//        Boolean result = borrowCardService.createBorrowCard(11);
+//        Boolean result = borrowCardService.createBorrowCard(24);
 //
 //        Assertions.assertTrue(result);
 //    }

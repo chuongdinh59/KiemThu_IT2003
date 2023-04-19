@@ -34,10 +34,10 @@ public class ReaderTestCase {
     @DisplayName("Kiểm tra hàm findById với id hợp lệ")
     public void testFindByIdTrue() {
         ReaderModel expectedResult = new ReaderModel();
-        expectedResult.setId(8);
-        expectedResult.setFullname("ab");
+        expectedResult.setId(10);
+        expectedResult.setFullname("Trần Văn Lượng");
 
-        ReaderModel result = readerService.findById(8);
+        ReaderModel result = readerService.findById(10);
 
         Assertions.assertEquals(expectedResult.getId(), result.getId());
         Assertions.assertEquals(expectedResult.getFullname(), result.getFullname());
@@ -53,26 +53,28 @@ public class ReaderTestCase {
 
 //    @Test
 //    @DisplayName("Kiểm tra hàm checkReader với thẻ thư viện hết hạn")
+//    Hàm test xong phải comment lại vì phía sau sẽ thay đổi data base
 //    public void testCheckReaderExpiredCard() {
-//        Integer id = 3;
+//        Integer id = 2;
 //        int expectedResult = 0;
 //        int result = readerService.checkReader(id);
 //        Assertions.assertEquals(expectedResult, result);
 //    }
 
-    @Test
-    @DisplayName("Kiểm tra hàm checkReader người dùng không tồn tại hoặc chưa tạo thẻ thư viện")
-    public void testCheckReaderNone() {
-        Integer id = 1;
-        int expectedResult = 2;
-        int result = readerService.checkReader(id);
-        Assertions.assertEquals(expectedResult, result);
-    }
+//    @Test
+//    @DisplayName("Kiểm tra hàm checkReader người dùng không tồn tại hoặc chưa tạo thẻ thư viện")
+//    //    Hàm test xong phải comment lại vì phía sau sẽ thay đổi data base
+//    public void testCheckReaderNone() {
+//        Integer id = 24;
+//        int expectedResult = 2;
+//        int result = readerService.checkReader(id);
+//        Assertions.assertEquals(expectedResult, result);
+//    }
 
     @Test
     @DisplayName("Kiểm tra hàm checkReader người dùng chưa trả sách")
     public void testCheckReaderReturn() {
-        Integer id = 11;
+        Integer id = 10;
         int expectedResult = 3;
         int result = readerService.checkReader(id);
         Assertions.assertEquals(expectedResult, result);
@@ -81,7 +83,7 @@ public class ReaderTestCase {
     @Test
     @DisplayName("Kiểm tra hàm checkReader hợp lệ")
     public void testCheckReaderPass() {
-        Integer id = 4;
+        Integer id = 6;
         int expectedResult = 1;
         int result = readerService.checkReader(id);
         Assertions.assertEquals(expectedResult, result);
@@ -91,9 +93,9 @@ public class ReaderTestCase {
     @DisplayName("Kiểm tra hàm updateReader hợp lệ")
     public void testUpdateReaderPass() {
         ReaderModel reader = new ReaderModel();
-        reader.setId(3);
-        reader.setFullname("phan2");
-        reader.setGender("Nữ");
+        reader.setId(24);
+        reader.setFullname("phu2");
+        reader.setGender("Nam");
 
         Boolean rs = readerService.updateReader(reader);
         Assertions.assertTrue(rs);
@@ -111,47 +113,48 @@ public class ReaderTestCase {
         Assertions.assertFalse(rs);
     }
 
-//    @Test
-//    @DisplayName("Kiểm tra hàm findReaderNotHaveBorrowCard không có thẻ thư viện hoặc thẻ thư viện hết hạn")
-//    public void testFindReaderNotHaveBorrowCardFalse() {
-//        ReaderModel reader = new ReaderModel();
-//        reader.setId(12);
-//        reader.setFullname("tamhoaName");
-//
-//        ReaderModel reader1 = new ReaderModel();
-//        reader.setId(3);
-//        reader.setFullname("phan2");
-//
-//        List<ReaderModel> expected = Arrays.asList(reader, reader1);
-//
-//        List<ReaderModel> actual = readerService.findReaderNotHaveBorrowCard();
-//
-//        Assertions.assertEquals(expected.size(), actual.size());
-//
-//    }
     @Test
-    @DisplayName("Kiểm tra hàm findReaderNotHaveBorrowCard với tất cả người dùng đều hợp lệ")
-    public void testFindReaderNotHaveBorrowCardTrue() {
+    @DisplayName("Kiểm tra hàm findReaderNotHaveBorrowCard không có thẻ thư viện hoặc thẻ thư viện hết hạn")
+    public void testFindReaderNotHaveBorrowCardFalse() {
+        ReaderModel reader = new ReaderModel();
+        reader.setId(24);
+        reader.setFullname("phu");
+        
+         ReaderModel reader1 = new ReaderModel();
+        reader.setId(2);
+        reader.setFullname("Đình Chương");
 
-        List<ReaderModel> expected = new ArrayList<>();
+        List<ReaderModel> expected = Arrays.asList(reader,reader1);
 
         List<ReaderModel> actual = readerService.findReaderNotHaveBorrowCard();
 
         Assertions.assertEquals(expected.size(), actual.size());
 
     }
+//    @Test
+//    @DisplayName("Kiểm tra hàm findReaderNotHaveBorrowCard với tất cả người dùng đều hợp lệ")
+//    Sửa data base trước khi test
+//    public void testFindReaderNotHaveBorrowCardTrue() {
+//
+//        List<ReaderModel> expected = new ArrayList<>();
+//
+//        List<ReaderModel> actual = readerService.findReaderNotHaveBorrowCard();
+//
+//        Assertions.assertEquals(expected.size(), actual.size());
+//
+//    }
 
     @Test
     @DisplayName("Kiểm tra hàm findAccountByRId với readerId hợp lệ")
     public void testFindAccountByRIdTrue() {
         AccountModel expectedResult = new AccountModel();
-        expectedResult.setId(8);
-        expectedResult.setUserName("staff");
-        expectedResult.setFullName("anh nhan vien");
-        expectedResult.setEmail("abc@gmail.com");
+        expectedResult.setId(2);
+        expectedResult.setUserName("cho");
+        expectedResult.setFullName("Đình Chương ");
+        expectedResult.setEmail("chuong59@gmail.com");
         expectedResult.setType("Customer");
 
-        AccountModel result = readerService.findAccountByRId(9);
+        AccountModel result = readerService.findAccountByRId(2);
 
         Assertions.assertEquals(expectedResult.getId(), result.getId());
         Assertions.assertEquals(expectedResult.getUserName(), result.getUserName());
@@ -195,7 +198,7 @@ public class ReaderTestCase {
     public void testLoginCustomer() {
         Map<String, Object> expectedResult = new HashMap<>();
         expectedResult.put("type", "Customer");
-        expectedResult.put("readerId", 4);
+        expectedResult.put("readerId", 2);
 
         Map<String, Object> actualResult = new HashMap<>();
         actualResult = readerService.login("cho", "123");
@@ -236,23 +239,21 @@ public class ReaderTestCase {
     public void testRegisterDuplicatedEmail() {
         int expectedResult = 2;
 
-        int actualResult = readerService.register("phuLib", "123", "phu", "abc@gmail.com");
+        int actualResult = readerService.register("phuLib", "123", "phu", "a@gmail.com");
         Assertions.assertEquals(expectedResult, actualResult);
     }
 
 //    @Test
 //    @DisplayName("Kiểm tra hàm register thành công")
+////    Hàm test xong phải comment lại vì nó sẽ tạo tài khoản dưới database
 //    public void testRegisterPass() {
 //        int expectedResult = 3;
 //
 //        int actualResult = readerService.register("phuLib2","123","phulib2","phuLib2@gmail.com");
 //        Assertions.assertEquals(expectedResult, actualResult);
 //    }
-//    @Test
-//    @DisplayName("Kiểm tra hàm register thất bại")
-//    public void testRegisterFalse() {
-////       Có return 4 nhưng mà không biết test như thế nào
-//    }
+    
+  
     @Test
     @DisplayName("Kiểm tra hàm updateRoleAccount thành công")
     public void testUpdateRoleAccountPass() {
