@@ -18,7 +18,6 @@ com\bros\quanlythuvien\converter\ReaderConverter.class
 com\bros\quanlythuvien\QuanTriSachController.class
 com\bros\quanlythuvien\mapper\ResultSetMapper.class
 com\bros\quanlythuvien\entity\CategoryEntity.class
-com\bros\quanlythuvien\repository\LoanSlipRepository.class
 com\bros\quanlythuvien\converter\BookConverter.class
 com\bros\quanlythuvien\service\BorrowCardService.class
 com\bros\quanlythuvien\service\impl\BookServiceImpl.class
@@ -72,6 +71,5 @@ com\bros\quanlythuvien\annotation\Column.class
 com\bros\quanlythuvien\utils\QueryBuilderUtils.class
 com\bros\quanlythuvien\entity\ReaderEntity.class
 com\bros\quanlythuvien\utils\MessageBoxUtils.class
-com\bros\quanlythuvien\repository\impl\LoanSlipRepositoryImpl.class
 com\bros\quanlythuvien\repository\impl\ReaderRepositoryImpl.class
 com\bros\quanlythuvien\repository\BorrowCardRepository.class

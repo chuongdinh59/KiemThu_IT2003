@@ -84,6 +84,7 @@ public class LoginController implements Initializable {
     private ReaderService readerService = new ReaderServiceImpl();
     private ReaderRepository readerRepository = new ReaderRepositoryImpl();
 //    Hàm
+
     public Map<String, Object> login(TextField username, TextField password, Button loginBtn) {
         String u = username.getText();
         String p = password.getText();
@@ -104,7 +105,8 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        loanSlipService.checkOnlineLoanSlip();
+        int rs = loanSlipService.checkOnlineLoanSlip();
+        MessageBoxUtils.AlertBox("INFORMATION", "Đã xóa " + rs +" phiếu mượn quá hạn", Alert.AlertType.INFORMATION);
     }
 
     @FXML

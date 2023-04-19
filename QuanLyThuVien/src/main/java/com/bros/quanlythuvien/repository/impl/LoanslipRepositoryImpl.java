@@ -5,7 +5,6 @@
 package com.bros.quanlythuvien.repository.impl;
 
 import com.bros.quanlythuvien.entity.LoanSlipEntity;
-import com.bros.quanlythuvien.mapper.ResultSetMapper;
 import com.bros.quanlythuvien.model.BookModel;
 import com.bros.quanlythuvien.model.LoanSlipModel;
 import com.bros.quanlythuvien.model.ReportModel;
@@ -22,10 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Alert;
 import com.bros.quanlythuvien.repository.LoanSlipRepository;
-import com.bros.quanlythuvien.utils.ConnectionUtils;
-import com.bros.quanlythuvien.utils.MessageBoxUtils;
 
 /**
  *
@@ -85,7 +81,7 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
             statement.setInt(1, loanSlip.getId());
 
             int rowsUpdated = statement.executeUpdate();
-            if ( rowsUpdated > 0 && targetDayBetween != 0) {
+            if (rowsUpdated > 0 && targetDayBetween != 0) {
                 return targetDayBetween;
             }
             if (rowsUpdated > 0) {
@@ -245,7 +241,7 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     @Override
     public Integer creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online) {
         if (LScheckReader == 1 && !LSbookList.isEmpty()) {
-            for (int i = 0 ; i < LSbookList.size() ; i++) {
+            for (int i = 0; i < LSbookList.size(); i++) {
                 BookModel book = LSbookList.get(i);
                 if (checkQuantity(book.getQuantity(), book.getId())) {
                     Connection connect = getConnection();
@@ -269,15 +265,15 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
                         int rowsInserted = statement.executeUpdate();
                         if (rowsInserted > 0) {
                             deleteQuantity(book.getQuantity(), book.getId());
-                            if ( i == LSbookList.size() - 1)
+                            if (i == LSbookList.size() - 1) {
                                 return 1;
+                            }
 //                            MessageBoxUtils.AlertBox("INFORMATION", "Thêm thành công", Alert.AlertType.INFORMATION);
 //                            return true;
-                        }
-                        else {
+                        } else {
                             return -1;
                         }
-                        
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         return -1;
@@ -419,45 +415,42 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
 
     @Override
     public int checkOnlineLoanSlip() {
+        int numOfDeleted = 0;
+        Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet result = null;
-        Connection connect = null;
+        ResultSet resultSet = null;
         try {
-            connect = getConnection();
-            String sql = "SELECT * FROM loanslip WHERE isOnline = 0 AND DATEDIFF(NOW(), BorrowedDate) >= 2;";
-            statement = connect.prepareStatement(sql);
-            result = statement.executeQuery();
-            if (result != null) {
-                return 0;
-            }
-            while (result.next()) {
-                int id = result.getInt("id");
-                insertQuantity(result.getInt("Quantity"), result.getInt("BookID"));
+            connection = getConnection();
+            String sql = "SELECT * FROM loanslip WHERE isOnline = 0 AND DATEDIFF(NOW(), ExpirationDate) >= 2;";
+            statement = connection.prepareStatement(sql);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                insertQuantity(resultSet.getInt("Quantity"), resultSet.getInt("BookID"));
                 String deleteSql = "DELETE FROM loanslip WHERE id = ?";
-                PreparedStatement pstmt = connect.prepareStatement(deleteSql);
+                PreparedStatement pstmt = connection.prepareStatement(deleteSql);
                 pstmt.setInt(1, id);
                 pstmt.executeUpdate();
+                numOfDeleted++;
             }
-            return 1;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (result != null) {
-                    result.close();
+                if (resultSet != null) {
+                    resultSet.close();
                 }
                 if (statement != null) {
                     statement.close();
                 }
-                if (connect != null) {
-                    connect.close();
+                if (connection != null) {
+                    connection.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return -1;
-
+        return numOfDeleted;
     }
 
     @Override
