@@ -168,9 +168,6 @@ public class CustomerController implements Initializable {
     @FXML
     private AnchorPane borrowCard_viewForm;
 
-
-
-
     @FXML
     public void minimize() {
         Stage stage = (Stage) mainForm.getScene().getWindow();
@@ -401,7 +398,12 @@ public class CustomerController implements Initializable {
 //            Kiểm tra số lượng sách trong Cart
             if (totalQuantity <= 5) {
                 String strReaderId = Integer.toString(readerId);
-                loanSlipService.creatLoanSlip(bookListCart, LScheckReader, strReaderId, 0);
+                Integer rs = loanSlipService.creatLoanSlip(bookListCart, LScheckReader, strReaderId, 0);
+                if (rs > 0) {
+                    MessageBoxUtils.AlertBox("INFORMATION", "Thêm thành công", Alert.AlertType.INFORMATION);
+                } else {
+                    MessageBoxUtils.AlertBox("ERROR", "Thêm thất bại", Alert.AlertType.ERROR);
+                }
                 clearCart();
             } else {
                 MessageBoxUtils.AlertBox("Error", "Không thể mượn quá 5 cuốn sách", AlertType.ERROR);
@@ -625,8 +627,8 @@ public class CustomerController implements Initializable {
             BorrowCard_Btn.setStyle("-fx-background-color: #08bc08; -fx-text-fill: #fff;");
         }
     }
-    
-    public void loadUserName(){
+
+    public void loadUserName() {
         ReaderModel reader = readerService.findById(readerId);
         username.setText(reader.getFullname());
     }
