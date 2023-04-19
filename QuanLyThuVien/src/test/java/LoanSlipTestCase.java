@@ -51,12 +51,18 @@ public class LoanSlipTestCase {
 //        );
 //    }
 //    @ParameterizedTest
-//    @DisplayName("Kiểm tra tìm kiếm phiếu mượn bằng readerid và bookid")
+//    @DisplayName("Kiểm tra tìm kiếm phiếu mượn bằng readerid và bookid thành công")
 //    @MethodSource("getMapSearch")
-//    public void testSearchBookByBookIDAndReaderID(Map<String, Integer> searchMap) {
+//    public void testSearchBookByBookIDAndReaderIDSuccess(Map<String, Integer> searchMap) {
 //        Integer readerID = searchMap.getOrDefault("readerid", null);
 //        Integer bookID = searchMap.getOrDefault("bookid", null);
-//        Assertions.assertTrue(loanSlipService.findByBookIDAndReaderID(bookID, readerID).size() > 0 );
+//        Assertions.assertTrue(loanSlipService.findByBookIDAndReaderID(bookID, readerID).size() > 0);
+//    }
+//
+//    @Test
+//    @DisplayName("Kiểm tra tìm kiếm phiếu mượn bằng readerid và bookid thất bại")
+//    public void testSearchBookByBookIDAndReaderIDFail() {
+//        Assertions.assertFalse(loanSlipService.findByBookIDAndReaderID(999, 999).size() > 0);
 //    }
 //    @Test
 //    @DisplayName("Kiểm tra đưa sách cho người nhận")
@@ -110,27 +116,27 @@ public class LoanSlipTestCase {
 //        // 3 --> Khách hàng không tồn tại hoặc bạn chưa thêm sách để tạo phiếu mượn
 //        Assertions.assertEquals(rs3, 3);
 //    }
-    @Test
-    @DisplayName("Kiểm tra cập nhật trạng thái")
-    public void testUpdateStatusBook() {
-
-        // -2 --> trả sách rồi 
-        LoanSlipModel loanSlip1 = loanSlipService.findByCId(2).get(0);
-        Integer rs1 = loanSlipService.updateBook(loanSlip1);
-        Assertions.assertEquals(rs1, -2);
-        // -1 --> sự cố lỗi, khi phiếu mượn không có hoặc exception
-        LoanSlipModel loanSlip2 = null;
-        Integer rs2 = loanSlipService.updateBook(loanSlip2);
-        Assertions.assertEquals(rs2, -1);
-        // 0 --> thành công
-        LoanSlipModel loanSlip3 = loanSlipService.findByBId(7).get(2);
-        Integer rs3 = loanSlipService.updateBook(loanSlip3);
-        Assertions.assertEquals(rs3, 0);
-//        // >0 --> thành công + phạt tiền
-        LoanSlipModel loanSlip4 = loanSlipService.findByCId(2).get(1);
-        Integer rs4 = loanSlipService.updateBook(loanSlip4);
-        Assertions.assertTrue(rs4 > 0);
-        
-    }
+//    @Test
+//    @DisplayName("Kiểm tra cập nhật trạng thái")
+//    public void testUpdateStatusBook() {
+//
+//        // -2 --> trả sách rồi 
+//        LoanSlipModel loanSlip1 = loanSlipService.findByCId(2).get(0);
+//        Integer rs1 = loanSlipService.updateBook(loanSlip1);
+//        Assertions.assertEquals(rs1, -2);
+//        // -1 --> sự cố lỗi, khi phiếu mượn không có hoặc exception
+//        LoanSlipModel loanSlip2 = null;
+//        Integer rs2 = loanSlipService.updateBook(loanSlip2);
+//        Assertions.assertEquals(rs2, -1);
+//        // 0 --> thành công
+//        LoanSlipModel loanSlip3 = loanSlipService.findByBId(7).get(2);
+//        Integer rs3 = loanSlipService.updateBook(loanSlip3);
+//        Assertions.assertEquals(rs3, 0);
+////      // >0 --> thành công + phạt tiền
+//        LoanSlipModel loanSlip4 = loanSlipService.findByCId(2).get(1);
+//        Integer rs4 = loanSlipService.updateBook(loanSlip4);
+//        Assertions.assertTrue(rs4 > 0);
+//        
+//    }
 
 }

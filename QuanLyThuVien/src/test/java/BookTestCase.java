@@ -38,7 +38,7 @@ public class BookTestCase {
 //        book.setPublicationYear(2012);
 //        book.setPublicationPlace("Hà Nội");
 //        book.setTitle("Sách của tác giả A");
-//        book.setQuantity(212);
+//        book.setQuantity(112);
 //        book.setLocation("Dãy A");
 //        book.setDescription("Sách của ngày A");
 //
@@ -76,7 +76,7 @@ public class BookTestCase {
 //        Assertions.assertEquals(quantityTest, quantityTest);
 //    }
 //    
-
+    
     static Stream<Map<String, Object>> getMapSearch() {
 // Do trên giao diện đã fix cứng những field search nên em tự cho dữ liệu phù hợp 
         return Stream.of(

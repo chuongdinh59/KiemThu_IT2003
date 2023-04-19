@@ -451,7 +451,6 @@ public class EmployeeController implements Initializable {
                     else {
                         MessageBoxUtils.AlertBox("ERROR", "Trả sách thất bại", Alert.AlertType.ERROR);
                     }
-
                     loadLoanslipInfo(returnLoanslipTB);
                     returnLoanslipTB.refresh();
                 }
