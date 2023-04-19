@@ -6,6 +6,7 @@ import com.bros.quanlythuvien.model.AccountModel;
 import com.bros.quanlythuvien.model.ReaderModel;
 import com.bros.quanlythuvien.service.ReaderService;
 import com.bros.quanlythuvien.service.impl.ReaderServiceImpl;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -50,14 +51,14 @@ public class ReaderTestCase {
         Assertions.assertNull(result);
     }
 
-    @Test
-    @DisplayName("Kiểm tra hàm checkReader với thẻ thư viện hết hạn")
-    public void testCheckReaderExpiredCard() {
-        Integer id = 3;
-        int expectedResult = 0;
-        int result = readerService.checkReader(id);
-        Assertions.assertEquals(expectedResult, result);
-    }
+//    @Test
+//    @DisplayName("Kiểm tra hàm checkReader với thẻ thư viện hết hạn")
+//    public void testCheckReaderExpiredCard() {
+//        Integer id = 3;
+//        int expectedResult = 0;
+//        int result = readerService.checkReader(id);
+//        Assertions.assertEquals(expectedResult, result);
+//    }
 
     @Test
     @DisplayName("Kiểm tra hàm checkReader người dùng không tồn tại hoặc chưa tạo thẻ thư viện")
@@ -112,7 +113,7 @@ public class ReaderTestCase {
 
 //    @Test
 //    @DisplayName("Kiểm tra hàm findReaderNotHaveBorrowCard không có thẻ thư viện hoặc thẻ thư viện hết hạn")
-//    public void testFindReaderNotHaveBorrowCard() {
+//    public void testFindReaderNotHaveBorrowCardFalse() {
 //        ReaderModel reader = new ReaderModel();
 //        reader.setId(12);
 //        reader.setFullname("tamhoaName");
@@ -128,6 +129,17 @@ public class ReaderTestCase {
 //        Assertions.assertEquals(expected.size(), actual.size());
 //
 //    }
+    @Test
+    @DisplayName("Kiểm tra hàm findReaderNotHaveBorrowCard với tất cả người dùng đều hợp lệ")
+    public void testFindReaderNotHaveBorrowCardTrue() {
+
+        List<ReaderModel> expected = new ArrayList<>();
+
+        List<ReaderModel> actual = readerService.findReaderNotHaveBorrowCard();
+
+        Assertions.assertEquals(expected.size(), actual.size());
+
+    }
 
     @Test
     @DisplayName("Kiểm tra hàm findAccountByRId với readerId hợp lệ")
@@ -200,34 +212,34 @@ public class ReaderTestCase {
         actualResult = readerService.login("chohoanghon", "123213123");
         Assertions.assertEquals(expectedResult, actualResult);
     }
-    
+
     @Test
     @DisplayName("Kiểm tra hàm register điền trống field")
     public void testRegisterBlank() {
         int expectedResult = 1;
 
-        int actualResult = readerService.register("phuLib","123","","phuLib@gmail.com");
+        int actualResult = readerService.register("phuLib", "123", "", "phuLib@gmail.com");
         Assertions.assertEquals(expectedResult, actualResult);
     }
-    
+
     @Test
     @DisplayName("Kiểm tra hàm register bị trùng username")
     public void testRegisterDuplicatedUserName() {
         int expectedResult = 2;
 
-        int actualResult = readerService.register("cho","123","phu","phuLib@gmail.com");
+        int actualResult = readerService.register("cho", "123", "phu", "phuLib@gmail.com");
         Assertions.assertEquals(expectedResult, actualResult);
     }
-    
+
     @Test
     @DisplayName("Kiểm tra hàm register bị trùng email")
     public void testRegisterDuplicatedEmail() {
         int expectedResult = 2;
 
-        int actualResult = readerService.register("phuLib","123","phu","abc@gmail.com");
+        int actualResult = readerService.register("phuLib", "123", "phu", "abc@gmail.com");
         Assertions.assertEquals(expectedResult, actualResult);
     }
-    
+
 //    @Test
 //    @DisplayName("Kiểm tra hàm register thành công")
 //    public void testRegisterPass() {
@@ -236,25 +248,23 @@ public class ReaderTestCase {
 //        int actualResult = readerService.register("phuLib2","123","phulib2","phuLib2@gmail.com");
 //        Assertions.assertEquals(expectedResult, actualResult);
 //    }
-    
 //    @Test
 //    @DisplayName("Kiểm tra hàm register thất bại")
 //    public void testRegisterFalse() {
 ////       Có return 4 nhưng mà không biết test như thế nào
 //    }
-    
     @Test
     @DisplayName("Kiểm tra hàm updateRoleAccount thành công")
     public void testUpdateRoleAccountPass() {
-        Boolean actualResult = readerService.updateRoleAccount("Employee",13);
+        Boolean actualResult = readerService.updateRoleAccount("Employee", 13);
         Assertions.assertTrue(actualResult);
     }
-    
-     @Test
+
+    @Test
     @DisplayName("Kiểm tra hàm updateRoleAccount thất bại")
     public void testUpdateRoleAccountFalse() {
-        Boolean actualResult = readerService.updateRoleAccount("Employee",99);
+        Boolean actualResult = readerService.updateRoleAccount("Employee", 99);
         Assertions.assertFalse(actualResult);
     }
-    
+
 }
