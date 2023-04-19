@@ -399,9 +399,16 @@ public class CustomerController implements Initializable {
             if (totalQuantity <= 5) {
                 String strReaderId = Integer.toString(readerId);
                 Integer rs = loanSlipService.creatLoanSlip(bookListCart, LScheckReader, strReaderId, 0);
-                if (rs > 0) {
+                if (rs == 1) {
                     MessageBoxUtils.AlertBox("INFORMATION", "Thêm thành công", Alert.AlertType.INFORMATION);
-                } else {
+                }
+                else if (rs == 2) {
+                    MessageBoxUtils.AlertBox("ERROR", "Thư viện không đủ sách", Alert.AlertType.ERROR);
+                }
+                else if (rs == 3) {
+                    MessageBoxUtils.AlertBox("ERROR", "Khách hàng không tồn tại hoặc bạn chưa thêm sách để tạo phiếu mượn", Alert.AlertType.ERROR);
+                }
+                else {
                     MessageBoxUtils.AlertBox("ERROR", "Thêm thất bại", Alert.AlertType.ERROR);
                 }
                 clearCart();
