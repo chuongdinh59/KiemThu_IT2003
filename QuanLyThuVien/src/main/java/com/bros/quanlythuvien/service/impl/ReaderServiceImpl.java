@@ -33,12 +33,16 @@ public class ReaderServiceImpl implements ReaderService {
     @Override
     public ReaderModel findById(Integer id) {
         ReaderEntity readerEntity = readerRepository.findById(id);
+        if (readerEntity == null) {
+            return null;
+        }
         return readerConverter.entityToModel(readerEntity, ReaderModel.class);
     }
 
     @Override
     public AccountModel findAccountByRId(Integer id) {
         AccountEntity accountEntity = readerRepository.findAccountByRId(id);
+        if(accountEntity == null)return null;
         return accountConverter.entityToModel(accountEntity, AccountModel.class);
     }
 
@@ -64,31 +68,7 @@ public class ReaderServiceImpl implements ReaderService {
 
     @Override
     public int checkReader(Integer id) {
-        switch (readerRepository.checkReader(id)) {
-            case 0: {
-                MessageBoxUtils.AlertBox("ERROR", "Thẻ thư viện đã hết hạn", Alert.AlertType.ERROR);
-                return 0;
-            }
-            case 1:
-                List<ReaderModel> readerList = findAll();
-                for (ReaderModel reader : readerList) {
-                    if (Objects.equals(reader.getId(), id)) {
-                        MessageBoxUtils.AlertBox("INFORMATION", "Người dùng hợp lệ", Alert.AlertType.INFORMATION);
-                    }
-                }
-                return 1;
-            case 2: {
-                MessageBoxUtils.AlertBox("ERROR", "Người dùng chưa tạo thẻ thư viện hoặc không tồn tại", Alert.AlertType.ERROR);
-                return 0;
-            }
-            case 3: {
-                MessageBoxUtils.AlertBox("ERROR", "Người dùng chưa trả sách", Alert.AlertType.ERROR);
-                return 0;
-            }
-            default:
-                break;
-        }
-        return 0;
+        return readerRepository.checkReader(id);
     }
 
     @Override
@@ -96,9 +76,9 @@ public class ReaderServiceImpl implements ReaderService {
         boolean rs = readerRepository.updateReader(reader);
         return rs;
     }
-    
-    public boolean updateRoleAccount(String role,Integer id){
-        boolean rs = readerRepository.updateRoleAccount(role,id);
+
+    public boolean updateRoleAccount(String role, Integer id) {
+        boolean rs = readerRepository.updateRoleAccount(role, id);
         return rs;
     }
 
@@ -111,6 +91,5 @@ public class ReaderServiceImpl implements ReaderService {
     public int register(String register_username, String register_password, String register_fullname, String register_email) {
         return readerRepository.register(register_username, register_password, register_fullname, register_email);
     }
-    
 
 }

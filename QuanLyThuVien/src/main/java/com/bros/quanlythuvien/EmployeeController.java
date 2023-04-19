@@ -680,10 +680,30 @@ public class EmployeeController implements Initializable {
             try {
                 Integer id = Integer.valueOf(sid);
                 int check = readerService.checkReader(id);
-                if (check == 0) {
-                    LScheckReader = 0;
-                } else {
-                    LScheckReader = 1;
+                switch (check) {
+                    case 0:
+                        MessageBoxUtils.AlertBox("ERROR", "Thẻ thư viện đã hết hạn", Alert.AlertType.ERROR);
+                        LScheckReader = 0;
+                        break;
+                    case 2:
+                        MessageBoxUtils.AlertBox("ERROR", "Người dùng chưa tạo thẻ thư viện hoặc không tồn tại", Alert.AlertType.ERROR);
+                        LScheckReader = 0;
+                        break;
+                    case 3:
+                        MessageBoxUtils.AlertBox("ERROR", "Người dùng chưa trả sách", Alert.AlertType.ERROR);
+                        LScheckReader = 0;
+                        break;
+                    case 1:
+                        List<ReaderModel> readerList = readerService.findAll();
+                        for (ReaderModel reader : readerList) {
+                            if (Objects.equals(reader.getId(), id)) {
+                                MessageBoxUtils.AlertBox("INFORMATION", "Người dùng hợp lệ", Alert.AlertType.INFORMATION);
+                            }
+                        }
+                        LScheckReader = 1;
+                        break;
+                    default:
+                        break;
                 }
 
             } catch (NumberFormatException e) {
