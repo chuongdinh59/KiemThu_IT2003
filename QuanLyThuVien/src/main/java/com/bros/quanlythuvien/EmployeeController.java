@@ -439,23 +439,21 @@ public class EmployeeController implements Initializable {
                 confirm.setContentText("Khách hàng chưa nhận sách, nếu tiếp tục sẽ hủy đơn");
                 Optional<ButtonType> result = confirm.showAndWait();
                 if (result.get() == ButtonType.OK) {
-                    Integer rs = loanSlipService.updateBook(selectedLoanSlip);
-                    if (rs > 0) {
-                        MessageBoxUtils.AlertBox("ERROR", "Bạn đã trễ hạn " + rs + " ngày và tiền phạt là: " + 5000 * rs + " VNĐ", Alert.AlertType.ERROR);
-                    } else if (rs == -2) {
-                        MessageBoxUtils.AlertBox("ERROR", "Sách đã được trả!!", Alert.AlertType.ERROR);
-                    }
-                    else if (rs == 0) {
-                        MessageBoxUtils.AlertBox("INFORMATION", "Trả sách thành công", Alert.AlertType.INFORMATION);
-                    }
-                    else {
-                        MessageBoxUtils.AlertBox("ERROR", "Trả sách thất bại", Alert.AlertType.ERROR);
-                    }
+                    loanSlipService.updateBook(selectedLoanSlip);
                     loadLoanslipInfo(returnLoanslipTB);
                     returnLoanslipTB.refresh();
                 }
             } else {
-                loanSlipService.updateBook(selectedLoanSlip);
+                Integer rs = loanSlipService.updateBook(selectedLoanSlip);
+                if (rs > 0) {
+                    MessageBoxUtils.AlertBox("ERROR", "Bạn đã trễ hạn " + rs + " ngày và tiền phạt là: " + 5000 * rs + " VNĐ", Alert.AlertType.ERROR);
+                } else if (rs == -2) {
+                    MessageBoxUtils.AlertBox("ERROR", "Sách đã được trả!!", Alert.AlertType.ERROR);
+                } else if (rs == 0) {
+                    MessageBoxUtils.AlertBox("INFORMATION", "Trả sách thành công", Alert.AlertType.INFORMATION);
+                } else {
+                    MessageBoxUtils.AlertBox("ERROR", "Trả sách thất bại", Alert.AlertType.ERROR);
+                }
                 loadLoanslipInfo(returnLoanslipTB);
                 returnLoanslipTB.refresh();
             }
@@ -883,7 +881,16 @@ public class EmployeeController implements Initializable {
     @FXML
     public void creatLoanSlip() {
         String strId = LSCustomerID.getText();
-        loanSlipService.creatLoanSlip(LSbookList, LScheckReader, strId, 1);
+        Integer rs = loanSlipService.creatLoanSlip(LSbookList, LScheckReader, strId, 1);
+        if (rs == 1) {
+            MessageBoxUtils.AlertBox("INFORMATION", "Thêm thành công", Alert.AlertType.INFORMATION);
+        } else if (rs == 2) {
+            MessageBoxUtils.AlertBox("ERROR", "Thư viện không đủ sách", Alert.AlertType.ERROR);
+        } else if (rs == 3) {
+            MessageBoxUtils.AlertBox("ERROR", "Khách hàng không tồn tại hoặc bạn chưa thêm sách để tạo phiếu mượn", Alert.AlertType.ERROR);
+        } else {
+            MessageBoxUtils.AlertBox("ERROR", "Thêm thất bại", Alert.AlertType.ERROR);
+        }
         clearArray();
     }
 

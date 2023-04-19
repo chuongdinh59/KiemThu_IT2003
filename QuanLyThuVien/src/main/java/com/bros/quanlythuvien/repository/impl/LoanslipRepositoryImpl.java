@@ -50,6 +50,7 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
         Connection connect = getConnection();
         PreparedStatement statement = null;
         ResultSet result = null;
+        Integer targetDayBetween = 0;
         try {
             String sql = "SELECT * FROM loanslip WHERE id = ?;";
             statement = connect.prepareStatement(sql);
@@ -66,7 +67,7 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
                 Long daysBetween = (sqlDate.getTime() - sqlTimestamp.getTime()) / (1000 * 60 * 60 * 24);
                 if (daysBetween > 0) {
                     // Tối thiểu là 1
-                    return Integer.valueOf(daysBetween.toString());
+                    targetDayBetween = Integer.valueOf(daysBetween.toString());
 //                    MessageBoxUtils.AlertBox("ERROR", "Bạn đã trễ hạn " + daysBetween + " ngày và tiền phạt là: " + 5000 * daysBetween + " VNĐ", Alert.AlertType.ERROR);
                 }
             }
@@ -84,6 +85,9 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
             statement.setInt(1, loanSlip.getId());
 
             int rowsUpdated = statement.executeUpdate();
+            if ( rowsUpdated > 0 && targetDayBetween != 0) {
+                return targetDayBetween;
+            }
             if (rowsUpdated > 0) {
                 insertQuantity(loanSlip.getQuantity(), loanSlip.getBookID());
                 return 0;
@@ -241,7 +245,8 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
     @Override
     public Integer creatLoanSlip(List<BookModel> LSbookList, int LScheckReader, String LSCustomerID, int online) {
         if (LScheckReader == 1 && !LSbookList.isEmpty()) {
-            for (BookModel book : LSbookList) {
+            for (int i = 0 ; i < LSbookList.size() ; i++) {
+                BookModel book = LSbookList.get(i);
                 if (checkQuantity(book.getQuantity(), book.getId())) {
                     Connection connect = getConnection();
                     PreparedStatement statement = null;
@@ -264,16 +269,18 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
                         int rowsInserted = statement.executeUpdate();
                         if (rowsInserted > 0) {
                             deleteQuantity(book.getQuantity(), book.getId());
-                            return 1;
+                            if ( i == LSbookList.size() - 1)
+                                return 1;
 //                            MessageBoxUtils.AlertBox("INFORMATION", "Thêm thành công", Alert.AlertType.INFORMATION);
 //                            return true;
-                        } else {
-                            return -1;
-//                            MessageBoxUtils.AlertBox("ERROR", "Thêm thất bạii", Alert.AlertType.ERROR);
-//                            return false;
                         }
+                        else {
+                            return -1;
+                        }
+                        
                     } catch (Exception e) {
                         e.printStackTrace();
+                        return -1;
                     } finally {
                         try {
                             if (result != null) {
@@ -291,7 +298,6 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
                     }
                 } else {
                     return 2;
-
 //                    MessageBoxUtils.AlertBox("ERROR", "Thư viện không đủ sách", Alert.AlertType.ERROR);
                 }
 

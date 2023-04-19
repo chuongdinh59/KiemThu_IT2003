@@ -414,14 +414,27 @@ public class CustomerController implements Initializable {
                 //            Lấy số lượng sách đã có trong Cart
                 for (BookModel book : bookListCart) {
                     totalQuantity += book.getQuantity();
-                }   //            Kiểm tra số lượng sách trong Cart
-                if (totalQuantity <= 5) {
-                    String strReaderId = Integer.toString(readerId);
-                    loanSlipService.creatLoanSlip(bookListCart, LScheckReader, strReaderId, 0);
-                    clearCart();
-                } else {
-                    MessageBoxUtils.AlertBox("Error", "Không thể mượn quá 5 cuốn sách", AlertType.ERROR);
-                }   break;
+                }  
+               //            Kiểm tra số lượng sách trong Cart
+            if (totalQuantity <= 5) {
+                String strReaderId = Integer.toString(readerId);
+                Integer rs = loanSlipService.creatLoanSlip(bookListCart, LScheckReader, strReaderId, 0);
+                if (rs == 1) {
+                    MessageBoxUtils.AlertBox("INFORMATION", "Thêm thành công", Alert.AlertType.INFORMATION);
+                }
+                else if (rs == 2) {
+                    MessageBoxUtils.AlertBox("ERROR", "Thư viện không đủ sách", Alert.AlertType.ERROR);
+                }
+                else if (rs == 3) {
+                    MessageBoxUtils.AlertBox("ERROR", "Khách hàng không tồn tại hoặc bạn chưa thêm sách để tạo phiếu mượn", Alert.AlertType.ERROR);
+                }
+                else {
+                    MessageBoxUtils.AlertBox("ERROR", "Thêm thất bại", Alert.AlertType.ERROR);
+                }
+                clearCart();
+            } else {
+                MessageBoxUtils.AlertBox("Error", "Không thể mượn quá 5 cuốn sách", AlertType.ERROR);
+            }
             default:
                 break;
         }
