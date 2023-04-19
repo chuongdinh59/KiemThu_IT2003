@@ -105,8 +105,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        int rs = loanSlipService.checkOnlineLoanSlip();
-        MessageBoxUtils.AlertBox("INFORMATION", "Đã xóa " + rs +" phiếu mượn quá hạn", Alert.AlertType.INFORMATION);
+         loanSlipService.checkOnlineLoanSlip();
     }
 
     @FXML

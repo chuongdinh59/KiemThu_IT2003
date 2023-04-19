@@ -421,7 +421,7 @@ public class LoanSlipRepositoryImpl extends CommonRepositoryImpl<LoanSlipEntity>
         ResultSet resultSet = null;
         try {
             connection = getConnection();
-            String sql = "SELECT * FROM loanslip WHERE isOnline = 0 AND DATEDIFF(NOW(), ExpirationDate) >= 2;";
+            String sql = "SELECT * FROM loanslip WHERE isOnline = 0 AND DATEDIFF(NOW(), BorrowedDate) >= 2;";
             statement = connection.prepareStatement(sql);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
