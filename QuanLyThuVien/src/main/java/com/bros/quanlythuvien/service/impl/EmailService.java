@@ -19,8 +19,8 @@ public class EmailService {
 
     private String host = "smtp.gmail.com";
     private String port = "587";
-    private  String username = "kiemthutestemail@gmail.com";
-    private  String password = "zndzfiascdkagmne";
+    private  String username = "hakoru1a@gmail.com";
+    private  String password = "pxunqhwpxlgbekzd";
 
    
     public void sendEmail(String toAddress, String subject, String message) throws MessagingException, UnsupportedEncodingException {

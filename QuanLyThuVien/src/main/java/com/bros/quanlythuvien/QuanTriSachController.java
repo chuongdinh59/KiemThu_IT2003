@@ -957,6 +957,7 @@ public class QuanTriSachController implements Initializable {
 //    Tải dữ liệu cho comboBox customer_role (trang customer trong Admin)
     @FXML
     public void loadComboBoxRole() {
+        customer_role.getItems().clear();
         customer_role.setPromptText("Chọn chức năng");
         customer_role.getItems().add(0, "Admin");
         customer_role.getItems().add(1, "Employee");
