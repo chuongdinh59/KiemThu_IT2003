@@ -15,8 +15,10 @@ import com.bros.quanlythuvien.repository.impl.CategoryRepositoryImpl;
  * @author phu nguyen
  */
 public class CategoryConverter {
+
     private final static CategoryRepository categoryRepository = new CategoryRepositoryImpl();
-     public CategoryModel entityToModel(CategoryEntity entity, Class<CategoryModel> tClass) {
+
+    public CategoryModel entityToModel(CategoryEntity entity, Class<CategoryModel> tClass) {
         CategoryModel model = modelMapper.map(entity, tClass);
 //        model.setDateOfBirth(DateUtils.convertDateToString(entity.getDateOfBirth()));
         return model;
